@@ -5,6 +5,7 @@
 ### Menu on the sky (12 November 2026)
 - The menu no longer sits in a grey bar above the sky. At the top of the home page it is transparent, in the sky's own ink, with the sky running behind it; once you scroll it becomes a solid navy bar that stays at the top.
 - Other pages, and the home page without JavaScript, use the solid navy bar.
+- The menu animates between its two states only after the page has loaded, so it cannot fade in from navy on arrival.
 - Fixed missing spaces before some links on the About, How it works and home pages.
 
 ### Named device location (12 November 2026)

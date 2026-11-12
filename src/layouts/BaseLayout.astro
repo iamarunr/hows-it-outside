@@ -28,12 +28,14 @@ const noindex = import.meta.env.PUBLIC_NOINDEX === 'true';
     <meta name="theme-color" content="#233651" />
     <link rel="preload" href={bebasNeue} as="font" type="font/woff2" crossorigin />
     <script is:inline>
-      // 'js' enables script-dependent styles; 'scrolled' turns the menu solid once the page has moved.
+      // 'js' enables script-dependent styles; 'scrolled' turns the menu solid once the page has moved;
+      // 'ready' (after the first paint) lets the menu animate between states, never during page load.
       (function (root) {
         root.classList.add('js');
         const sync = () => root.classList.toggle('scrolled', window.scrollY > 8);
         window.addEventListener('scroll', sync, { passive: true });
         sync();
+        window.addEventListener('load', () => requestAnimationFrame(() => root.classList.add('ready')));
       })(document.documentElement);
     </script>
   </head>

@@ -97,3 +97,25 @@ for (const width of [320, 360, 768, 1440]) {
     }
   });
 }
+
+test('the menu is transparent from the first frame on the home page: no fade from navy while loading', async ({ page }) => {
+  // Sample the bar's background on every frame from the moment it exists until well after load.
+  await page.addInitScript(() => {
+    const samples: string[] = [];
+    (window as unknown as { __menuSamples: string[] }).__menuSamples = samples;
+    const started = performance.now();
+    const tick = () => {
+      const el = document.querySelector('.site-header');
+      if (el !== null && document.querySelector('.sky-hero') !== null) samples.push(getComputedStyle(el).backgroundColor);
+      if (performance.now() - started < 1500) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  });
+  await page.goto('/');
+  await page.getByRole('list', { name: 'Places to try' }).waitFor();
+  await page.waitForFunction(() => document.documentElement.classList.contains('ready'));
+  await page.waitForTimeout(600);
+  const samples = await page.evaluate(() => (window as unknown as { __menuSamples: string[] }).__menuSamples);
+  expect(samples.length).toBeGreaterThan(5);
+  expect([...new Set(samples)]).toEqual([TRANSPARENT]);
+});
