@@ -7,11 +7,16 @@
 export const PROVIDER_ORIGINS = {
   forecast: 'https://api.open-meteo.com',
   geocoding: 'https://geocoding-api.open-meteo.com',
+  /** Names the area for "Use my location" only (BigDataCloud client-side reverse geocoding). */
+  placeName: 'https://api.bigdatacloud.net',
+  /** The documented endpoint above redirects here; a redirect target must be allowed by connect-src too. */
+  placeNameRedirect: 'https://api-bdc.io',
 } as const;
 
 export const ENDPOINTS = {
   forecast: `${PROVIDER_ORIGINS.forecast}/v1/forecast`,
   geocoding: `${PROVIDER_ORIGINS.geocoding}/v1/search`,
+  placeName: `${PROVIDER_ORIGINS.placeName}/data/reverse-geocode-client`,
 } as const;
 
 export const BUILD_INFO = {

@@ -9,7 +9,7 @@ import { buildHeadersFile, buildPolicy, findInline, hashesInHeaders, sha256Sourc
 
 const DIST = new URL('../dist/', import.meta.url).pathname;
 // Must match src/lib/config.ts PROVIDER_ORIGINS (asserted by tests/unit/csp.test.ts).
-const CONNECT_ORIGINS = ['https://api.open-meteo.com', 'https://geocoding-api.open-meteo.com'] as const;
+const CONNECT_ORIGINS = ['https://api.open-meteo.com', 'https://geocoding-api.open-meteo.com', 'https://api.bigdatacloud.net', 'https://api-bdc.io'] as const;
 
 async function htmlFiles(dir: string): Promise<string[]> {
   const entries = await readdir(dir, { withFileTypes: true, recursive: true });

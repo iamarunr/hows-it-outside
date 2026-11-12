@@ -31,7 +31,7 @@ export type Harness = {
   cspViolations: string[];
 };
 
-const PROVIDER_ORIGINS = ['https://api.open-meteo.com', 'https://geocoding-api.open-meteo.com'];
+const PROVIDER_ORIGINS = ['https://api.open-meteo.com', 'https://geocoding-api.open-meteo.com', 'https://api.bigdatacloud.net', 'https://api-bdc.io'];
 
 export async function setUp(page: Page, opts: { referenceNow: number; handlers: Handler[] }): Promise<Harness> {
   // Handlers are read at request time, so tests may push or replace handlers mid-test.

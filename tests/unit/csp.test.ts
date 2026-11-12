@@ -33,7 +33,7 @@ describe('CSP generation', () => {
     });
     expect(policy).not.toContain('unsafe-inline');
     expect(policy).toContain("script-src 'self' 'sha256-a' 'sha256-b'");
-    expect(policy).toContain("connect-src 'self' https://api.open-meteo.com https://geocoding-api.open-meteo.com");
+    expect(policy).toContain("connect-src 'self' https://api.open-meteo.com https://geocoding-api.open-meteo.com https://api.bigdatacloud.net https://api-bdc.io");
     expect(policy).toContain("frame-ancestors 'none'");
     const file = buildHeadersFile(policy);
     expect([...hashesInHeaders(file, 'script-src')]).toEqual(["'sha256-a'", "'sha256-b'"]);

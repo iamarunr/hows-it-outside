@@ -95,7 +95,7 @@ curl -sI https://<deployment-host>/ | grep -iE 'content-security-policy|x-conten
 curl -sI https://<deployment-host>/_astro/<any-asset>.js | grep -i cache-control
 ```
 
-Expect the CSP to start with `default-src 'self'`, contain `connect-src 'self' https://api.open-meteo.com https://geocoding-api.open-meteo.com` and `frame-ancestors 'none'`, and contain no `unsafe-inline`. Expect `X-Robots-Tag` only on preview hosts. Then open the site, run a search and "Use my location", and check the browser console for CSP reports.
+Expect the CSP to start with `default-src 'self'`, contain `connect-src 'self' https://api.open-meteo.com https://geocoding-api.open-meteo.com https://api.bigdatacloud.net https://api-bdc.io` and `frame-ancestors 'none'`, and contain no `unsafe-inline`. Expect `X-Robots-Tag` only on preview hosts. Then open the site, run a search and "Use my location", and check the browser console for CSP reports.
 
 ### Rollback
 

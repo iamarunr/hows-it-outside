@@ -15,6 +15,7 @@ import { createForecastCache, forecastCacheKey, type ForecastCache } from '../..
 import { FetchJsonError } from '../../../services/fetchJson';
 import { createGeocodingCache, type GeocodingCache, type PlaceResult } from '../../../services/geocoding';
 import { requestDeviceLocation } from '../../../services/geolocation';
+import { lookupPlaceName } from '../../../services/reverseGeocoding';
 import {
   createSettingsStore,
   defaultSettings,
@@ -40,6 +41,8 @@ export type ControllerDeps = {
   settingsStore: SettingsStore;
   geocodingCache: GeocodingCache;
   geolocation: () => Pick<Geolocation, 'getCurrentPosition'> | undefined;
+  /** Names the area around a fresh device location; resolves to null when it cannot. */
+  placeName: (coords: Coordinates, signal: AbortSignal) => Promise<string | null>;
   isOnline: () => boolean;
   isVisible: () => boolean;
 };
@@ -54,6 +57,7 @@ export function browserDeps(): ControllerDeps {
     settingsStore: createSettingsStore(browserLocalStore()),
     geocodingCache: createGeocodingCache(nowSeconds),
     geolocation: () => (typeof navigator === 'undefined' ? undefined : navigator.geolocation),
+    placeName: lookupPlaceName,
     isOnline: () => typeof navigator === 'undefined' || navigator.onLine,
     isVisible: () => typeof document === 'undefined' || document.visibilityState === 'visible',
   };
@@ -71,8 +75,11 @@ export function locationFromPlace(place: PlaceResult): Location {
   };
 }
 
-export function deviceLocation(coords: Coordinates): Location {
-  return { key: locationKey(coords), ...coords, label: 'Current area', source: 'device' };
+/** Shown when the area around a device location cannot be named. */
+export const DEVICE_FALLBACK_LABEL = 'Current area';
+
+export function deviceLocation(coords: Coordinates, placeName: string | null = null): Location {
+  return { key: locationKey(coords), ...coords, label: placeName ?? DEVICE_FALLBACK_LABEL, source: 'device' };
 }
 
 function toSaved(location: Location): SavedLocation {
@@ -119,6 +126,7 @@ export function useWeatherController(depsFactory: () => ControllerDeps = browser
   const [hydrated, setHydrated] = useState(false);
   const [online, setOnline] = useState(true);
   const abortRef = useRef<AbortController | null>(null);
+  const placeNameAbortRef = useRef<AbortController | null>(null);
 
   const load = useCallback(() => {
     const s = stateRef.current;
@@ -223,7 +231,13 @@ export function useWeatherController(depsFactory: () => ControllerDeps = browser
     };
   }, [deps, maybeRefresh]);
 
-  useEffect(() => () => abortRef.current?.abort(), []);
+  useEffect(
+    () => () => {
+      abortRef.current?.abort();
+      placeNameAbortRef.current?.abort();
+    },
+    [],
+  );
 
   const select = useCallback((location: Location) => {
     dispatch({ type: 'select', location, saved: false });
@@ -234,9 +248,19 @@ export function useWeatherController(depsFactory: () => ControllerDeps = browser
 
   const locateMe = useCallback(() => {
     dispatch({ type: 'locate_start' });
-    void requestDeviceLocation(deps.geolocation()).then((result) => {
-      if (result.ok) select(deviceLocation(result.coords));
-      else dispatch({ type: 'locate_failed', error: result.error });
+    placeNameAbortRef.current?.abort();
+    const naming = new AbortController();
+    placeNameAbortRef.current = naming;
+    void requestDeviceLocation(deps.geolocation()).then(async (result) => {
+      if (!result.ok) {
+        dispatch({ type: 'locate_failed', error: result.error });
+        return;
+      }
+      // Name the area first (bounded by a short timeout) so the readout never shows one label and then another.
+      const placeName = await deps.placeName(result.coords, naming.signal);
+      // The visitor may have picked a place, or asked again, while this was in flight.
+      if (naming.signal.aborted || stateRef.current.location.status !== 'locating') return;
+      select(deviceLocation(result.coords, placeName));
     });
   }, [deps, select]);
 

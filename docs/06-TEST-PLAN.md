@@ -32,7 +32,7 @@ Create fixtures for mild dry day, hot humid day, gusty cycling day, rain beginni
 
 ## End-to-end journeys
 1. Fresh browser: no permission prompt; search St. Louis; choose matching city; see expected fixture weather and attribution.
-2. Device location success: rounded coordinates sent; label Current area; user can change place.
+2. Device location success: rounded coordinates sent to the forecast and to the area-name lookup; label is the looked-up area, or Current area when the lookup fails; user can change place.
 3. Permission denied/timeout/unavailable: search remains fully usable; no repeated automatic prompt.
 4. Search ambiguity: two same-name cities selectable; newest response wins after rapid typing.
 5. Switch all activities; forecasts do not refetch; scores/reasons update.

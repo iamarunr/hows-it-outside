@@ -39,13 +39,22 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             <td>Their policies apply; Outside? can't delete data they receive.</td>
           </tr>
           <tr>
+            <td>Rounded coordinates (about 1 km) when you choose "Use my location"</td>
+            <td><a href="https://www.bigdatacloud.com/">BigDataCloud</a> reverse geocoding API</td>
+            <td>
+              Used once, to name the area (for example "St. Louis"). Not sent for searched or remembered places.
+              BigDataCloud says it pairs such coordinates with the request's IP address to improve its IP location
+              data; its policies apply.
+            </td>
+          </tr>
+          <tr>
             <td>City search text</td>
             <td>Open-Meteo geocoding API</td>
             <td>Sent as you type (after a short pause). Search history is not saved.</td>
           </tr>
           <tr>
             <td>IP address and normal request details</td>
-            <td>The website host and Open-Meteo</td>
+            <td>The website host, Open-Meteo and (for "Use my location") BigDataCloud</td>
             <td>Managed by those providers' own logs and policies.</td>
           </tr>
         </tbody>

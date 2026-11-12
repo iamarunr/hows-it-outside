@@ -92,21 +92,85 @@ test('no location prompt before the button; denied permission leaves search usab
   expectClean(h);
 });
 
-test('device location sends rounded coordinates and is labeled Current area', async ({ page, context }) => {
+const isPlaceName = (u: URL) => u.hostname === 'api.bigdatacloud.net';
+const ST_LOUIS_FORECAST = { match: isForecastAt('38.63', '-90.20'), body: syntheticForecast({ start: START, timezone: 'America/Chicago', current: { time: NOW } }) };
+const ST_LOUIS_NAME = {
+  lookupSource: 'coordinates',
+  city: 'St. Louis',
+  locality: 'Downtown',
+  principalSubdivision: 'Missouri',
+  countryName: 'United States of America',
+  postcode: '63103',
+};
+
+async function locate(page: Page, context: import('@playwright/test').BrowserContext, handlers: Handler[]) {
   await context.grantPermissions(['geolocation']);
   await context.setGeolocation({ latitude: 38.627274, longitude: -90.197889 });
-  const h = await setUp(page, {
-    referenceNow: NOW,
-    handlers: [{ match: isForecastAt('38.63', '-90.20'), body: syntheticForecast({ start: START, timezone: 'America/Chicago', current: { time: NOW } }) }],
-  });
+  const h = await setUp(page, { referenceNow: NOW, handlers });
   await page.goto('/');
   await page.getByRole('button', { name: 'Use my location' }).click();
-  await expect(page.getByRole('heading', { name: 'Weather for Current area' })).toBeVisible();
+  return h;
+}
+
+test('device location is named from rounded coordinates, and only rounded coordinates leave the browser', async ({ page, context }) => {
+  const h = await locate(page, context, [ST_LOUIS_FORECAST, { match: isPlaceName, body: ST_LOUIS_NAME }]);
+  await expect(page.getByRole('heading', { name: 'Weather for St. Louis, Missouri, United States of America' })).toBeVisible();
+  await expect(page.locator('.readout-city')).toHaveText('St. Louis');
+  await expect(page.locator('.location-kind')).toHaveText('Approximate location');
   await expect(page.getByText('Based on your approximate location')).toBeVisible();
+  // The fallback label never flashes: the name is known before the readout renders.
+  await expect(page.getByText('Current area')).toHaveCount(0);
+
   const [request] = forecastRequests(h.providerRequests);
   expect(request?.searchParams.get('latitude')).toBe('38.63');
   expect(request?.searchParams.get('longitude')).toBe('-90.20');
-  expect(request?.toString()).not.toContain('38.627');
+  const lookups = h.providerRequests.filter(isPlaceName);
+  expect(lookups).toHaveLength(1);
+  expect(lookups[0]?.pathname).toBe('/data/reverse-geocode-client');
+  expect(lookups[0]?.searchParams.get('latitude')).toBe('38.63');
+  expect(lookups[0]?.searchParams.get('longitude')).toBe('-90.20');
+  for (const url of h.providerRequests) expect(url.toString()).not.toContain('38.627');
+  expectClean(h);
+
+  // The name is kept with a remembered place: a reload does not look it up again.
+  await page.getByText('Preferences and saved data').click();
+  await page.getByLabel('Remember this location on this device').check();
+  await page.reload();
+  await expect(page.getByRole('heading', { name: /Weather for St\. Louis/ })).toBeVisible();
+  expect(h.providerRequests.filter(isPlaceName)).toHaveLength(1);
+});
+
+for (const [why, handler] of [
+  ['the lookup fails', { match: isPlaceName, status: 500, body: {} }],
+  ['the lookup is rate limited', { match: isPlaceName, status: 429, body: {} }],
+  ['the name was guessed from the IP address', { match: isPlaceName, body: { ...ST_LOUIS_NAME, lookupSource: 'ipGeolocation' } }],
+  ['the payload has no usable name', { match: isPlaceName, body: { lookupSource: 'coordinates', city: '', locality: '' } }],
+  ['the payload is not the expected shape', { match: isPlaceName, body: ['<script>alert(1)</script>'] }],
+] as const) {
+  test(`device location falls back to Current area when ${why}`, async ({ page, context }) => {
+    const h = await locate(page, context, [ST_LOUIS_FORECAST, handler]);
+    await expect(page.getByRole('heading', { name: 'Weather for Current area' })).toBeVisible();
+    await expect(page.locator('.readout-temp')).not.toHaveText('—');
+    expect(h.providerRequests.filter(isPlaceName)).toHaveLength(1);
+    expect(forecastRequests(h.providerRequests)).toHaveLength(1);
+    expect(h.cspViolations).toEqual([]);
+  });
+}
+
+test('a slow name lookup never holds the forecast back for long', async ({ page, context }) => {
+  const h = await locate(page, context, [ST_LOUIS_FORECAST, { match: isPlaceName, body: ST_LOUIS_NAME, delayMs: 60_000 }]);
+  await expect(page.getByRole('button', { name: 'Finding your location…' })).toBeVisible();
+  await page.clock.runFor(2100);
+  await expect(page.getByRole('heading', { name: 'Weather for Current area' })).toBeVisible();
+  expect(forecastRequests(h.providerRequests)).toHaveLength(1);
+});
+
+test('searched places and shortcut cards never call the name lookup', async ({ page }) => {
+  const h = await setUp(page, { referenceNow: NOW, handlers: baseHandlers() });
+  await page.goto('/');
+  await choose(page, 'London', /London, England/);
+  await expect(page.getByRole('heading', { name: /Weather for London/ })).toBeVisible();
+  expect(h.providerRequests.filter(isPlaceName)).toHaveLength(0);
   expectClean(h);
 });
 

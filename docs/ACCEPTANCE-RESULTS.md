@@ -30,7 +30,7 @@ All weather in automated tests is **synthetic fixture data**. Live-provider evid
 | # | Journey | Spec file | Result |
 |---|---|---|---|
 | 1 | Fresh browser, no prompt, search, attribution | `search.spec.ts` | Pass |
-| 2 | Device location success, rounded, Current area | `location.spec.ts` | Pass |
+| 2 | Device location success, rounded, named area (Current area on lookup failure) | `location.spec.ts` | Pass |
 | 3 | Permission denied/timeout/unavailable | `location.spec.ts`, `provider.test.ts` | Pass (see LOC-01 note) |
 | 4 | Same-name cities; newest response wins | `search.spec.ts`, `location.spec.ts` race | Pass |
 | 5 | Switch all activities, no refetch | `experience.spec.ts` | Pass |
