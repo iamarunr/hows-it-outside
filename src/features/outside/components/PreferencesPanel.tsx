@@ -171,7 +171,7 @@ export function StorageControls(props: {
       <h3>On this device</h3>
       <p className="hint">
         {props.persistent
-          ? 'Your settings are saved in this browser. Your location is saved only if you choose to remember it.'
+          ? 'Your settings are saved in this browser. A place is saved only if you pin it or choose to remember it.'
           : "This browser isn't allowing storage, so settings last only until you close the page."}
       </p>
       <div className="checkbox">

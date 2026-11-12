@@ -24,6 +24,8 @@ const overflow = (page: Page) => page.evaluate(() => document.documentElement.sc
 
 /** The sun or moon and the hills must stay inside the strip, clear of every piece of hero text. */
 async function expectSceneClearOfText(page: Page) {
+  // The disc glides to its new place when a sky changes; measure it once it has settled.
+  await page.waitForFunction(() => (document.querySelector('.scene-body')?.getAnimations().length ?? 0) === 0);
   const boxes = await page.evaluate(() => {
     const rect = (sel: string) => document.querySelector(sel)?.getBoundingClientRect();
     const inner = rect('.sky-hero .hero-inner');

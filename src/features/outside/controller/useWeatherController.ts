@@ -20,6 +20,7 @@ import {
   createSettingsStore,
   defaultSettings,
   forgetLocation as forgetSaved,
+  togglePin as toggleSavedPin,
   resetPreferences,
   withRemember,
   withSavedLocation,
@@ -102,6 +103,10 @@ export type WeatherController = {
   online: boolean;
   geocodingCache: GeocodingCache;
   selectPlace: (place: PlaceResult) => void;
+  /** Opens a known place (a pinned place or a shortcut card) without searching. */
+  selectLocation: (location: Location) => void;
+  /** Pins or unpins the current place on the first screen. */
+  togglePin: () => void;
   locateMe: () => void;
   retry: () => void;
   updateSettings: (update: (s: Settings) => Settings) => void;
@@ -246,6 +251,16 @@ export function useWeatherController(depsFactory: () => ControllerDeps = browser
 
   const selectPlace = useCallback((place: PlaceResult) => select(locationFromPlace(place)), [select]);
 
+  const togglePin = useCallback(() => {
+    const s = stateRef.current;
+    const loc = selectedLocation(s);
+    if (loc === null) return;
+    // Keep the forecast's time zone with a device location, so its card can show the local time.
+    const f = s.forecast.status === 'ready' || s.forecast.status === 'refreshing' ? s.forecast.forecast : null;
+    const zone = f !== null && !f.timezoneFallback ? f.timezone : undefined;
+    setSettings((cur) => toggleSavedPin(cur, { ...toSaved(loc), ...(loc.timezone === undefined && zone !== undefined && { timezone: zone }) }));
+  }, []);
+
   const locateMe = useCallback(() => {
     dispatch({ type: 'locate_start' });
     placeNameAbortRef.current?.abort();
@@ -300,6 +315,8 @@ export function useWeatherController(depsFactory: () => ControllerDeps = browser
     online,
     geocodingCache: deps.geocodingCache,
     selectPlace,
+    selectLocation: select,
+    togglePin,
     locateMe,
     retry: load,
     updateSettings: setSettings,

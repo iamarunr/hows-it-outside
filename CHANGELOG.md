@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### Pinned places (12 November 2026)
+- "Pin this place" on the results screen pins up to three places. Pinned places replace the London, Chennai and Sydney cards on the first screen and open in one tap, with no search.
+- Pins are stored only in this browser, only when you pin, and are removed by unpinning or "Clear all local data". Settings saved before this change load unchanged.
+- The menu's solid state now follows a marker at the top of the page instead of scroll events, which Firefox could miss when the page jumped back to the top.
+- Fixed: on phones in WebKit the day strip caused sideways scrolling part-way through an hour.
+
 ### The ground below the sky (12 November 2026)
 - The hills now run into a deep navy ground that carries Now, Best times and the footer (replacing the white Now strip and the charcoal band).
 - Now: wind, gusts and humidity are half-dials with the value inside. A missing value shows "Unavailable" with no arc.

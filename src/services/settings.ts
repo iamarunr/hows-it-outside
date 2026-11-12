@@ -1,7 +1,8 @@
 /**
  * Versioned local settings (spec 02 §6, 05 Controls). Preferences persist in
  * localStorage; a saved location persists only with the explicit remember
- * opt-in, and only rounded. Corrupt or unknown data resets to defaults with a
+ * opt-in, and pinned places only because the visitor pinned them. Locations
+ * are always rounded. Corrupt or unknown data resets to defaults with a
  * notice instead of crashing. Storage failure degrades to memory.
  */
 import * as z from 'zod/mini';
@@ -13,6 +14,8 @@ import type { KeyValueStore } from './storageAdapter';
 
 export const SETTINGS_STORAGE_KEY = 'outside:settings';
 export const SETTINGS_VERSION = 1;
+/** PRODUCT ASSUMPTION: three pins, matching the three shortcut cards on the first screen. */
+export const PIN_LIMIT = 3;
 
 export type SavedLocation = {
   key: string;
@@ -33,6 +36,8 @@ export type Settings = {
   activities: Record<ActivityId, ActivityPreferences>;
   rememberLocation: boolean;
   savedLocation: SavedLocation | null;
+  /** Places the visitor pinned to the first screen, in pin order. At most PIN_LIMIT. */
+  pinnedPlaces: SavedLocation[];
 };
 
 export type LoadNotice = 'reset_corrupt' | 'reset_version' | null;
@@ -49,6 +54,7 @@ export function defaultSettings(): Settings {
     >,
     rememberLocation: false,
     savedLocation: null,
+    pinnedPlaces: [],
   };
 }
 
@@ -76,6 +82,8 @@ const settingsSchema = z.object({
   activities: z.optional(z.record(z.string(), z.unknown())),
   rememberLocation: z.optional(z.boolean()),
   savedLocation: z.optional(z.nullable(z.unknown())),
+  // Added after version 1 shipped: absent in older data, which then simply has no pins.
+  pinnedPlaces: z.optional(z.array(z.unknown())),
 });
 
 function sanitizeSavedLocation(raw: unknown): SavedLocation | null {
@@ -91,6 +99,16 @@ function sanitizeSavedLocation(raw: unknown): SavedLocation | null {
     ...(parsed.data.countryCode !== undefined && { countryCode: parsed.data.countryCode }),
     ...(parsed.data.timezone !== undefined && { timezone: parsed.data.timezone }),
   };
+}
+
+/** Valid pins only, re-rounded, without duplicates, capped at PIN_LIMIT. */
+function sanitizePins(raw: readonly unknown[] | undefined): SavedLocation[] {
+  const pins: SavedLocation[] = [];
+  for (const item of raw ?? []) {
+    const pin = sanitizeSavedLocation(item);
+    if (pin !== null && pins.length < PIN_LIMIT && !pins.some((p) => p.key === pin.key)) pins.push(pin);
+  }
+  return pins;
 }
 
 /** Parses stored JSON. Invalid parts fall back to defaults individually; unknown versions reset. */
@@ -123,6 +141,7 @@ export function parseSettings(raw: string | null): { settings: Settings; notice:
       activities,
       rememberLocation,
       savedLocation: rememberLocation ? sanitizeSavedLocation(d.savedLocation) : null,
+      pinnedPlaces: sanitizePins(d.pinnedPlaces),
     },
     notice: null,
   };
@@ -140,7 +159,7 @@ export function createSettingsStore(store: KeyValueStore): SettingsStore {
       return parseSettings(store.get(SETTINGS_STORAGE_KEY));
     },
     save(settings) {
-      // Never persist a location without the opt-in.
+      // Never persist the current location without the opt-in. Pins are their own explicit opt-in.
       const safe: Settings = settings.rememberLocation ? settings : { ...settings, savedLocation: null };
       store.set(SETTINGS_STORAGE_KEY, JSON.stringify(safe));
     },
@@ -166,7 +185,18 @@ export function forgetLocation(settings: Settings): Settings {
 
 export function resetPreferences(settings: Settings): Settings {
   const d = defaultSettings();
-  return { ...d, rememberLocation: settings.rememberLocation, savedLocation: settings.savedLocation };
+  return { ...d, rememberLocation: settings.rememberLocation, savedLocation: settings.savedLocation, pinnedPlaces: settings.pinnedPlaces };
+}
+
+export function isPinned(settings: Settings, key: string): boolean {
+  return settings.pinnedPlaces.some((p) => p.key === key);
+}
+
+/** Unpins a pinned place; pins an unpinned one if there is room. A full list is left unchanged. */
+export function togglePin(settings: Settings, location: SavedLocation): Settings {
+  if (isPinned(settings, location.key)) return { ...settings, pinnedPlaces: settings.pinnedPlaces.filter((p) => p.key !== location.key) };
+  if (settings.pinnedPlaces.length >= PIN_LIMIT) return settings;
+  return { ...settings, pinnedPlaces: [...settings.pinnedPlaces, location] };
 }
 
 export function resetActivity(settings: Settings, id: ActivityId): Settings {

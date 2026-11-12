@@ -432,7 +432,7 @@ Thin and exact, like a ticket stub.
 ### Navigation
 A full-width bar, 62px tall, with the Bebas Neue wordmark and two uppercase links on one row at every width (links drop to 12px below 360px). It has two states:
 - **On the sky:** at the top of the home page the bar is transparent and the sky runs behind it. Its ink is the current sky's ink, set from the sky id with `:has()`, so it is the same contrast-tested pair as the hero text.
-- **Solid:** brand navy with white ink (a tested pair). Used once the page has scrolled (the layout script toggles `.scrolled` on `html` past 8px), on pages without a sky, when a notice sits above the sky, and always without JavaScript.
+- **Solid:** brand navy with white ink (a tested pair). Used once the page has scrolled (the layout script toggles `.scrolled` on `html` when an 8px marker at the top of the page leaves the screen), on pages without a sky, when a notice sits above the sky, and always without JavaScript.
 
 The bar is sticky only with JavaScript. `scroll-padding-top` keeps focused and linked-to content clear of it. Hover is an underline; the focus ring uses the bar's current ink.
 
@@ -452,7 +452,7 @@ Two painted layers sit behind the content:
 
 **Arrival.** The live temperature block and the verdict rise in over 800ms, and the tick inside the good mark draws itself.
 
-**Shortcut cards.** In the empty state three cards (London, Chennai, Sydney) are nested skies: each is a `.sky` with its own tested ink, showing the city, country and local time under the day, dawn, dusk or night sky there right now, and never weather. They are buttons that load the place. Below 1000px they form a horizontal snap row with the next card peeking; from 1000px they form a loose overlapping deck (rotated -6°, 5°, -2°) that straightens and lifts on hover. They do not float: a click target should hold still.
+**Shortcut cards.** In the empty state up to three cards are nested skies. They are the visitor's pinned places when there are any (list name "Your pinned places"), otherwise London, Chennai and Sydney ("Places to try"). A place is pinned from the results toolbar with "Pin this place", a toggle button that fills with the sky's ink and reads "Pinned" when on; with three pins it is disabled on other places and says why. Each card is a nested sky: each is a `.sky` with its own tested ink, showing the city, country and local time under the day, dawn, dusk or night sky there right now, and never weather. They are buttons that load the place. Below 1000px they form a horizontal snap row with the next card peeking; from 1000px they form a loose overlapping deck (rotated -6°, 5°, -2°) that straightens and lifts on hover. They do not float: a click target should hold still.
 
 **Search pill.** On every sky the search field and its button share one white pill ringed in the sky's ink; the focus ring is drawn around the whole pill in ink.
 

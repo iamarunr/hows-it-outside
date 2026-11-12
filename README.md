@@ -100,6 +100,7 @@ The full runbook for outside.knnaresh.com is in [docs/08-DEPLOYMENT.md](docs/08-
 - Hourly forecasts: a 30-minute outing uses the whole hour's forecast, and dawn and dusk hours are excluded from daylight-only suggestions.
 - No air quality, UV, pollen, official alerts, maps, routes, terrain or water conditions.
 - Thresholds are product defaults, not validated comfort or health limits.
+- Up to three places can be pinned to the first screen. Pins live only in the browser's local storage and are removed by unpinning or clearing local data.
 - Device location is approximate. Its area is named ("St. Louis, Missouri, …") by one request with the rounded coordinates to BigDataCloud's free client-side reverse geocoding API; if that fails the label is "Current area". Searched and remembered places never use it.
 - Times use US-style formatting in every language; translation is future work.
 - Automated accessibility checks (axe) pass with zero violations. Manual screen-reader and real-device testing is still pending.

@@ -2061,3 +2061,20 @@ body:has(.sky-hero[data-sky='unknown']) {
     background: CanvasText;
   }
 }
+
+/* Pin toggle on the sky: outlined when off, filled in the sky's ink when the place is pinned. */
+.sky .pin-toggle[aria-pressed='true'] {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--on-ink);
+}
+.location-current .hint {
+  flex-basis: 100%;
+  margin: 0;
+}
+@media (forced-colors: active) {
+  .sky .pin-toggle[aria-pressed='true'] {
+    outline: 3px solid Highlight;
+    outline-offset: 2px;
+  }
+}

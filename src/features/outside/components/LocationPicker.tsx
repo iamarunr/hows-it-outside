@@ -40,10 +40,14 @@ export type LocationPickerProps = {
   announce: (message: string) => void;
   /** False until the island has hydrated: controls stay disabled so early input is never lost or natively submitted. */
   ready: boolean;
+  /** Whether the current place is pinned to the first screen, and whether the pin list is full. */
+  pinned: boolean;
+  pinsFull: boolean;
+  onTogglePin: () => void;
 };
 
 export function LocationPicker(props: LocationPickerProps) {
-  const { location, saved, locating, geoNotice, geocodingCache, onSelectPlace, onLocateMe, announce, ready } = props;
+  const { location, saved, locating, geoNotice, geocodingCache, onSelectPlace, onLocateMe, announce, ready, pinned, pinsFull, onTogglePin } = props;
   const inputId = useId();
   const [openRequested, setOpen] = useState(false);
   // The search is always shown when nothing is selected (first visit, cleared, or after a denied location).
@@ -135,6 +139,26 @@ export function LocationPicker(props: LocationPickerProps) {
             <button ref={changeRef} type="button" onClick={() => setOpen(true)}>
               Change location
             </button>
+          )}
+          {!open && (
+            <button
+              type="button"
+              className="pin-toggle"
+              aria-pressed={pinned}
+              disabled={!pinned && pinsFull}
+              aria-describedby={!pinned && pinsFull ? `${inputId}-pins-full` : undefined}
+              onClick={() => {
+                onTogglePin();
+                announce(pinned ? 'Unpinned from your first screen.' : 'Pinned to your first screen.');
+              }}
+            >
+              {pinned ? 'Pinned' : 'Pin this place'}
+            </button>
+          )}
+          {!open && !pinned && pinsFull && (
+            <p id={`${inputId}-pins-full`} className="hint">
+              You have 3 pinned places. Unpin one to pin this.
+            </p>
           )}
         </div>
       )}

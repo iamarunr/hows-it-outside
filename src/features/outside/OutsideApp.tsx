@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ACTIVITY_PRESETS } from '../../domain/activities';
 import { summaryHeadline } from '../../domain/explanations';
 import { defaultUnitSystem } from '../../lib/units';
-import { resetActivity } from '../../services/settings';
+import { isPinned, PIN_LIMIT, resetActivity } from '../../services/settings';
 import { skyFor } from '../../domain/sky';
 import { clockSunState, reconcileSun, sunState, type SunState } from '../../domain/sun';
 import { ConditionsSummary } from './components/ConditionsSummary';
@@ -12,7 +12,7 @@ import { DataStatus } from './components/DataStatus';
 import { HourlyTimeline } from './components/HourlyTimeline';
 import { LocationPicker } from './components/LocationPicker';
 import { PreferencesPanel, StorageControls } from './components/PreferencesPanel';
-import { PlaceCards } from './components/PlaceCards';
+import { EXAMPLE_PLACES, PlaceCards } from './components/PlaceCards';
 import { SkyScene } from './components/SkyScene';
 import { NextHourSummary } from './components/Summary';
 import { WindowSuggestions } from './components/WindowSuggestions';
@@ -106,6 +106,9 @@ export default function OutsideApp({ depsFactory = browserDeps }: OutsideAppProp
         onLocateMe={c.locateMe}
         announce={announce}
         ready={c.hydrated}
+        pinned={location !== null && isPinned(settings, location.key)}
+        pinsFull={settings.pinnedPlaces.length >= PIN_LIMIT}
+        onTogglePin={c.togglePin}
       />
       <UnitsPicker value={units} onChange={(u) => updateSettings((s) => ({ ...s, units: u }))} />
     </div>
@@ -136,7 +139,14 @@ export default function OutsideApp({ depsFactory = browserDeps }: OutsideAppProp
                 </p>
                 {toolbar}
               </div>
-              <div className="hero-cards">{c.hydrated && <PlaceCards now={c.now} onSelect={c.selectPlace} />}</div>
+              <div className="hero-cards">{c.hydrated && (
+                  <PlaceCards
+                    places={settings.pinnedPlaces.length > 0 ? settings.pinnedPlaces : EXAMPLE_PLACES}
+                    label={settings.pinnedPlaces.length > 0 ? 'Your pinned places' : 'Places to try'}
+                    now={c.now}
+                    onSelect={c.selectLocation}
+                  />
+                )}</div>
             </div>
           ) : (
             <div className="hero-inner hero-results">

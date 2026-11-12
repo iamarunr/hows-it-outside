@@ -49,7 +49,8 @@ test('at the top the menu is transparent, takes the sky ink, and the sky runs be
   await page.getByRole('list', { name: 'Places to try' }).getByRole('button').first().click();
   await expect(page.locator('.sky-hero')).toHaveAttribute('data-sky', 'rain');
   await expect.poll(async () => (await headerStyle(page)).color).toBe(WHITE);
-  expect((await headerStyle(page)).background).toBe(TRANSPARENT);
+  // Clicking the card may have scrolled the page; the app returns to the top and the bar clears again.
+  await expect.poll(async () => (await headerStyle(page)).background).toBe(TRANSPARENT);
   expectClean(h);
 });
 
@@ -118,4 +119,19 @@ test('the menu is transparent from the first frame on the home page: no fade fro
   const samples = await page.evaluate(() => (window as unknown as { __menuSamples: string[] }).__menuSamples);
   expect(samples.length).toBeGreaterThan(5);
   expect([...new Set(samples)]).toEqual([TRANSPARENT]);
+});
+
+test('the menu state follows the page position however it got there (no stuck navy bar at the top)', async ({ page }) => {
+  // Found in Firefox: a jump back to the top did not always fire the scroll event the bar used to rely on.
+  await page.setViewportSize({ width: 1280, height: 500 });
+  await open(page, 2);
+  await page.goto('/');
+  const card = page.getByRole('list', { name: 'Places to try' }).getByRole('button').last();
+  await card.scrollIntoViewIfNeeded();
+  await expect.poll(async () => (await headerStyle(page)).background).toBe(NAVY);
+  await card.click();
+  await page.locator('.summary').waitFor();
+  expect(await page.evaluate(() => window.scrollY)).toBe(0);
+  await expect.poll(async () => (await headerStyle(page)).background).toBe(TRANSPARENT);
+  await expect(page.locator('html')).not.toHaveClass(/scrolled/);
 });

@@ -3,10 +3,13 @@ import {
   createSettingsStore,
   defaultSettings,
   forgetLocation,
+  isPinned,
   parseSettings,
+  PIN_LIMIT,
   resetActivity,
   resetPreferences,
   SETTINGS_STORAGE_KEY,
+  togglePin,
   withRemember,
   type SavedLocation,
 } from '../../src/services/settings';
@@ -130,5 +133,73 @@ describe('settings transitions', () => {
     const r = resetActivity(s, 'walk');
     expect(r.activities.walk.comfortLowC).toBe(8);
     expect(r.activities.run.comfortLowC).toBe(0);
+  });
+});
+
+describe('pinned places', () => {
+  const at = (n: number): SavedLocation => ({ key: `${n}.00,${n}.00`, latitude: n, longitude: n, label: `Place ${n}, Country`, source: 'search' });
+
+  it('settings saved before pins existed load with no pins and no reset notice', () => {
+    const old = JSON.stringify({ version: 1, activity: 'run', rememberLocation: false, savedLocation: null });
+    const { settings, notice } = parseSettings(old);
+    expect(notice).toBeNull();
+    expect(settings.activity).toBe('run');
+    expect(settings.pinnedPlaces).toEqual([]);
+  });
+
+  it('pins persist without the remember-location opt-in, which still does not save the current place', () => {
+    const storage = fakeStorage();
+    const store = createSettingsStore(createStore(() => storage));
+    store.save({ ...togglePin(defaultSettings(), place), savedLocation: place });
+    const { settings } = store.load();
+    expect(settings.pinnedPlaces).toEqual([place]);
+    expect(settings.savedLocation).toBeNull();
+  });
+
+  it('pinning toggles, keeps order, and stops at the limit', () => {
+    let s = defaultSettings();
+    for (const n of [1, 2, 3]) s = togglePin(s, at(n));
+    expect(s.pinnedPlaces.map((p) => p.latitude)).toEqual([1, 2, 3]);
+    expect(s.pinnedPlaces).toHaveLength(PIN_LIMIT);
+    expect(togglePin(s, at(4))).toBe(s);
+    expect(isPinned(s, at(2).key)).toBe(true);
+    s = togglePin(s, at(2));
+    expect(s.pinnedPlaces.map((p) => p.latitude)).toEqual([1, 3]);
+    expect(isPinned(s, at(2).key)).toBe(false);
+    expect(togglePin(s, at(4)).pinnedPlaces.map((p) => p.latitude)).toEqual([1, 3, 4]);
+  });
+
+  it('stored pins are validated: bad entries dropped, coordinates re-rounded, duplicates and extras removed', () => {
+    const raw = JSON.stringify({
+      version: 1,
+      pinnedPlaces: [
+        { latitude: 38.627274, longitude: -90.197889, label: 'St. Louis', source: 'device' },
+        { latitude: 38.63, longitude: -90.2, label: 'Duplicate after rounding', source: 'search' },
+        { latitude: 999, longitude: 0, label: 'Nowhere', source: 'search' },
+        { label: 'No coordinates', source: 'search' },
+        '<script>',
+        at(1),
+        at(2),
+        at(3),
+      ],
+    });
+    const { settings, notice } = parseSettings(raw);
+    expect(notice).toBeNull();
+    expect(settings.pinnedPlaces.map((p) => [p.key, p.label])).toEqual([
+      ['38.63,-90.20', 'St. Louis'],
+      ['1.00,1.00', 'Place 1, Country'],
+      ['2.00,2.00', 'Place 2, Country'],
+    ]);
+  });
+
+  it('a pins field of the wrong type resets nothing else away silently: it is treated as corrupt', () => {
+    expect(parseSettings(JSON.stringify({ version: 1, pinnedPlaces: 'x' })).notice).toBe('reset_corrupt');
+  });
+
+  it('reset preferences keeps pins; forgetting the location keeps pins; defaults have none', () => {
+    const pinned = togglePin({ ...defaultSettings(), activity: 'bike' }, place);
+    expect(resetPreferences(pinned).pinnedPlaces).toEqual([place]);
+    expect(forgetLocation(pinned).pinnedPlaces).toEqual([place]);
+    expect(defaultSettings().pinnedPlaces).toEqual([]);
   });
 });
