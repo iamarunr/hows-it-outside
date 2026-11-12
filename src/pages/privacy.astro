@@ -1,0 +1,102 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Privacy — Outside?" description="What Outside? sends, what it stores in your browser, and how to clear it.">
+  <article class="prose">
+    <h1>Privacy</h1>
+    <p>
+      Outside? has no accounts, no tracking analytics, no ads and no third-party scripts or fonts. It runs in your browser
+      and talks directly to the weather and location services below. Like any website, it can't avoid sending normal
+      network information such as your IP address to the services it uses.
+    </p>
+
+    <h2>Your location</h2>
+    <ul>
+      <li>Outside? asks for your location only when you press <strong>Use my location</strong>, and only once each time.</li>
+      <li>
+        Your position is rounded to two decimal places (roughly 1 km) before it is used or sent anywhere, and the precise
+        position is not kept. Rounding reduces precision but does not make you anonymous.
+      </li>
+      <li>There is no reverse lookup of your address; a device location is shown as “Current area”.</li>
+      <li>You can always search for a city instead.</li>
+    </ul>
+
+    <h2>What is sent, and to whom</h2>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Data</th>
+            <th scope="col">Sent to</th>
+            <th scope="col">Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Rounded coordinates of the chosen place</td>
+            <td><a href="https://open-meteo.com/">Open-Meteo</a> weather API</td>
+            <td>Their policies apply; Outside? can't delete data they receive.</td>
+          </tr>
+          <tr>
+            <td>City search text</td>
+            <td>Open-Meteo geocoding API</td>
+            <td>Sent as you type (after a short pause). Search history is not saved.</td>
+          </tr>
+          <tr>
+            <td>IP address and normal request details</td>
+            <td>The website host and Open-Meteo</td>
+            <td>Managed by those providers' own logs and policies.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>What is stored in your browser</h2>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Data</th>
+            <th scope="col">Where</th>
+            <th scope="col">How long</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Activity, units, outing length and preferences</td>
+            <td>Local storage</td>
+            <td>Until you reset or clear them</td>
+          </tr>
+          <tr>
+            <td>Your chosen place (rounded)</td>
+            <td>Local storage, only if you tick “Remember this location”</td>
+            <td>Until you choose Forget location or clear all data</td>
+          </tr>
+          <tr>
+            <td>Recent forecasts (up to five places, rounded)</td>
+            <td>Session storage</td>
+            <td>Until the tab closes, at most two hours each</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      Nothing is stored on a server by Outside?. If your browser blocks storage, settings last only until you close the
+      page.
+    </p>
+
+    <h2>Your controls</h2>
+    <p>Under <strong>Preferences and saved data</strong> on the home page:</p>
+    <ul>
+      <li><strong>Remember this location</strong> is off unless you turn it on; turning it off removes the saved place.</li>
+      <li><strong>Forget location</strong> removes the saved place and all stored forecasts.</li>
+      <li><strong>Reset all preferences</strong> restores the defaults.</li>
+      <li><strong>Clear all local data</strong> does all of the above.</li>
+    </ul>
+    <p>You can also clear this site's data in your browser settings at any time.</p>
+
+    <h2>Location links</h2>
+    <p>Outside? never puts your coordinates in its page addresses, so sharing a link does not share your location.</p>
+  </article>
+</BaseLayout>

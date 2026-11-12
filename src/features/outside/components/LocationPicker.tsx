@@ -124,10 +124,11 @@ export function LocationPicker(props: LocationPickerProps) {
     <section className="location" aria-label="Location">
       {location !== null && (
         <div className="location-current">
-          <p className="location-label">
-            <span className="location-kind">{saved ? 'Saved location' : location.source === 'device' ? 'Approximate' : 'Showing'}</span>{' '}
-            <strong>{location.label}</strong>
-          </p>
+          {(saved || location.source === 'device') && (
+            <p className="location-label">
+              <span className="location-kind">{saved ? 'Saved location' : 'Approximate location'}</span>
+            </p>
+          )}
           {!open && (
             <button ref={changeRef} type="button" onClick={() => setOpen(true)}>
               Change location

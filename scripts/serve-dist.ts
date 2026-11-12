@@ -9,7 +9,7 @@ import { readFile, stat } from 'node:fs/promises';
 import { extname, join, normalize } from 'node:path';
 
 const DIST = new URL('../dist/', import.meta.url).pathname;
-const PORT = Number(process.env.PORT ?? 4322);
+const PORT = Number(process.env.PORT ?? 4791);
 
 const TYPES: Record<string, string> = {
   '.html': 'text/html; charset=utf-8',

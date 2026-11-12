@@ -18,22 +18,31 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical.toString()} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script is:inline>document.documentElement.classList.add('js');</script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header">
       <a class="wordmark" href="/">Outside?</a>
       <nav aria-label="Site">
+        <a href="/methodology/">How it works</a>
         <a href="/about/">About</a>
-        {SITE_LINKS.source !== undefined && <a href={SITE_LINKS.source}>Source</a>}
       </nav>
     </header>
     <main id="main">
       <slot />
     </main>
     <footer class="site-footer">
+      <nav aria-label="Footer">
+        <a href="/methodology/">How it works</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="/about/">About</a>
+        {SITE_LINKS.source !== undefined && <a href={SITE_LINKS.source}>Source</a>}
+      </nav>
       <p>
-        Weather data by <a href="https://open-meteo.com/">Open-Meteo</a>. Location data by GeoNames via Open-Meteo.
+        Weather data by <a href="https://open-meteo.com/">Open-Meteo</a>{' '}
+        (<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>). Location data by{' '}
+        <a href="https://www.geonames.org/">GeoNames</a> via Open-Meteo.
       </p>
       {
         SITE_LINKS.author !== undefined && (

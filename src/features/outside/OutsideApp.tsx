@@ -72,6 +72,11 @@ export default function OutsideApp({ depsFactory = browserDeps }: OutsideAppProp
     <div className="outside-app">
       <p ref={liveRef} role="status" aria-live="polite" className="visually-hidden" />
 
+      {!c.online && <p className="notice notice-mixed">You&apos;re offline. Previously loaded weather may be out of date.</p>}
+      {c.settingsNotice !== null && (
+        <p className="notice notice-mixed">Your saved settings couldn&apos;t be read, so the default settings are in use.</p>
+      )}
+
       <div className="location-row">
         <LocationPicker
           location={location}
@@ -95,11 +100,11 @@ export default function OutsideApp({ depsFactory = browserDeps }: OutsideAppProp
 
           {view.kind === 'data' && results !== null && (
             <>
-              <NextHourSummary results={results} units={units} timezone={timezone} />
-
-              <ActivityPicker value={settings.activity} onChange={(id) => updateSettings((s) => ({ ...s, activity: id }))} />
-
-              <ConditionsSummary current={view.forecast.current} timezone={timezone} units={units} now={c.now} />
+              <div className="overview">
+                <NextHourSummary results={results} units={units} timezone={timezone} />
+                <ActivityPicker value={settings.activity} onChange={(id) => updateSettings((s) => ({ ...s, activity: id }))} />
+                <ConditionsSummary current={view.forecast.current} timezone={timezone} units={units} now={c.now} />
+              </div>
 
               <section className="best-windows" aria-labelledby="windows-heading">
                 <h3 id="windows-heading">Best times in the next 24 hours</h3>

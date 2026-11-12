@@ -88,3 +88,8 @@ Capture answers in the decision register. Do not invent them or stop ordinary im
 | 2026-11-11 | IMP-024 | Times format in `en-US` style in every locale for v1 | Localization is P1; formats are still computed in the target IANA zone |
 | 2026-11-11 | IMP-025 | Heading outline: H1 page question; H2 "Weather for …"; H3 next hour, Now, best times, next 24 hours; H4 selected hour | One H1, logical nesting for screen-reader navigation |
 | 2026-11-11 | IMP-026 | Daylight-only toggle sits with the duration control; rain, wind and comfort range sit in the Preferences disclosure | DESIGN page order item 6; daylight-only remains per activity |
+| 2026-11-11 | IMP-027 | New `--color-control-border` (#7c8a7c, ≥3:1) for interactive outlines; `--color-divider` stays decorative | Divider was 1.26:1, too faint as the only boundary of timeline buttons (WCAG 1.4.11) |
+| 2026-11-11 | IMP-028 | No-JS fallback uses an `html.js` class set by a one-line inline script (hashed into the CSP) instead of `<noscript>`; the inert tool is hidden without JS | Shows a working explanation instead of controls that do nothing; testable in Playwright |
+| 2026-11-11 | IMP-029 | E2E server on dedicated port 4791 with `reuseExistingServer: false` | Another local site on 4322 was silently reused; a busy port must fail the run |
+| 2026-11-11 | IMP-030 | The location row shows only "Saved location"/"Approximate location" plus Change; the place name appears once, in the weather heading | Mobile review: the name appeared twice and pushed the verdict down |
+| 2026-11-11 | IMP-031 | Desktop (≥900 px) overview: summary and activity left, Now right, via grid areas with unchanged DOM order | DESIGN: two columns only where reading order stays natural |

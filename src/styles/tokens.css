@@ -1,11 +1,13 @@
-/* Proposed initial tokens (DESIGN.md). Contrast to be verified in M4. */
+/* Design tokens (DESIGN.md). Contrast pairs are verified by tests/unit/contrast.test.ts. */
 :root {
   --color-bg: #f7f8f4;
   --color-surface: #ffffff;
   --color-text: #202820;
   --color-text-secondary: #526052;
   --color-brand: #2d6848;
-  --color-divider: #d9e0d7;
+  --color-divider: #d9e0d7; /* decorative only; never the sole boundary of a control */
+  --color-control-border: #7c8a7c; /* ≥3:1 on surface and background */
+  --color-selected: #eef4ef;
   --color-good: #245c3d;
   --color-mixed: #785315;
   --color-concern: #9b3030;

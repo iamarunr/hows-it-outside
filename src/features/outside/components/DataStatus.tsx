@@ -2,7 +2,7 @@ import type { ForecastErrorKind, ForecastView } from '../controller/reducer';
 import { formatTime, zoneName } from '../../../lib/time';
 
 const ERROR_COPY: Readonly<Record<ForecastErrorKind | 'expired', string>> = {
-  offline: "You're offline. Previously loaded weather may be out of date.",
+  offline: "Weather couldn't load because you're offline. Try again when you're connected.",
   rate_limited: 'The weather service is busy. Please wait a minute and try again.',
   timeout: "Weather couldn't load. Try again or choose another location.",
   network: "Weather couldn't load. Try again or choose another location.",
@@ -64,9 +64,7 @@ export function DataStatus({ view, now, cooldownUntil, onRetry }: DataStatusProp
         </div>
       )}
       {tier !== 'stale' && refreshError !== null && (
-        <p className="notice notice-mixed">
-          {refreshError === 'offline' ? ERROR_COPY.offline : `Couldn't refresh. Forecast retrieved at ${retrieved}.`}
-        </p>
+        <p className="notice notice-mixed">Couldn&apos;t refresh. Forecast retrieved at {retrieved}.</p>
       )}
     </>
   );

@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+### M4 — Design and resilience (11 November 2026)
+- Verified token contrast with automated tests; stronger border for interactive hour buttons.
+- Desktop two-column overview; place name shown once on small screens; forced-colors support.
+- Offline, storage-blocked and settings-reset notices.
+- Methodology, Privacy and expanded About pages; footer navigation and full attribution.
+- No-JavaScript explanation on the home page; inert controls hidden.
+- Automated axe, reflow, target-size, forced-colors, no-JS, offline and storage journeys.
+
 ### M3 — Complete product experience (11 November 2026)
 - Activity choice (Outdoors, Walk, Run, Bike, Hang out), units, outing length and daylight-only controls; all recompute locally without refetching.
 - Next-hour summary with concerning-weather notices first, up to two reasons and a comparison with the best window.

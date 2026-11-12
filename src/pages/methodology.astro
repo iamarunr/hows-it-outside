@@ -1,0 +1,176 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import {
+  ACTIVITY_IDS,
+  ACTIVITY_PRESETS,
+  FLAG_THRESHOLDS,
+  RAIN_DIVISORS,
+  SCORING_VERSION,
+  WIND_THRESHOLDS,
+} from '../domain/activities';
+import { FLAG_COPY } from '../domain/flags';
+
+const rainLabel = { avoid: 'Avoid rain', light: 'Some rain is fine', okay: "Rain doesn't bother me" } as const;
+const windLabel = { low: 'Prefer calm', medium: 'Some wind is fine', high: "Wind doesn't bother me" } as const;
+const pct = (n: number) => `${Math.round(n * 100)}%`;
+---
+
+<BaseLayout
+  title="Methodology — Outside?"
+  description="How Outside? turns a forecast into a preference match: inputs, presets, formulas, flags and limitations."
+>
+  <article class="prose">
+    <h1>How Outside? works</h1>
+    <p>
+      Outside? compares the forecast with the preferences for the activity you choose. The result is a
+      <strong>preference match</strong>, not a safety assessment, a medical judgment or an official warning. The
+      thresholds below are product defaults chosen for this tool, not researched comfort or health limits. Scoring
+      version {SCORING_VERSION}.
+    </p>
+
+    <h2>What it looks at</h2>
+    <ul>
+      <li>Feels-like (apparent) temperature, from the forecast.</li>
+      <li>Chance of precipitation and precipitation amount for each hour.</li>
+      <li>Sustained wind and gusts.</li>
+      <li>Weather type (for example rain, snow, fog or thunderstorms) and whether it is daylight.</li>
+    </ul>
+    <p>
+      It does <strong>not</strong> check air quality, UV, pollen, official weather alerts, visibility detail, terrain,
+      trail or road surfaces, or water conditions. A good match says nothing about those.
+    </p>
+
+    <h2>Activity presets</h2>
+    <p>You can change each activity's comfortable range and its rain and wind tolerance under Preferences.</p>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Activity</th>
+            <th scope="col">Comfortable feels-like</th>
+            <th scope="col">Temperature weight</th>
+            <th scope="col">Rain weight</th>
+            <th scope="col">Wind weight</th>
+            <th scope="col">Default rain</th>
+            <th scope="col">Default wind</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            ACTIVITY_IDS.map((id) => {
+              const p = ACTIVITY_PRESETS[id];
+              return (
+                <tr>
+                  <th scope="row">{p.label}</th>
+                  <td>
+                    {p.defaults.comfortLowC} to {p.defaults.comfortHighC} °C
+                  </td>
+                  <td>{pct(p.weights.temperature)}</td>
+                  <td>{pct(p.weights.precipitation)}</td>
+                  <td>{pct(p.weights.wind)}</td>
+                  <td>{rainLabel[p.defaults.rain]}</td>
+                  <td>{windLabel[p.defaults.wind]}</td>
+                </tr>
+              );
+            })
+          }
+        </tbody>
+      </table>
+    </div>
+    <p>“Outdoors” is meant for casual, land-based time outside. It is not a model for swimming, climbing, boating or remote hiking.</p>
+
+    <h2>How an hour is scored</h2>
+    <p>Each hour gets three penalties between 0 and 1:</p>
+    <ul>
+      <li>
+        <strong>Temperature:</strong> 0 inside your comfortable range, rising to 1 when the feels-like temperature is 12 °C
+        outside it. Humidity is already part of feels-like, so it is shown but not counted again. Wind is part of
+        feels-like too, and is also counted on its own because it affects effort, especially on a bike.
+      </li>
+      <li>
+        <strong>Rain:</strong> the larger of the chance of precipitation and the amount, each compared with your tolerance:
+        {
+          (Object.keys(RAIN_DIVISORS) as (keyof typeof RAIN_DIVISORS)[]).map((k, i) => (
+            <>
+              {i > 0 && '; '}
+              {rainLabel[k].toLowerCase()} reaches 1 at {RAIN_DIVISORS[k].probabilityPct}% or {RAIN_DIVISORS[k].amountMm} mm per hour
+            </>
+          ))
+        }.
+      </li>
+      <li>
+        <strong>Wind:</strong> how far sustained wind and gusts exceed your tolerance (
+        {
+          (Object.keys(WIND_THRESHOLDS) as (keyof typeof WIND_THRESHOLDS)[]).map((k, i) => (
+            <>
+              {i > 0 && '; '}
+              {windLabel[k].toLowerCase()}: from {WIND_THRESHOLDS[k].sustainedKmh} km/h, gusts from {WIND_THRESHOLDS[k].gustKmh} km/h
+            </>
+          ))
+        }).
+      </li>
+    </ul>
+    <p>
+      The score is 100 minus the weighted penalties. If any single penalty is high, the score is also capped so that one
+      unacceptable factor cannot be averaged away by good ones: a fully unacceptable factor always gives a poor match.
+      Scores of 75 or more are a <strong>Good match</strong>, 45 to 75 <strong>Mixed conditions</strong>, and below 45 a
+      <strong>Poor match</strong>. If any needed value is missing, the hour shows <strong>Limited data</strong> instead
+      of a guess.
+    </p>
+    <p>
+      Reasons name a factor only when it is noticeable, so a 5% chance of rain is not described as “higher chance of
+      precipitation”.
+    </p>
+
+    <h2>Weather that is always flagged</h2>
+    <p>
+      These are shown whenever they appear in the forecast, whatever your preferences, and those hours are never
+      suggested. They are conservative app rules, not official hazard thresholds, and no flag does not mean no hazard.
+    </p>
+    <ul>
+      <li>{FLAG_COPY.thunderstorm}</li>
+      <li>{FLAG_COPY.freezing_precip}</li>
+      <li>{FLAG_COPY.strong_gusts} (gusts of {FLAG_THRESHOLDS.strongGustKmh} km/h or more)</li>
+      <li>{FLAG_COPY.heavy_precip} ({FLAG_THRESHOLDS.heavyPrecipMm} mm or more in an hour)</li>
+      <li>{FLAG_COPY.high_heat} (feels like {FLAG_THRESHOLDS.highHeatFeelsLikeC} °C or more)</li>
+      <li>{FLAG_COPY.severe_cold} (feels like {FLAG_THRESHOLDS.severeColdFeelsLikeC} °C or less)</li>
+      <li>{FLAG_COPY.snow_or_ice_concern}</li>
+    </ul>
+    <p>Fog is shown as a note but does not by itself exclude an hour.</p>
+
+    <h2>Best times</h2>
+    <p>
+      For the length you choose (30 minutes to 2 hours), Outside? checks every start time in the next 24 hours: now and
+      each following hour. A window's score combines the average of its hours (70%) with its worst hour (30%), so one bad
+      hour counts against a longer outing. Windows with missing data, flagged weather, a poor hour or night hours (when
+      “Daylight only” is on) are not suggested. Up to three non-overlapping windows are shown, best first; ties go to the
+      earlier time. Poor windows are never added just to fill the list.
+    </p>
+
+    <h2>Hourly approximations</h2>
+    <ul>
+      <li>
+        Forecasts are hourly. Temperature, humidity and sustained wind are taken at the start of each hour; precipitation,
+        its chance and gusts describe the hour that follows. A 30-minute outing uses the whole hour's forecast, and
+        precipitation is never scaled down for a shorter outing.
+      </li>
+      <li>An hour counts as daylight only if it is daylight at both its start and its end, so dawn and dusk hours are left out of daylight-only suggestions.</li>
+      <li>“Now” comes from the provider's current conditions and is kept separate from the next-hour match.</li>
+      <li>Times are shown in the selected place's time zone, including across daylight-saving changes.</li>
+    </ul>
+
+    <h2>Freshness</h2>
+    <p>
+      A forecast is refreshed after 15 minutes. If it can't be refreshed, it stays visible; after an hour suggestions are
+      paused and the forecast is marked as earlier, and after two hours it is no longer shown.
+    </p>
+
+    <h2>Data sources</h2>
+    <p>
+      Weather data by <a href="https://open-meteo.com/">Open-Meteo</a>, licensed under
+      <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. Location search uses data from
+      <a href="https://www.geonames.org/">GeoNames</a> via Open-Meteo. Forecasts are model output for a grid area, not
+      street-level observations, and can be wrong.
+    </p>
+  </article>
+</BaseLayout>

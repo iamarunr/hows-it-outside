@@ -1,6 +1,6 @@
 # Implementation status
 
-Last updated: 11 November 2026 · Milestone: **M3 complete (uncommitted)** · Branch: `main` · Last-known-good commit: `f7174e2` (M2; M1 `479891b`, M0 `6342d19`)
+Last updated: 11 November 2026 · Milestone: **M4 complete (uncommitted)** · Branch: `main` · Last-known-good commit: `fabd1db` (M3; M2 `f7174e2`, M1 `479891b`, M0 `6342d19`)
 
 ## Baseline
 Folder contained only the single-file spec (v1.1). Not a git repository; `git init -b main` run. Spec split into repository paths (README.md, START_HERE.md, PRODUCT.md, AGENTS.md, WORKFLOW.md, DESIGN.md, docs/01–10); original kept at `docs/archive/Outside_Complete_Agent_Specification.md`.
@@ -91,14 +91,32 @@ M3 command results (11 Nov 2026): `npm run check` 0 errors · `npm run lint` cle
 
 Bundle after M3 (gzip -9): **JS 94.8 KB of 100 KB** (React DOM 65.7, react 3.0, island 26.0); CSS 2.3 KB of 30 KB. About 5 KB of JS headroom remains for M4; supporting pages are static and add no JS.
 
+## M4 — Design and resilience
+| Area | Change | Evidence |
+|---|---|---|
+| Contrast | All text tokens ≥4.5:1 on background, surface and selected fill (lowest 5.97:1); new control-border token ≥3:1 | `tests/unit/contrast.test.ts` (25 pairs) |
+| Layout | Desktop two-column overview; place name shown once; footer spacing fixed | Screenshots at 320, 360, 390, 768, 1440 px |
+| States | Offline banner; settings-reset notice; storage-blocked note; distinct offline load error | `accessibility.spec.ts` offline/storage journeys |
+| Supporting pages | `/methodology/` (presets table generated from code, formulas, cap, flags, windows, approximations, freshness, sources), `/privacy/`, `/about/`, footer links, 404 | axe + one-H1 checks |
+| No-JS | `html.js` class; explanation with links; inert tool hidden | E2E with JavaScript disabled |
+| Forced colors | Selected radios and hour use system Highlight colors | E2E with emulated forced colors + axe |
+
+Automated accessibility evidence (axe-core 4.14 via @axe-core/playwright, WCAG 2.0/2.1/2.2 A and AA tags, Chromium): **0 violations** on home (empty), home (loaded, preferences open), forced colors, About, Methodology, Privacy and 404. Reflow at 320 px (≈400% zoom) and 640 px (≈200%): no horizontal page scrolling. All visible targets ≥24×24 px at 360 px (most 44 px). Automated evidence only, not a conformance claim; manual screen-reader and real-device checks are still pending.
+
+Screenshot review (synthetic London): the review pass found a duplicate place name on mobile, missing spaces in the footer attribution and 20 px checkboxes; all fixed and confirmed in a second pass.
+
+M4 command results (11 Nov 2026): `npm run check` 0 errors · `npm run lint` clean · `npm run test` 17 files, 244 tests · `npm run build` 5 pages, CSP 3 script + 1 style hashes · `npm run test:e2e` 34 passed, 5 skipped (screenshots), stable over 3 repeats (102/102).
+
+Bundle after M4 (gzip -9): **JS 94.9 KB of 100 KB**; CSS 2.7 KB of 30 KB. Supporting pages ship no JS beyond the one-line `js` class script.
+
 ## Not done / pending
 - CI has never run (no GitHub remote). Firefox/WebKit not run (Chromium only by default; `E2E_ALL_BROWSERS=1` adds them).
-- axe checks not yet wired (M4).
+- Manual screen-reader and real iOS/Android device checks not done; Firefox/WebKit not run.
 - `fsevents` install script not approved by npm's allowScripts (macOS-only optional dependency; no effect on build/tests).
 - README.md is still the handoff README; contributor README is M5.
 
 ## Next exact task
-M4: apply DESIGN.md (desktop two-column summary/Now, hierarchy, spacing), verify token contrast and fix failing pairs, offline and storage-disabled notices, settings reset notice, methodology and privacy pages, wire axe checks into E2E, 200%/400% zoom, 320 px reflow, forced colors and reduced motion checks.
+M5: contributor README (real screenshot, setup, architecture, limitations, deployment), LICENSE (MIT), THIRD_PARTY_NOTICES, CONTRIBUTING, SECURITY (route pending owner), issue/PR templates, docs/ACCEPTANCE-RESULTS.md mapping P0 IDs to evidence, preview noindex, robots/sitemap, Firefox/WebKit run, fresh-clone verification.
 
 ## Local preview
 ```

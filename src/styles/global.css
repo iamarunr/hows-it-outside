@@ -223,3 +223,49 @@ button {
 .skeleton div:nth-child(3) {
   width: 40%;
 }
+.site-footer nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  margin-block: var(--space-3);
+}
+.site-footer a,
+.site-header nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target-min);
+}
+.prose {
+  max-width: 44rem;
+}
+.prose h2 {
+  font-size: 1.25rem;
+  margin-top: var(--space-6);
+}
+.prose li + li {
+  margin-top: var(--space-2);
+}
+.table-scroll {
+  overflow-x: auto;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.9375rem;
+}
+th,
+td {
+  text-align: left;
+  vertical-align: top;
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--color-divider);
+}
+thead th {
+  border-bottom: 2px solid var(--color-control-border);
+}
+
+/* Without JavaScript the tool cannot work: explain instead of showing inert controls. */
+.js .js-required,
+html:not(.js) .outside-app {
+  display: none;
+}

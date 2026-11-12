@@ -12,7 +12,10 @@ const NOW = 1794729600;
 const LONDON = place(2643743, 'London', 'England', 'United Kingdom', 51.50853, -0.12574, 'Europe/London');
 
 for (const [name, viewport] of [
+  ['mobile-320', { width: 320, height: 700 }],
   ['mobile-360', { width: 360, height: 800 }],
+  ['mobile-390', { width: 390, height: 844 }],
+  ['tablet-768', { width: 768, height: 1024 }],
   ['desktop-1440', { width: 1440, height: 900 }],
 ] as const) {
   test(`screenshot ${name}`, async ({ page }) => {
@@ -47,5 +50,8 @@ for (const [name, viewport] of [
     await page.getByRole('button', { name: /London, England/ }).click();
     await page.locator('.summary').waitFor();
     await page.screenshot({ path: `${dir}/${name}-loaded.png`, fullPage: true });
+    await page.screenshot({ path: `${dir}/${name}-first-screen.png` });
+    await page.getByText('Preferences and saved data').click();
+    await page.locator('.settings').screenshot({ path: `${dir}/${name}-preferences.png` });
   });
 }

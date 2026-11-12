@@ -1,19 +1,37 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE_LINKS } from '../lib/config';
 ---
 
-<BaseLayout title="About — Outside?" description="What Outside? does and what it does not check.">
-  <h1>About Outside?</h1>
-  <p>
-    Outside? helps you decide whether to head outside now and spot a better time in the next 24 hours for walking,
-    running, cycling or spending time outdoors.
-  </p>
-  <p>
-    Matches are based on your preferences and the displayed forecast only. They are not safety assessments and do not
-    include air quality, UV or official weather alerts.
-  </p>
-  <p>
-    Weather data by <a href="https://open-meteo.com/">Open-Meteo</a>, licensed under
-    <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
-  </p>
+<BaseLayout title="About — Outside?" description="What Outside? does, who made it, and what it does not check.">
+  <article class="prose">
+    <h1>About Outside?</h1>
+    <p>
+      Outside? helps you decide whether to head outside now, and spot a better time in the next 24 hours, for walking,
+      running, cycling, hanging out or just being outdoors. Pick a place, optionally pick an activity, and it explains
+      how the forecast matches your preferences.
+    </p>
+    <p>
+      Matches are based only on the forecast it shows and the preferences you set. They are not safety advice and do not
+      include air quality, UV, pollen or official weather alerts. See <a href="/methodology/">how it works</a> for the
+      details and limitations.
+    </p>
+    <h2>Open source</h2>
+    <p>
+      The code is open source under the MIT license, so anyone can use, adapt and run their own copy. Weather and location
+      data keep their own licenses.
+      {SITE_LINKS.source !== undefined && <> The source code is <a href={SITE_LINKS.source}>available here</a>.</>}
+    </p>
+    <h2>Who made it</h2>
+    <p>
+      Outside? is a project by
+      {SITE_LINKS.author !== undefined ? <a href={SITE_LINKS.author}>Naresh Kumar</a> : 'Naresh Kumar'}.
+    </p>
+    <h2>Data</h2>
+    <p>
+      Weather data by <a href="https://open-meteo.com/">Open-Meteo</a>, licensed under
+      <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. Location search uses data from
+      <a href="https://www.geonames.org/">GeoNames</a> via Open-Meteo. Read the <a href="/privacy/">privacy notes</a>.
+    </p>
+  </article>
 </BaseLayout>

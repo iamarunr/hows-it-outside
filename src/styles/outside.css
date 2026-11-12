@@ -129,8 +129,9 @@ legend {
   min-height: var(--target-min);
 }
 .checkbox input {
-  width: 1.25rem;
-  height: 1.25rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin: 0;
 }
 .windows {
   list-style: none;
@@ -188,12 +189,12 @@ legend {
   padding: var(--space-3);
   text-align: left;
   color: var(--color-text);
-  border-color: var(--color-divider);
+  border-color: var(--color-control-border);
   font-size: 0.875rem;
 }
 .hour[aria-checked='true'] {
   border: 2px solid var(--color-brand);
-  background: #eef4ef;
+  background: var(--color-selected);
 }
 .hour-time {
   font-weight: 700;
@@ -277,4 +278,55 @@ input[type='number'] {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);
+}
+
+/* Desktop: summary and activity on the left, Now on the right; DOM (reading) order unchanged. */
+@media (min-width: 900px) {
+  .overview {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(16rem, 2fr);
+    grid-template-areas:
+      'summary now'
+      'activity now';
+    column-gap: var(--space-6);
+    align-items: start;
+    border-bottom: 1px solid var(--color-divider);
+  }
+  .overview > .summary {
+    grid-area: summary;
+    border-bottom: 0;
+  }
+  .overview > .segmented {
+    grid-area: activity;
+  }
+  .overview > .now {
+    grid-area: now;
+    border-bottom: 0;
+    margin-top: var(--space-4);
+    padding: var(--space-4);
+    background: var(--color-surface);
+    border-radius: var(--radius);
+  }
+  .overview .metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (forced-colors: active) {
+  .segmented-option input:checked + span,
+  .hour[aria-checked='true'] {
+    forced-color-adjust: none;
+    background: Highlight;
+    color: HighlightText;
+    border-color: Highlight;
+  }
+  .hour[aria-checked='true'] * {
+    color: HighlightText;
+  }
+  .notice {
+    border: 1px solid CanvasText;
+  }
+  .timeline-scroll {
+    mask-image: none;
+  }
 }

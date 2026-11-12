@@ -1,6 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
-const PORT = 4322;
+// Dedicated port; a busy port fails the run instead of silently testing another site.
+const PORT = 4791;
 
 // Chromium runs in CI. Set E2E_ALL_BROWSERS=1 to add Firefox and WebKit locally.
 const allBrowsers = process.env.E2E_ALL_BROWSERS === '1';
@@ -30,6 +31,6 @@ export default defineConfig({
     command: `node scripts/serve-dist.ts`,
     env: { PORT: String(PORT) },
     url: `http://127.0.0.1:${PORT}/`,
-    reuseExistingServer: process.env.CI === undefined,
+    reuseExistingServer: false,
   },
 });
