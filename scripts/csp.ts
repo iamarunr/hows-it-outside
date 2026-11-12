@@ -77,7 +77,7 @@ export function buildPolicy(input: PolicyInput): string {
   return directives.map(([name, values]) => `${name} ${values.join(' ')}`).join('; ');
 }
 
-export function buildHeadersFile(policy: string): string {
+export function buildHeadersFile(policy: string, options: { noindex?: boolean } = {}): string {
   return [
     '/*',
     `  Content-Security-Policy: ${policy}`,
@@ -85,6 +85,7 @@ export function buildHeadersFile(policy: string): string {
     '  Referrer-Policy: no-referrer',
     '  Permissions-Policy: geolocation=(self), camera=(), microphone=(), payment=(), usb=()',
     '  X-Frame-Options: DENY',
+    ...(options.noindex === true ? ['  X-Robots-Tag: noindex, nofollow'] : []),
     '',
     '/_astro/*',
     '  Cache-Control: public, max-age=31536000, immutable',

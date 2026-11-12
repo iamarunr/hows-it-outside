@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### M5 — Open-source and release preparation (11 November 2026)
+- Contributor README, MIT license, third-party notices, contributing and security guides, issue forms and PR template.
+- Preview deployments can be marked noindex; hosted builds require a canonical site URL.
+- Fixed in cross-browser testing: select height in Safari, forced-colors selection contrast, and a stuck "Finding your location…" in Firefox when the permission prompt is ignored.
+- Acceptance results, implemented deployment runbook, lab performance check and portfolio entry draft.
+
 ### M4 — Design and resilience (11 November 2026)
 - Verified token contrast with automated tests; stronger border for interactive hour buttons.
 - Desktop two-column overview; place name shown once on small screens; forced-colors support.

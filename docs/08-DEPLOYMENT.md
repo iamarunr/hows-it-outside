@@ -50,3 +50,53 @@ Provider outage: static site remains available; error/stale state communicates f
 
 ## Maintenance
 Check dependencies and provider contract regularly before releases. Keep a scheduled automated dependency PR mechanism optional; no automation is created by this document. Re-run golden tests when provider fields change. Review free-tier terms before adding sponsorship, ads, commercial positioning or paid features. Track unresolved reports without collecting private locations.
+
+## Implemented runbook (M5, 11 November 2026)
+
+This section records the actual implementation. Nothing here has been deployed; every hosted step needs owner authorization.
+
+### Build settings (Cloudflare Pages)
+
+| Setting | Value |
+|---|---|
+| Framework preset | None (or Astro) — static output, no adapter |
+| Build command | `npm run build` |
+| Output directory | `dist` |
+| Node version | `26` (`NODE_VERSION=26` environment variable, matching `.nvmrc`) |
+| Production branch | `main` |
+
+`npm run build` runs `astro build`, then `scripts/csp-headers.ts` (hashes every inline script and style into `dist/_headers` and fails on anything a hash can't cover), then `scripts/verify-dist.ts` (fails if fixtures or test hooks reach the bundle).
+
+### Environment variables
+
+| Variable | Production | Preview |
+|---|---|---|
+| `PUBLIC_SITE_URL` | `https://outside.knnaresh.com` | `https://outside.knnaresh.com` (canonical stays production) |
+| `PUBLIC_NOINDEX` | unset | `true` |
+| `PUBLIC_SOURCE_URL` | real repository URL once public | same |
+| `PUBLIC_AUTHOR_URL` | `https://knnaresh.com` | same |
+
+A Pages build (`CF_PAGES=1`) without `PUBLIC_SITE_URL` fails on purpose. With `PUBLIC_NOINDEX=true` every page gets `<meta name="robots" content="noindex, nofollow">` and `_headers` adds `X-Robots-Tag: noindex, nofollow`. Never set it on production.
+
+### Local verification before deploying
+
+```sh
+npm ci && npm run check && npm run lint && npm run test && npm run build
+npm run test:e2e                       # Chromium, built site with headers, port 4791
+E2E_ALL_BROWSERS=1 npm run test:e2e    # adds Firefox and WebKit
+PERF=1 npx playwright test perf --project=chromium
+npm run preview                        # http://localhost:4321 (no _headers; use for visual checks only)
+```
+
+### Header verification after a deployment
+
+```sh
+curl -sI https://<deployment-host>/ | grep -iE 'content-security-policy|x-content-type-options|referrer-policy|permissions-policy|x-frame-options|x-robots-tag'
+curl -sI https://<deployment-host>/_astro/<any-asset>.js | grep -i cache-control
+```
+
+Expect the CSP to start with `default-src 'self'`, contain `connect-src 'self' https://api.open-meteo.com https://geocoding-api.open-meteo.com` and `frame-ancestors 'none'`, and contain no `unsafe-inline`. Expect `X-Robots-Tag` only on preview hosts. Then open the site, run a search and "Use my location", and check the browser console for CSP reports.
+
+### Rollback
+
+Cloudflare Pages keeps every deployment. To roll back, choose the last known-good deployment in the Pages dashboard and use **Rollback to this deployment**, then record the commit. Do not rewrite git history to roll back.

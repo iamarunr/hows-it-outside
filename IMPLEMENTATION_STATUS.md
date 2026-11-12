@@ -1,6 +1,6 @@
 # Implementation status
 
-Last updated: 11 November 2026 · Milestone: **M4 complete (uncommitted)** · Branch: `main` · Last-known-good commit: `fabd1db` (M3; M2 `f7174e2`, M1 `479891b`, M0 `6342d19`)
+Last updated: 11 November 2026 · Milestone: **M5 complete (uncommitted)** · Branch: `main` · Last-known-good commit: `feff8ab` (M4; M3 `fabd1db`, M2 `f7174e2`, M1 `479891b`, M0 `6342d19`)
 
 ## Baseline
 Folder contained only the single-file spec (v1.1). Not a git repository; `git init -b main` run. Spec split into repository paths (README.md, START_HERE.md, PRODUCT.md, AGENTS.md, WORKFLOW.md, DESIGN.md, docs/01–10); original kept at `docs/archive/Outside_Complete_Agent_Specification.md`.
@@ -109,14 +109,31 @@ M4 command results (11 Nov 2026): `npm run check` 0 errors · `npm run lint` cle
 
 Bundle after M4 (gzip -9): **JS 94.9 KB of 100 KB**; CSS 2.7 KB of 30 KB. Supporting pages ship no JS beyond the one-line `js` class script.
 
+## M5 — Open-source and release preparation
+- Root `README.md` for contributors (screenshot, setup, scripts, configuration, architecture, deployment, limitations); spec-pack README moved to `docs/00-HANDOFF.md`.
+- `LICENSE` (MIT, 2026 Naresh Kumar), `THIRD_PARTY_NOTICES.md`, `CONTRIBUTING.md`, `SECURITY.md` (private route **pending owner**; no invented address).
+- Issue forms (bug, feature, scoring feedback; privacy warnings; blank issues off) and PR template; advisory `npm audit` CI job.
+- Preview noindex (`PUBLIC_NOINDEX`) and a hosted-build guard for `PUBLIC_SITE_URL`; both verified locally.
+- Cross-browser: Firefox and WebKit installed and run. Findings fixed: Safari select height, Firefox forced-colors contrast, Firefox geolocation never answering (20 s guard). Result: 101 passed, 16 skipped across 3 engines.
+- Fresh-copy verification: only committable files, no `.env`, `npm ci` → check, lint, 247 unit tests, build, 34 E2E all pass.
+- Lab performance (Chromium, 4× CPU, throttled network): LCP 416–436 ms, CLS 0, activity switch 23–40 ms.
+- `docs/ACCEPTANCE-RESULTS.md` maps every P0 ID and test-plan journey to evidence; `docs/08-DEPLOYMENT.md` has the implemented runbook; `docs/PORTFOLIO.md` drafts the portfolio entry.
+
+M5 command results (11 Nov 2026): `npm run check` 0 errors · `npm run lint` clean · `npm run test` 17 files, 247 tests · `npm run build` 5 pages · `npm run test:e2e` 34 passed (Chromium) · `E2E_ALL_BROWSERS=1` 101 passed, 16 skipped.
+
 ## Not done / pending
-- CI has never run (no GitHub remote). Firefox/WebKit not run (Chromium only by default; `E2E_ALL_BROWSERS=1` adds them).
-- Manual screen-reader and real iOS/Android device checks not done; Firefox/WebKit not run.
+- CI has never run (no GitHub remote). CI runs Chromium only; Firefox/WebKit were run locally.
+- Manual screen-reader and real iOS/Android device checks not done.
 - `fsevents` install script not approved by npm's allowScripts (macOS-only optional dependency; no effect on build/tests).
-- README.md is still the handoff README; contributor README is M5.
+
+## Owner decisions blocking public launch
+1. Open-Meteo hosted API eligibility for a portfolio-linked site (non-commercial or paid plan + proxy).
+2. Public repository URL (`PUBLIC_SOURCE_URL`, README links).
+3. Private security-reporting route for `SECURITY.md`.
+4. Authorization to create the Cloudflare Pages project, add the outside.knnaresh.com custom domain and deploy.
 
 ## Next exact task
-M5: contributor README (real screenshot, setup, architecture, limitations, deployment), LICENSE (MIT), THIRD_PARTY_NOTICES, CONTRIBUTING, SECURITY (route pending owner), issue/PR templates, docs/ACCEPTANCE-RESULTS.md mapping P0 IDs to evidence, preview noindex, robots/sitemap, Firefox/WebKit run, fresh-clone verification.
+M6 (needs owner authorization): resolve the decisions above, create the Pages project with the documented settings, verify a preview deployment (headers, noindex, search, location, attribution), add the custom domain, verify production headers and live smoke in 5+ cities, record the release commit and rollback target in `docs/ACCEPTANCE-RESULTS.md`.
 
 ## Local preview
 ```

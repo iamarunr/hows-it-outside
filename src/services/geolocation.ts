@@ -16,9 +16,27 @@ export const GEOLOCATION_OPTIONS: PositionOptions = {
 
 type GeolocationLike = Pick<Geolocation, 'getCurrentPosition'>;
 
-export function requestDeviceLocation(geo: GeolocationLike | undefined): Promise<GeoResult> {
+/**
+ * Some browsers (Firefox) never call back while a permission prompt is ignored, and the
+ * API timeout only starts after permission. This guard ends the wait so the visitor is
+ * never stuck on "Finding your location…".
+ */
+export const GEOLOCATION_GUARD_MS = 20_000;
+
+export function requestDeviceLocation(
+  geo: GeolocationLike | undefined,
+  guardMs: number = GEOLOCATION_GUARD_MS,
+): Promise<GeoResult> {
   if (geo === undefined) return Promise.resolve({ ok: false, error: 'unsupported' });
-  return new Promise((resolve) => {
+  return new Promise((outerResolve) => {
+    let settled = false;
+    const guard = setTimeout(() => resolve({ ok: false, error: 'timeout' }), guardMs);
+    function resolve(result: GeoResult): void {
+      if (settled) return;
+      settled = true;
+      clearTimeout(guard);
+      outerResolve(result);
+    }
     try {
       geo.getCurrentPosition(
         (position) => {

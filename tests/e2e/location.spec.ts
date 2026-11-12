@@ -74,7 +74,9 @@ test('a slow response for an earlier place cannot overwrite the newer selection'
   expect(h.unmatched).toEqual([]);
 });
 
-test('no location prompt before the button; denied permission leaves search usable', async ({ page, context }) => {
+test('no location prompt before the button; denied permission leaves search usable', async ({ page, context, browserName }) => {
+  // Firefox cannot emulate a denied prompt; the guard-timeout path is unit-tested instead.
+  test.skip(browserName === 'firefox', 'Firefox has no scriptable permission denial');
   await context.clearPermissions();
   const h = await setUp(page, { referenceNow: NOW, handlers: baseHandlers() });
   await page.goto('/');

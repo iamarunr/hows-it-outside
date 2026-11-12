@@ -123,6 +123,21 @@ describe('device location', () => {
     expect(await requestDeviceLocation(g.api)).toEqual({ ok: false, error: expected });
   });
 
+  it('gives up with timeout when the browser never answers (ignored permission prompt)', async () => {
+    const g = geo(() => {});
+    expect(await requestDeviceLocation(g.api, 20)).toEqual({ ok: false, error: 'timeout' });
+  });
+
+  it('ignores a late answer after the guard fired', async () => {
+    let late: ((p: GeolocationPosition) => void) | undefined;
+    const g = geo((ok) => {
+      late = ok;
+    });
+    const result = await requestDeviceLocation(g.api, 10);
+    late?.({ coords: { latitude: 1, longitude: 1 } } as GeolocationPosition);
+    expect(result).toEqual({ ok: false, error: 'timeout' });
+  });
+
   it('reports unsupported when the API is missing', async () => {
     expect(await requestDeviceLocation(undefined)).toEqual({ ok: false, error: 'unsupported' });
   });

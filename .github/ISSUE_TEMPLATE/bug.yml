@@ -1,0 +1,48 @@
+name: Bug report
+description: Something in Outside? doesn't work as expected.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Privacy:** please don't include your exact location, home address, coordinates or screenshots that reveal where you live. A nearby city name is enough.
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and version
+      placeholder: e.g. Safari 19 on iOS, Firefox 140 on Windows
+    validations:
+      required: true
+  - type: dropdown
+    id: activity
+    attributes:
+      label: Activity
+      options: [Outdoors, Walk, Run, Bike, Hang out, Not relevant]
+  - type: dropdown
+    id: units
+    attributes:
+      label: Units
+      options: ['°C, km/h, mm', '°F, mph, in', Not relevant]
+  - type: input
+    id: place
+    attributes:
+      label: City searched (optional)
+      description: A city name only. Never coordinates or an address.
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened instead
+    validations:
+      required: true

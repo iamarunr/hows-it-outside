@@ -253,6 +253,13 @@ legend {
   gap: var(--space-1);
   font-weight: 600;
 }
+select {
+  appearance: none;
+  padding-right: 2.25rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23202820' stroke-width='2'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+}
 input[type='number'],
 select {
   min-height: var(--target-min);
@@ -313,15 +320,12 @@ input[type='number'] {
 }
 
 @media (forced-colors: active) {
+  /* Keep the user's system text colors; mark selection with a thick system outline and weight. */
   .segmented-option input:checked + span,
   .hour[aria-checked='true'] {
-    forced-color-adjust: none;
-    background: Highlight;
-    color: HighlightText;
-    border-color: Highlight;
-  }
-  .hour[aria-checked='true'] * {
-    color: HighlightText;
+    outline: 3px solid Highlight;
+    outline-offset: 2px;
+    font-weight: 700;
   }
   .notice {
     border: 1px solid CanvasText;

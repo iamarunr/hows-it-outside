@@ -40,7 +40,11 @@ async function main(): Promise<void> {
   }
 
   const headersPath = join(DIST, '_headers');
-  await writeFile(headersPath, buildHeadersFile(buildPolicy({ scriptHashes, styleHashes, connectOrigins: CONNECT_ORIGINS })));
+  const noindex = process.env.PUBLIC_NOINDEX === 'true';
+  await writeFile(
+    headersPath,
+    buildHeadersFile(buildPolicy({ scriptHashes, styleHashes, connectOrigins: CONNECT_ORIGINS }), { noindex }),
+  );
 
   // Independent verification pass against the file actually written.
   const written = await readFile(headersPath, 'utf8');
@@ -53,7 +57,7 @@ async function main(): Promise<void> {
   if (missing.length > 0) throw new Error(`Inline code not covered by CSP:\n  ${missing.join('\n  ')}`);
 
   console.log(
-    `[csp] ${files.length} HTML files; ${scriptHashes.size} script and ${styleHashes.size} style hashes written to dist/_headers`,
+    `[csp] ${files.length} HTML files; ${scriptHashes.size} script and ${styleHashes.size} style hashes written to dist/_headers${noindex ? ' (noindex)' : ''}`,
   );
 }
 

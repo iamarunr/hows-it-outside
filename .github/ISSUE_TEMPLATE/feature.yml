@@ -1,0 +1,20 @@
+name: Feature idea
+description: Suggest an improvement.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve?
+      description: Describe the situation and who it affects, not just the solution.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope and trade-offs
+      description: New data sources (AQI, UV, alerts, maps) need their own requirements, privacy review and tests. See docs/01-PRB.md for current non-goals.

@@ -44,7 +44,13 @@ async function axe(page: Page) {
   // axe relies on timers; the harness pauses the page clock, so let it run.
   await page.clock.resume().catch(() => undefined);
   const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']).analyze();
-  return results.violations.map((v) => `${v.impact ?? 'unknown'} ${v.id}: ${v.nodes.length} node(s) — ${v.help}`);
+  return results.violations.map(
+    (v) =>
+      `${v.impact ?? 'unknown'} ${v.id}: ${v.nodes.length} node(s) — ${v.help} [${v.nodes
+        .slice(0, 4)
+        .map((n) => `${n.target.join(' ')} ${n.any[0]?.message ?? ''}`)
+        .join(' | ')}]`,
+  );
 }
 
 test('home before a place is chosen has no axe violations', async ({ page }) => {

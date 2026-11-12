@@ -1,0 +1,34 @@
+name: Scoring feedback
+description: A match, window or reason seemed wrong for the forecast shown.
+labels: [scoring]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Matches are preference heuristics, not safety advice, and comfortable conditions vary a lot between people. Feedback helps tune the defaults; please compare against the forecast values the app showed. See the Methodology page for how scores work.
+
+        **Privacy:** a city name is enough. Don't share coordinates or addresses.
+  - type: dropdown
+    id: activity
+    attributes:
+      label: Activity
+      options: [Outdoors, Walk, Run, Bike, Hang out]
+    validations:
+      required: true
+  - type: textarea
+    id: shown
+    attributes:
+      label: What the app showed
+      description: The verdict and reasons, and the hour's feels-like temperature, precipitation chance and amount, wind and gusts.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected, and why
+    validations:
+      required: true
+  - type: textarea
+    id: prefs
+    attributes:
+      label: Your preferences (if changed from defaults)

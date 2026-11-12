@@ -39,6 +39,11 @@ describe('CSP generation', () => {
     expect([...hashesInHeaders(file, 'script-src')]).toEqual(["'sha256-a'", "'sha256-b'"]);
   });
 
+  it('adds X-Robots-Tag only for noindex (preview) builds', () => {
+    expect(buildHeadersFile('default-src self')).not.toContain('X-Robots-Tag');
+    expect(buildHeadersFile('default-src self', { noindex: true })).toContain('X-Robots-Tag: noindex, nofollow');
+  });
+
   it('keeps the post-build connect origins in sync with the app config', () => {
     const script = readFileSync(new URL('../../scripts/csp-headers.ts', import.meta.url), 'utf8');
     for (const origin of Object.values(PROVIDER_ORIGINS)) expect(script).toContain(`'${origin}'`);
