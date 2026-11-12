@@ -444,7 +444,7 @@ legend {
 .sky-hero {
   width: 100vw;
   margin-inline: calc(50% - 50vw);
-  min-height: calc(100svh - 62px);
+  min-height: calc(100svh - var(--header-h));
   display: flex;
   flex-direction: column;
   /* Height of the landscape strip. Text never sits on it. */
@@ -1654,5 +1654,67 @@ legend {
 @keyframes hill-mid {
   to {
     transform: translateY(17%);
+  }
+}
+
+/*
+ * The menu sits on the sky. At the top of the page the bar is transparent and takes the current
+ * sky's ink (each ink is contrast-tested against that sky's top stop); once the page scrolls, the
+ * layout script adds .scrolled and the bar turns solid brand navy. Without JavaScript, or when a notice
+ * sits above the sky, the bar stays solid and the sky starts below it.
+ */
+body:has(.sky-hero[data-sky='clear']) {
+  --header-ink: var(--sky-clear-ink);
+}
+body:has(.sky-hero[data-sky='cloudy']) {
+  --header-ink: var(--sky-cloudy-ink);
+}
+body:has(.sky-hero[data-sky='rain']) {
+  --header-ink: var(--sky-rain-ink);
+}
+body:has(.sky-hero[data-sky='snow']) {
+  --header-ink: var(--sky-snow-ink);
+}
+body:has(.sky-hero[data-sky='storm']) {
+  --header-ink: var(--sky-storm-ink);
+}
+body:has(.sky-hero[data-sky='fog']) {
+  --header-ink: var(--sky-fog-ink);
+}
+body:has(.sky-hero[data-sky='night-clear']) {
+  --header-ink: var(--sky-night-clear-ink);
+}
+body:has(.sky-hero[data-sky='night-cloudy']) {
+  --header-ink: var(--sky-night-cloudy-ink);
+}
+body:has(.sky-hero[data-sky='dawn']) {
+  --header-ink: var(--sky-dawn-ink);
+}
+body:has(.sky-hero[data-sky='dusk']) {
+  --header-ink: var(--sky-dusk-ink);
+}
+body:has(.sky-hero[data-sky='unknown']) {
+  --header-ink: var(--sky-unknown-ink);
+}
+.js .outside-app > .weather > .sky-hero {
+  margin-top: calc(-1 * var(--header-h));
+  padding-top: var(--header-h);
+  min-height: 100svh;
+}
+.js .outside-app > .notice ~ .weather > .sky-hero {
+  margin-top: 0;
+  padding-top: 0;
+  min-height: calc(100svh - var(--header-h));
+}
+.js:not(.scrolled) body:has(.outside-app > .weather > .sky-hero):not(:has(.outside-app > .notice)) .site-header {
+  color: var(--header-ink, var(--color-text));
+  background-color: transparent;
+  border-bottom-color: transparent;
+}
+@media (forced-colors: active) {
+  .site-header {
+    background: Canvas !important;
+    color: CanvasText !important;
+    border-bottom-color: CanvasText !important;
   }
 }

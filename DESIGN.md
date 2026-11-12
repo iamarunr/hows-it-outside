@@ -382,7 +382,7 @@ The column is centred at a 1180px maximum, with side padding of `clamp(16px, 4vw
 1. Slim header: the Outside? wordmark, then "How it works" and "About".
 2. Offline and unreadable-settings notices, when present, as tinted notices above the sky.
 3. Sky hero, empty state (no place chosen): centred vertically, the display headline (h1), the lede, then Use my location, a 56px search, and the Units pills (°C / °F, visible "Units" legend), stacked on the sky.
-4. Sky hero, results state: the toolbar (the chosen place, which reads "Current area" for a device location and carries a "Saved location" or "Approximate location" tag, with Change location; Units opposite), the readout (h2, the focus target after a place is chosen: city and region, temperature, condition and feels-like), data status notices (concerning weather and stale data before any positive summary), a 1px hairline in the sky's ink at 45%, then the next-hour verdict with two reasons and a comparison line, and the activity pills (Outdoors, Walk, Run, Bike, Hang out). The toolbar sits at the top and the verdict at the bottom of the screen. The h1 is visually hidden in this state.
+4. Sky hero, results state: the toolbar (the chosen place, which for a device location is the looked-up area name, or "Current area" when the lookup fails, and carries a "Saved location" or "Approximate location" tag, with Change location; Units opposite), the readout (h2, the focus target after a place is chosen: city and region, temperature, condition and feels-like), data status notices (concerning weather and stale data before any positive summary), a 1px hairline in the sky's ink at 45%, then the next-hour verdict with two reasons and a comparison line, and the activity pills (Outdoors, Walk, Run, Bike, Hang out). The toolbar sits at the top and the verdict at the bottom of the screen. The h1 is visually hidden in this state.
 5. Now strip: the "Now" heading beside wind, gusts and humidity as display numbers, with the "Conditions as of" timestamp, above a divider.
 6. Planning band (padding `clamp(48px, 7vw, 6rem)`): heading, duration pills and Daylight only, then the best window and up to two alternatives as scoreboard rows.
 7. Next 24 hours: the hourly strip across the full width, with the selected-hour detail below.
@@ -430,7 +430,11 @@ Thin and exact, like a ticket stub.
 - **Error:** concern-text message below the field.
 
 ### Navigation
-Header links use uppercase sans 600 at 0.875rem in ink and turn navy with an underline on hover. Footer links are underlined in navy. Every link has a 44px minimum height. The wordmark is Bebas Neue at 1.875rem.
+A full-width bar, 62px tall, with the Bebas Neue wordmark and two uppercase links on one row at every width (links drop to 12px below 360px). It has two states:
+- **On the sky:** at the top of the home page the bar is transparent and the sky runs behind it. Its ink is the current sky's ink, set from the sky id with `:has()`, so it is the same contrast-tested pair as the hero text.
+- **Solid:** brand navy with white ink (a tested pair). Used once the page has scrolled (the layout script toggles `.scrolled` on `html` past 8px), on pages without a sky, when a notice sits above the sky, and always without JavaScript.
+
+The bar is sticky only with JavaScript. `scroll-padding-top` keeps focused and linked-to content clear of it. Hover is an underline; the focus ring uses the bar's current ink.
 
 ### Favicon
 A chalk sun rising over a sand horizon line and an olive ground, on a navy-to-slate rounded tile (`favicon.svg`, `favicon.ico`, `apple-touch-icon.png`). The shell sets `theme-color` to Harbour Navy (#233651).
@@ -493,7 +497,7 @@ Location: visible input label "Search city or place." Use a debounced accessible
 
 Units: compact °C/°F radio pills with a visible "Units" legend. Assistive tech gets the full names "°C, km/h, mm" and "°F, mph, in".
 
-Geolocation: permission is requested only from the button. Copy before the click: "Uses your approximate location to load weather." Round coordinates before sending. There is no reverse geocoding in v1, so a GPS selection is labelled "Current area", never an invented city. Show the timezone below when relevant. Failures appear inline with Retry, and search stays available.
+Geolocation: permission is requested only from the button. Copy before the click: "Uses your approximate location to load weather." Round coordinates before sending. A GPS selection is named by one reverse-geocoding request with the rounded coordinates (BigDataCloud, client-side, no key), made before the readout appears and bounded by a 2 s timeout. If it fails, or the provider only guessed from the IP address, the label is "Current area", never an invented city. The toolbar keeps its "Approximate location" tag either way. Show the timezone below when relevant. Failures appear inline with Retry, and search stays available.
 
 Activities: native radio inputs styled as pills, which wrap on narrow screens. Do not misuse tabs when there is no tabpanel. The selected state has a visible label and checked semantics. Switching keeps focus and briefly announces the updated summary.
 

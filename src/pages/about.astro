@@ -19,19 +19,20 @@ import { SITE_LINKS } from '../lib/config';
     <h2>Open source</h2>
     <p>
       The code is open source under the MIT license, so anyone can use, adapt and run their own copy. Weather and location
-      data keep their own licenses.
+      data keep their own licenses.{' '}
       {SITE_LINKS.source !== undefined && <> The source code is <a href={SITE_LINKS.source}>available here</a>.</>}
     </p>
     <h2>Who made it</h2>
     <p>
-      Outside? is a project by
+      Outside? is a project by{' '}
       {SITE_LINKS.author !== undefined ? <a href={SITE_LINKS.author}>Naresh Kumar</a> : 'Naresh Kumar'}.
     </p>
     <h2>Data</h2>
     <p>
-      Weather data by <a href="https://open-meteo.com/">Open-Meteo</a>, licensed under
-      <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. Location search uses data from
-      <a href="https://www.geonames.org/">GeoNames</a> via Open-Meteo. Read the <a href="/privacy/">privacy notes</a>.
+      Weather data by <a href="https://open-meteo.com/">Open-Meteo</a>, licensed under{' '}
+      <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. Location search uses data from{' '}
+      <a href="https://www.geonames.org/">GeoNames</a> via Open-Meteo. The area name for "Use my location" comes from{' '}
+      <a href="https://www.bigdatacloud.com/">BigDataCloud</a>. Read the <a href="/privacy/">privacy notes</a>.
     </p>
   </article>
 </BaseLayout>

@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+### Menu on the sky (12 November 2026)
+- The menu no longer sits in a grey bar above the sky. At the top of the home page it is transparent, in the sky's own ink, with the sky running behind it; once you scroll it becomes a solid navy bar that stays at the top.
+- Other pages, and the home page without JavaScript, use the solid navy bar.
+- Fixed missing spaces before some links on the About, How it works and home pages.
+
+### Named device location (12 November 2026)
+- "Use my location" now shows the area's name (for example "St. Louis, Missouri, United States of America") instead of "Current area".
+- One request with coordinates rounded to about 1 km goes to BigDataCloud's free reverse geocoding API. Searched and remembered places never use it. If the lookup fails or is slow (2 s), the label stays "Current area".
+- Privacy page, security policy (`connect-src`) and third-party notices updated. This supersedes the earlier "no reverse geocoding" decision (ADR-004).
+
 ### Living landscape (12 November 2026)
 - A strip of layered hills closes the sky, with a sun or moon riding its arc: from the real sun position for a chosen place, and from the visitor's clock before one is chosen.
 - Two new skies, dawn and dusk, when the sun is within 50 minutes of the horizon under a clear sky.

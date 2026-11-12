@@ -113,5 +113,6 @@
   --radius-pill: 999px;
   --content-max: 1180px;
   --target-min: 44px;
+  --header-h: 62px;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }

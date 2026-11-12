@@ -6,7 +6,7 @@
 | ADR-001 | Separate Astro app/repo | Portable open-source project and independent portfolio deployment |
 | ADR-002 | Static output plus single React island | Simple hosting and one coherent interactive state tree |
 | ADR-003 | Direct public provider calls for eligible deployments | Zero secrets/backend; provider sees client network metadata |
-| ADR-004 | No reverse geocoding | Fewer services/privacy exposure; GPS selection is labeled Current area |
+| ADR-004 | No reverse geocoding (superseded by IMP-056 on 2026-11-12) | Fewer services/privacy exposure; GPS selection is labeled Current area |
 | ADR-005 | Two-decimal coordinate rounding | Reduce unnecessary precision; not an anonymity guarantee |
 | ADR-006 | UTC arithmetic, IANA display | DST correctness and remote-city support |
 | ADR-007 | Normalize preceding-hour fields separately | Prevent rain/gust from being shifted into the wrong outing hour |
@@ -130,3 +130,8 @@ Capture answers in the decision register. Do not invent them or stop ordinary im
 | 2026-11-12 | IMP-053 | PRODUCT ASSUMPTION: shortcut cards are London, Chennai and Sydney; each shows local time and a day/night sky from the sun position, never weather | Honest before any forecast is fetched; no extra API requests on first load |
 | 2026-11-12 | IMP-054 | Shortcut cards do not float or drift; only their sky layers move | A perpetually moving click target is harder to hit (found by browser tests) |
 | 2026-11-12 | IMP-055 | The disc's arc is written with `style.setProperty` from an effect, not a style attribute | Strict CSP forbids inline style attributes |
+| 2026-11-12 | IMP-056 | OWNER DECISION, supersedes ADR-004: "Use my location" names its area through BigDataCloud's free client-side reverse geocoding endpoint (`api.bigdatacloud.net` and its redirect target `api-bdc.io`, both added to CSP `connect-src`; the redirect was found by a live check, since mocked tests cannot see it) | The owner asked for a city instead of "Current area" and accepted a second service receiving rounded coordinates |
+| 2026-11-12 | IMP-057 | The lookup runs only right after a fresh geolocation result, with 2-decimal coordinates, no retry and a 2 s timeout; the name is stored with the remembered place and never looked up again | Provider terms cover the device's own current position only; the name must not delay the forecast |
+| 2026-11-12 | IMP-058 | A name with `lookupSource` other than `coordinates`, an invalid payload or any error falls back to "Current area" | Never show a city guessed from an IP address; provider data is untrusted |
+| 2026-11-12 | IMP-059 | The menu is transparent over the sky at the top of the home page and solid brand navy once scrolled, on other pages, above notices and without JavaScript | Owner found the grey bar at odds with the page; a sticky transparent bar would be unreadable over page content without the scroll script |
+| 2026-11-12 | IMP-060 | The scrolled state is a class set by a small inline layout script (hashed into the CSP), not a scroll-driven animation | Scroll timelines are not available in every tested browser |
