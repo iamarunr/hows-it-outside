@@ -10,6 +10,6 @@
 
 Stack: Astro 7 · React 19 · TypeScript · Vitest · Playwright · axe-core · Open-Meteo · Cloudflare Pages.
 
-Links: Live site (pending) · Source (pending). Screenshot: `docs/images/screenshot-desktop.png` (synthetic sample weather).
+Links: Live site (pending) · Source: https://github.com/iamarunr/hows-it-outside. Screenshot: `docs/images/screenshot-desktop.png` (synthetic sample weather).
 
 Note for the portfolio: don't describe it as safety or health advice, or as hyperlocal.

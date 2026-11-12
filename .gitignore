@@ -9,3 +9,5 @@ test-results/
 blob-report/
 coverage/
 .DS_Store
+# Local editor/agent tooling
+.claude/

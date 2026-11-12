@@ -100,3 +100,12 @@ Capture answers in the decision register. Do not invent them or stop ordinary im
 | 2026-11-11 | IMP-036 | `npm audit` runs as a separate, advisory CI job (`--omit=dev`) | Spec: an external advisory service must not mask functional test status; dev-only findings (ESLint's `minimatch`) are documented, not force-upgraded |
 | 2026-11-11 | IMP-037 | Spec-pack README moved to `docs/00-HANDOFF.md`; root README is now the contributor README | OSS-01 needs a first-time-contributor README at the root |
 | 2026-11-11 | IMP-038 | Lab performance check is an opt-in Playwright spec (`PERF=1`) using CDP throttling | No Lighthouse dependency; numbers recorded in `docs/ACCEPTANCE-RESULTS.md` with configuration |
+
+## Owner decisions for release (M6)
+
+| Date | Decision | Notes |
+|---|---|---|
+| 2026-11-12 | Launch on Open-Meteo's free hosted API; the owner confirms this portfolio-linked site, with no ads or payments, is non-commercial use | Revisit before adding ads, sponsorship, paid features or commercial positioning (docs/08-DEPLOYMENT.md Maintenance) |
+| 2026-11-12 | Owner supplies the public repository URL; the local `gh` account is not used to create it | `PUBLIC_SOURCE_URL` and README links follow that URL |
+| 2026-11-12 | Security reports go through GitHub private vulnerability reporting on the public repository | No email address is published |
+| 2026-11-12 | Deploy to Cloudflare Pages on the owner's account: verify a preview, then attach outside.knnaresh.com and verify production | Existing knnaresh.com DNS records are left untouched |

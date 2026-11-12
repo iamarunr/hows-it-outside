@@ -7,7 +7,7 @@
 <sub>Screenshots use synthetic sample weather from the test fixtures, not a real forecast.</sub>
 
 - **Live site:** pending launch (planned: https://outside.knnaresh.com)
-- **Source:** this repository (public URL to be confirmed before launch)
+- **Source:** https://github.com/iamarunr/hows-it-outside
 
 No account, no install and no tracking analytics. Location permission is optional: you can always search for a city. Matches are based on **your preferences and the forecast shown**. They are not safety advice and don't include air quality, UV or official alerts.
 

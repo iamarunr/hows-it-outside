@@ -2,9 +2,9 @@
 
 ## Reporting a vulnerability
 
-**A private reporting route has not been set up yet.** Until the maintainer publishes one here, please do not open a public issue with exploit details. If the repository has GitHub private vulnerability reporting enabled, use **Security → Report a vulnerability**.
+Please report vulnerabilities privately through GitHub: open this repository's **Security** tab and choose **Report a vulnerability** (GitHub private vulnerability reporting). Don't open a public issue with exploit details.
 
-<!-- Owner: replace the paragraph above with the real private reporting route before public launch (see docs/09-OPEN-SOURCE.md). Do not invent an address. -->
+You'll get an acknowledgement when the report is reviewed. This is a personal open-source project, so there is no bug bounty and no guaranteed response time.
 
 ## Scope
 

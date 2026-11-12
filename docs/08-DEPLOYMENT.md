@@ -73,7 +73,7 @@ This section records the actual implementation. Nothing here has been deployed; 
 |---|---|---|
 | `PUBLIC_SITE_URL` | `https://outside.knnaresh.com` | `https://outside.knnaresh.com` (canonical stays production) |
 | `PUBLIC_NOINDEX` | unset | `true` |
-| `PUBLIC_SOURCE_URL` | real repository URL once public | same |
+| `PUBLIC_SOURCE_URL` | `https://github.com/iamarunr/hows-it-outside` | same |
 | `PUBLIC_AUTHOR_URL` | `https://knnaresh.com` | same |
 
 A Pages build (`CF_PAGES=1`) without `PUBLIC_SITE_URL` fails on purpose. With `PUBLIC_NOINDEX=true` every page gets `<meta name="robots" content="noindex, nofollow">` and `_headers` adds `X-Robots-Tag: noindex, nofollow`. Never set it on production.

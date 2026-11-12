@@ -1,6 +1,6 @@
 # Implementation status
 
-Last updated: 11 November 2026 · Milestone: **M5 complete (uncommitted)** · Branch: `main` · Last-known-good commit: `feff8ab` (M4; M3 `fabd1db`, M2 `f7174e2`, M1 `479891b`, M0 `6342d19`)
+Last updated: 11 November 2026 · Milestone: **M6 in progress (awaiting owner decisions)** · Branch: `main` · Last-known-good commit: `0b96078` (M5; M4 `feff8ab`, M3 `fabd1db`, M2 `f7174e2`, M1 `479891b`, M0 `6342d19`)
 
 ## Baseline
 Folder contained only the single-file spec (v1.1). Not a git repository; `git init -b main` run. Spec split into repository paths (README.md, START_HERE.md, PRODUCT.md, AGENTS.md, WORKFLOW.md, DESIGN.md, docs/01–10); original kept at `docs/archive/Outside_Complete_Agent_Specification.md`.
@@ -126,11 +126,11 @@ M5 command results (11 Nov 2026): `npm run check` 0 errors · `npm run lint` cle
 - Manual screen-reader and real iOS/Android device checks not done.
 - `fsevents` install script not approved by npm's allowScripts (macOS-only optional dependency; no effect on build/tests).
 
-## Owner decisions blocking public launch
-1. Open-Meteo hosted API eligibility for a portfolio-linked site (non-commercial or paid plan + proxy).
-2. Public repository URL (`PUBLIC_SOURCE_URL`, README links).
-3. Private security-reporting route for `SECURITY.md`.
-4. Authorization to create the Cloudflare Pages project, add the outside.knnaresh.com custom domain and deploy.
+## Owner decisions (resolved 2026-11-12)
+1. Free Open-Meteo API: owner confirms non-commercial use.
+2. Repository: https://github.com/iamarunr/hows-it-outside (commits published with the owner's GitHub noreply address).
+3. Security reports: GitHub private vulnerability reporting.
+4. Deploy: Cloudflare Pages on the owner's account; preview first, then outside.knnaresh.com.
 
 ## Next exact task
 M6 (needs owner authorization): resolve the decisions above, create the Pages project with the documented settings, verify a preview deployment (headers, noindex, search, location, attribution), add the custom domain, verify production headers and live smoke in 5+ cities, record the release commit and rollback target in `docs/ACCEPTANCE-RESULTS.md`.

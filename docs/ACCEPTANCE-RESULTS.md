@@ -21,7 +21,7 @@ All weather in automated tests is **synthetic fixture data**. Live-provider evid
 | WIN-02 | Honest empty results | Unit `windows.test.ts` empty-reason priority; E2E flagged-hours journey | Pass |
 | EXP-01 | Explanations from scoring engine, no LLM | Unit `explanations.test.ts` (drivers ⊆ penalized, threshold, prohibited-word sweep) | Pass |
 | ACC-01 | Keyboard, focus, semantics, live status, no color-only meaning | axe 0 violations on all pages in Chromium, Firefox and WebKit (incl. forced colors); timeline single Tab stop; contrast unit tests; reflow 320/640 px; targets ≥ 24 px | Pass (automated). Manual screen reader and real devices: **Pending** |
-| OSS-01 | MIT, setup, tests, deployment, attribution, commercial caveat | `LICENSE`, `README.md`, `CONTRIBUTING.md`, `THIRD_PARTY_NOTICES.md`, `docs/08-DEPLOYMENT.md`; fresh-copy `npm ci` → all checks pass without `.env` | Pass. Real repository URL and security route: **Pending (owner)** |
+| OSS-01 | MIT, setup, tests, deployment, attribution, commercial caveat | `LICENSE`, `README.md`, `CONTRIBUTING.md`, `THIRD_PARTY_NOTICES.md`, `docs/08-DEPLOYMENT.md`; fresh-copy `npm ci` → all checks pass without `.env` | Pass |
 | OPS-01 | Debounce, cancellation, bounded retries, 429 feedback, cache | Unit `fetchJson.test.ts`, `provider.test.ts`, `cache.test.ts`, `reducer.test.ts`; E2E outage, 429, race and cache journeys | Pass |
 | DOC-01 | About, methodology, privacy, not-found pages | Built pages; axe and one-H1 checks; readable without JS | Pass |
 
@@ -66,8 +66,8 @@ These are local lab numbers, not field data. Real-device and hosted measurements
 | Check | Result |
 |---|---|
 | Live smoke in 5+ cities through the deployed UI | **Pending (release)**; provider field availability checked for 8 cities in M0 |
-| Provider eligibility (non-commercial use from a portfolio subdomain) | **Pending (owner)** |
-| Real repository URL, contact and security route | **Pending (owner)** |
+| Provider eligibility (non-commercial use from a portfolio subdomain) | Owner confirmed non-commercial use of the free API (2026-11-12) |
+| Real repository URL, contact and security route | Repository: https://github.com/iamarunr/hows-it-outside; security reports via GitHub private vulnerability reporting |
 | Cloudflare Pages project, custom domain, HTTPS | **Pending (authorization)** |
 | Production response headers and CSP verified on the host | **Pending (release)**; verified locally with `scripts/serve-dist.ts` |
 | Preview deployments not indexable | Implemented (`PUBLIC_NOINDEX`); **Pending** host verification |
