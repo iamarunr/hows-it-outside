@@ -25,9 +25,9 @@ export default tseslint.config(
   },
   {
     // Domain and pure library modules must stay framework- and network-free (AGENTS.md).
-    files: ['src/domain/**/*.ts', 'src/lib/time.ts', 'src/lib/units.ts', 'src/lib/geo.ts'],
+    files: ['src/domain/**/*.ts', 'src/lib/time.ts', 'src/lib/units.ts', 'src/lib/geo.ts', 'src/services/weather/normalize.ts'],
     rules: {
-      'no-restricted-imports': ['error', { patterns: ['react', 'react-dom', '*/services/*', '../services/*'] }],
+      'no-restricted-imports': ['error', { patterns: ['react', 'react-dom', '**/services/fetchJson', '**/services/geocoding', '**/services/cache', '**/services/storage'] }],
       'no-restricted-globals': ['error', 'window', 'document', 'navigator', 'fetch', 'localStorage', 'sessionStorage'],
     },
   },

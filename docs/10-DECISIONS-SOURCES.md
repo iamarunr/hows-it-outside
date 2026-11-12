@@ -70,3 +70,11 @@ Capture answers in the decision register. Do not invent them or stop ordinary im
 | 2026-11-11 | IMP-006 | CI runs Chromium only; Firefox/WebKit opt-in via `E2E_ALL_BROWSERS=1` | Review recommendation; full matrix before release |
 | 2026-11-11 | IMP-007 | `zod/mini` for runtime validation | Full `zod` added ~17 KB gzip; React DOM already uses ~66 KB of the 100 KB budget |
 | 2026-11-11 | IMP-008 | Time-zone fixture asserts wall-clock date/time/offset, not display strings | Zone abbreviations vary across ICU builds (IST vs GMT+5:30) |
+| 2026-11-11 | IMP-009 | Empty-window reason = the priority stage (data → daylight → flag → preference) at which no candidate remains | Spec says "highest-priority applicable reason in that order"; applying constraints as sequential filters makes "applicable" deterministic and avoids blaming missing data when other candidates had data |
+| 2026-11-11 | IMP-010 | Missing coverage and missing fields share one rejection, `data` | Spec groups them as "missing coverage/data"; `coverageComplete` is still exposed |
+| 2026-11-11 | IMP-011 | Unit mismatch or missing unit for a field nulls that field (diagnostic) rather than rejecting the response; non-`unixtime` axis rejects the response | Conservative per-field degradation; time axis is authoritative |
+| 2026-11-11 | IMP-012 | Air/feels-like temperatures outside -100…70 °C become null (heuristic sanity bound) | Spec asks to validate ranges but gives no temperature bound |
+| 2026-11-11 | IMP-013 | Flagged intervals with missing data are labeled Check conditions, not Limited data | Flags take precedence and must stay visible (SCORING §5) |
+| 2026-11-11 | IMP-014 | Added copy for the `preference` empty state: "No window in the next 24 hours matches your preferences. Try another duration or adjust your preferences." | DESIGN.md gives copy for the other empty states but not this one |
+| 2026-11-11 | IMP-015 | A flagged next hour compares only as "better later" (never "similar" or "now is best") | Spec: do not imply a flagged current period is recommended |
+| 2026-11-11 | IMP-016 | Unit tests run with `TZ=Pacific/Chatham` | Any accidental device-zone use shows up as a failure |
