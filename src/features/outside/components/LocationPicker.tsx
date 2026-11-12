@@ -38,10 +38,12 @@ export type LocationPickerProps = {
   onSelectPlace: (place: PlaceResult) => void;
   onLocateMe: () => void;
   announce: (message: string) => void;
+  /** False until the island has hydrated: controls stay disabled so early input is never lost or natively submitted. */
+  ready: boolean;
 };
 
 export function LocationPicker(props: LocationPickerProps) {
-  const { location, saved, locating, geoNotice, geocodingCache, onSelectPlace, onLocateMe, announce } = props;
+  const { location, saved, locating, geoNotice, geocodingCache, onSelectPlace, onLocateMe, announce, ready } = props;
   const inputId = useId();
   const [openRequested, setOpen] = useState(false);
   // The search is always shown when nothing is selected (first visit, cleared, or after a denied location).
@@ -140,7 +142,7 @@ export function LocationPicker(props: LocationPickerProps) {
       {open && (
         <div className="location-panel">
           <div className="locate">
-            <button type="button" onClick={locate} disabled={locating} aria-describedby={`${inputId}-geo-help`}>
+            <button type="button" onClick={locate} disabled={locating || !ready} aria-describedby={`${inputId}-geo-help`}>
               {locating ? 'Finding your location…' : 'Use my location'}
             </button>
             <p id={`${inputId}-geo-help`} className="hint">
@@ -152,6 +154,7 @@ export function LocationPicker(props: LocationPickerProps) {
             <label htmlFor={inputId}>Search city or place</label>
             <div className="search-row">
               <input
+                disabled={!ready}
                 ref={inputRef}
                 id={inputId}
                 type="search"
@@ -161,7 +164,9 @@ export function LocationPicker(props: LocationPickerProps) {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
               />
-              <button type="submit">Search</button>
+              <button type="submit" disabled={!ready}>
+                Search
+              </button>
             </div>
           </form>
 

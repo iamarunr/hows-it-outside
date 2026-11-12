@@ -53,6 +53,8 @@ test('search lists same-name places and selects one, with controlled clock and n
   await expect(page.getByText('Times shown for America/Chicago')).toBeVisible();
 
   expect(harness.providerRequests).toHaveLength(2);
+  // The search never becomes a native form submission (no query or place in the URL).
+  expect(new URL(page.url()).search).toBe('');
   const request = harness.providerRequests[0];
   expect(request?.searchParams.get('count')).toBe('8');
   expect(request?.searchParams.get('language')).toBe('en');

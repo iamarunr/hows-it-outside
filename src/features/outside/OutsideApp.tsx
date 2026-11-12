@@ -94,6 +94,7 @@ export default function OutsideApp({ depsFactory = browserDeps }: OutsideAppProp
           onSelectPlace={c.selectPlace}
           onLocateMe={c.locateMe}
           announce={announce}
+          ready={c.hydrated}
         />
         <UnitsPicker value={units} onChange={(u) => updateSettings((s) => ({ ...s, units: u }))} />
       </div>
