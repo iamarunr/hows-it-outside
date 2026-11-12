@@ -109,6 +109,7 @@ Capture answers in the decision register. Do not invent them or stop ordinary im
 | 2026-11-12 | Owner supplies the public repository URL; the local `gh` account is not used to create it | `PUBLIC_SOURCE_URL` and README links follow that URL |
 | 2026-11-12 | Security reports go through GitHub private vulnerability reporting on the public repository | No email address is published |
 | 2026-11-12 | Deploy to Cloudflare Pages on the owner's account: verify a preview, then attach outside.knnaresh.com and verify production | Existing knnaresh.com DNS records are left untouched |
+| 2026-11-12 | Custom domain outside.knnaresh.com deferred; production canonical uses https://hows-it-outside.pages.dev until it is attached | Owner decision after the first attempt left no domain on the project |
 | 2026-11-12 | Published commits use the owner's GitHub noreply address (3859170+iamarunr@users.noreply.github.com) | History rewritten before the first push; content unchanged |
 | 2026-11-12 | Redesign after the Dutchblue site reference: its look, tool-first; self-hosted Bebas Neue for display; weather-aware CSS sky instead of photos | Supersedes the original calm green editorial direction in DESIGN.md; PRODUCT.md's "no gradients / compact" lines are superseded for visuals |
 | 2026-11-12 | IMP-039 | Display type Bebas Neue self-hosted via @fontsource (latin 400, 13.8 KB woff2, preloaded); reading text stays system sans | Owner choice; no font CDN keeps the CSP `font-src 'self'` |
