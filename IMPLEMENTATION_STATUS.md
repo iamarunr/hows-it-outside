@@ -1,6 +1,6 @@
 # Implementation status
 
-Last updated: 11 November 2026 · Milestone: **M1 complete (uncommitted)** · Branch: `main` · Last-known-good commit: `6342d19` (M0)
+Last updated: 11 November 2026 · Milestone: **M2 complete (uncommitted)** · Branch: `main` · Last-known-good commit: `479891b` (M1; M0 `6342d19`)
 
 ## Baseline
 Folder contained only the single-file spec (v1.1). Not a git repository; `git init -b main` run. Spec split into repository paths (README.md, START_HERE.md, PRODUCT.md, AGENTS.md, WORKFLOW.md, DESIGN.md, docs/01–10); original kept at `docs/archive/Outside_Complete_Agent_Specification.md`.
@@ -52,6 +52,26 @@ Lint enforces that domain, `lib/time|units|geo` and `normalize.ts` import no Rea
 
 M1 command results (11 Nov 2026): `npm run check` 0 errors · `npm run lint` clean · `npm run test` 11 files, 168 tests passed · `npm run build` clean · `npm run test:e2e` 3 passed (Chromium). JS bundle unchanged at 77.4 KB gzip (domain not yet imported by the island).
 
+## M2 — Data and location slice
+| Area | Module | Tests |
+|---|---|---|
+| Freshness tiers, current-block usability | `src/domain/freshness.ts` | `cache.test.ts` (15 min / 60 min / 2 h boundaries; 90 min old / 10 min future) |
+| Safe storage with memory fallback | `src/services/storageAdapter.ts` | `cache.test.ts`, `settings.test.ts` (disabled, quota, throwing access) |
+| Forecast session cache | `src/services/cache.ts` | `cache.test.ts` (key has no display units, expiry, future fetchedAt, key mismatch, LRU 5, corrupt/old/invalid entries, clear) |
+| Versioned settings, remember opt-in | `src/services/settings.ts` | `settings.test.ts` (corrupt, old version, per-activity fallback, remember off removes location, rounding on restore, forget/reset) |
+| Forecast provider with in-flight dedupe | `src/services/weather/provider.ts` | `provider.test.ts` (normalize, dedupe, abort only when all callers abort, invalid payload) |
+| Explicit geolocation | `src/services/geolocation.ts` | `provider.test.ts` (options, rounding, denied/unavailable/timeout/unsupported, NaN not 0,0) |
+| Geocoding memory cache (24 h, 50) | `src/services/geocoding.ts` | `geocoding.test.ts` |
+| Controller reducer + view model | `src/features/outside/controller/reducer.ts` | `reducer.test.ts` (old response cannot overwrite newer place, key mismatch, abort not an error, refresh without flicker, stale/expired, cooldown, denial keeps previous place) |
+| Controller hook (requests, cache, refresh triggers) | `controller/useWeatherController.ts` | E2E |
+| UI: location picker, Now, data status | `components/LocationPicker.tsx`, `ConditionsSummary.tsx`, `DataStatus.tsx` | E2E |
+
+E2E journeys added (`tests/e2e/location.spec.ts`, all Chromium, stable over 5 repeats): two cities in turn; slow earlier response cannot overwrite the newer place; no prompt before the button and denied permission keeps search usable; device location sends 2-decimal coordinates and is labeled Current area; null current values show Unavailable; 503 → one retry → error → Try again recovers, provider text never shown; 429 busy message with disabled retry; session cache avoids a second request; failed refresh keeps data, then stale notice after an hour.
+
+M2 command results (11 Nov 2026): `npm run check` 0 errors · `npm run lint` clean · `npm run test` 15 files, 214 tests · `npm run build` clean (CSP 2 script + 1 style hashes) · `npm run test:e2e` 12 passed.
+
+Bundle after M2 (gzip -9): JS 87.3 KB of 100 KB (React DOM 65.7, react 3.0, island 18.5); CSS 1.4 KB. **Budget risk:** ~12.7 KB remain for M3–M4, and the scoring/windows/explanations modules are not yet imported by the island. M3 must measure after each slice; if the budget is exceeded, the owner decides between accepting the overage, trimming, or Preact.
+
 ## Not done / pending
 - CI has never run (no GitHub remote). Firefox/WebKit not run (Chromium only by default; `E2E_ALL_BROWSERS=1` adds them).
 - axe checks not yet wired (M4).
@@ -59,7 +79,7 @@ M1 command results (11 Nov 2026): `npm run check` 0 errors · `npm run lint` cle
 - README.md is still the handoff README; contributor README is M5.
 
 ## Next exact task
-M2: forecast request service (`buildForecastUrl` + `fetchJson` + `normalizeForecast`), freshness tiers and sessionStorage cache (key excludes display units, LRU 5, future fetchedAt rejection), versioned localStorage preferences with memory fallback, explicit geolocation with rounding, controller reducer with generation IDs so stale responses cannot overwrite a newer selection.
+M3: activity radio group, units control, next-hour summary with reasons and flags, duration/daylight controls, ranked windows, 24-hour timeline (single Tab stop) with hour details, preferences disclosure with per-activity reset, remember-location checkbox and Forget location; E2E proving activity/unit/preference changes make no network request.
 
 ## Local preview
 ```

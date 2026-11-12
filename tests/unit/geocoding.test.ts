@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
-import { buildGeocodingUrl, normalizeQuery, parseGeocodingResponse, shouldAutoSearch } from '../../src/services/geocoding';
+import { buildGeocodingUrl, createGeocodingCache, normalizeQuery, parseGeocodingResponse, shouldAutoSearch } from '../../src/services/geocoding';
 import { FetchJsonError } from '../../src/services/fetchJson';
 
 const fixture: unknown = JSON.parse(
@@ -56,5 +56,21 @@ describe('geocoding response parsing', () => {
 
   it('rejects a non-object payload as invalid_response', () => {
     expect(() => parseGeocodingResponse('nope')).toThrow(FetchJsonError);
+  });
+});
+
+describe('geocoding memory cache', () => {
+  it('matches case-insensitively, expires at 24 h and keeps 50 entries', () => {
+    let now = 1_000_000;
+    const cache = createGeocodingCache(() => now);
+    cache.put('Paris', []);
+    expect(cache.get('paris')).toEqual([]);
+    now += 24 * 3600 - 1;
+    expect(cache.get('PARIS')).toEqual([]);
+    now += 1;
+    expect(cache.get('Paris')).toBeNull();
+    for (let i = 0; i < 51; i++) cache.put(`q${i}`, []);
+    expect(cache.get('q0')).toBeNull();
+    expect(cache.get('q50')).toEqual([]);
   });
 });

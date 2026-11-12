@@ -1,12 +1,19 @@
 import { expect, test } from '@playwright/test';
 import { expectClean, loadFixture, setUp } from './support/harness';
+import { syntheticForecast } from './support/forecast';
 
 const stLouis = loadFixture('geocoding/st-louis.json');
 
 test('search lists same-name places and selects one, with controlled clock and no prompt', async ({ page }) => {
   const harness = await setUp(page, {
     referenceNow: stLouis._fixture.referenceNow,
-    handlers: [{ match: (u) => u.pathname === '/v1/search' && u.searchParams.get('name') === 'St. Louis', body: stLouis }],
+    handlers: [
+      { match: (u) => u.pathname === '/v1/search' && u.searchParams.get('name') === 'St. Louis', body: stLouis },
+      {
+        match: (u) => u.pathname === '/v1/forecast',
+        body: syntheticForecast({ start: stLouis._fixture.referenceNow - 8 * 3600, timezone: 'America/Chicago', current: { time: stLouis._fixture.referenceNow } }),
+      },
+    ],
   });
 
   // Fail if anything asks for geolocation before a deliberate action.
@@ -41,11 +48,11 @@ test('search lists same-name places and selects one, with controlled clock and n
   await expect(page.getByRole('status')).toHaveText('2 places found.');
 
   await results.getByRole('button', { name: 'St. Louis, Missouri, United States' }).click();
-  const heading = page.getByRole('heading', { level: 2, name: 'St. Louis, Missouri, United States' });
+  const heading = page.getByRole('heading', { level: 2, name: 'Weather for St. Louis, Missouri, United States' });
   await expect(heading).toBeFocused();
-  await expect(page.getByText('Time zone: America/Chicago')).toBeVisible();
+  await expect(page.getByText('Times shown for America/Chicago')).toBeVisible();
 
-  expect(harness.providerRequests).toHaveLength(1);
+  expect(harness.providerRequests).toHaveLength(2);
   const request = harness.providerRequests[0];
   expect(request?.searchParams.get('count')).toBe('8');
   expect(request?.searchParams.get('language')).toBe('en');

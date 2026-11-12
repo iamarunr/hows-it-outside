@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### M2 — Data and location slice (11 November 2026)
+- Forecast provider (validate, normalize, dedupe in-flight requests) and freshness tiers.
+- Session forecast cache (LRU 5, re-validated on read) and versioned local settings with remember-location opt-in; storage failures fall back to memory.
+- Explicit one-shot geolocation with 2-decimal rounding; denial keeps search and any previous place.
+- Controller with generation IDs so slow earlier responses never replace a newer place; refresh on visibility, reconnect and a minute check; 429 cooldown.
+- Location picker, Now conditions and data-status notices with a single polite live region.
+
 ### M1 — Domain engine (11 November 2026)
 - Forecast normalization with an explicit field-to-time semantics registry: instantaneous fields from the interval start, precipitation, probability and gusts from the interval end; conservative weather-code and daylight handling.
 - Units and IANA time-zone helpers (DST-safe labels, UTC fallback flag).

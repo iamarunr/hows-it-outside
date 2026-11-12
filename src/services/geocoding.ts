@@ -84,12 +84,51 @@ export function parseGeocodingResponse(payload: unknown): PlaceResult[] {
   return out;
 }
 
-export async function searchPlaces(rawQuery: string, signal?: AbortSignal): Promise<PlaceResult[]> {
+const GEOCODE_CACHE_TTL_SECONDS = 24 * 60 * 60;
+const GEOCODE_CACHE_MAX = 50;
+
+/** In-memory search cache (spec 02 §6): normalized query + language, 24 h TTL, 50 entries. Not persisted. */
+export function createGeocodingCache(now: () => number) {
+  const entries = new Map<string, { at: number; results: PlaceResult[] }>();
+  const keyOf = (query: string): string => `en|${query.toLocaleLowerCase('en')}`;
+  return {
+    get(query: string): PlaceResult[] | null {
+      const key = keyOf(query);
+      const hit = entries.get(key);
+      if (hit === undefined) return null;
+      if (now() - hit.at >= GEOCODE_CACHE_TTL_SECONDS) {
+        entries.delete(key);
+        return null;
+      }
+      entries.delete(key);
+      entries.set(key, hit); // most recently used last
+      return hit.results;
+    },
+    put(query: string, results: PlaceResult[]): void {
+      const key = keyOf(query);
+      entries.delete(key);
+      entries.set(key, { at: now(), results });
+      while (entries.size > GEOCODE_CACHE_MAX) {
+        const oldest = entries.keys().next().value;
+        if (oldest === undefined) break;
+        entries.delete(oldest);
+      }
+    },
+  };
+}
+
+export type GeocodingCache = ReturnType<typeof createGeocodingCache>;
+
+export async function searchPlaces(rawQuery: string, signal?: AbortSignal, cache?: GeocodingCache): Promise<PlaceResult[]> {
   const query = normalizeQuery(rawQuery);
   if (query === '') return [];
+  const cached = cache?.get(query);
+  if (cached !== undefined && cached !== null) return cached;
   const payload = await fetchJson(buildGeocodingUrl(query), {
     timeoutMs: SEARCH_TIMEOUT_MS,
     ...(signal !== undefined && { signal }),
   });
-  return parseGeocodingResponse(payload);
+  const results = parseGeocodingResponse(payload);
+  cache?.put(query, results);
+  return results;
 }

@@ -30,3 +30,30 @@ export function rng(seed: number): () => number {
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
 }
+
+/** In-memory Storage double; optionally throws on every call. */
+export function fakeStorage(opts: { throwOn?: 'all' | 'set' } = {}): Storage {
+  const map = new Map<string, string>();
+  const maybeThrow = (op: 'get' | 'set') => {
+    if (opts.throwOn === 'all' || (opts.throwOn === 'set' && op === 'set')) throw new DOMException('nope', 'QuotaExceededError');
+  };
+  return {
+    get length() {
+      return map.size;
+    },
+    clear: () => map.clear(),
+    key: (i: number) => [...map.keys()][i] ?? null,
+    getItem: (k: string) => {
+      maybeThrow('get');
+      return map.get(k) ?? null;
+    },
+    setItem: (k: string, v: string) => {
+      maybeThrow('set');
+      map.set(k, v);
+    },
+    removeItem: (k: string) => {
+      map.delete(k);
+    },
+  };
+}
+

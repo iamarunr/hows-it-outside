@@ -16,7 +16,14 @@ export function loadFixture(relativePath: string): Fixture {
   return JSON.parse(readFileSync(url, 'utf8')) as Fixture;
 }
 
-export type Handler = { match: (url: URL) => boolean; body: unknown; status?: number; headers?: Record<string, string> };
+export type Handler = {
+  match: (url: URL) => boolean;
+  body: unknown;
+  status?: number;
+  headers?: Record<string, string>;
+  /** Real-time delay before responding (independent of the page clock). */
+  delayMs?: number;
+};
 
 export type Harness = {
   providerRequests: URL[];
@@ -27,6 +34,7 @@ export type Harness = {
 const PROVIDER_ORIGINS = ['https://api.open-meteo.com', 'https://geocoding-api.open-meteo.com'];
 
 export async function setUp(page: Page, opts: { referenceNow: number; handlers: Handler[] }): Promise<Harness> {
+  // Handlers are read at request time, so tests may push or replace handlers mid-test.
   const harness: Harness = { providerRequests: [], unmatched: [], cspViolations: [] };
 
   // Install slightly before referenceNow, then pause exactly at it: time only moves when a test
@@ -49,6 +57,7 @@ export async function setUp(page: Page, opts: { referenceNow: number; handlers: 
         await route.abort('failed');
         return;
       }
+      if (handler.delayMs !== undefined) await new Promise((r) => setTimeout(r, handler.delayMs));
       await route.fulfill({
         status: handler.status ?? 200,
         contentType: 'application/json',
