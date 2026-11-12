@@ -6,6 +6,8 @@ import {
   drivers,
   emptyReasonText,
   explain,
+  NOTABLE_PENALTY,
+  peakPenalties,
   summaryHeadline,
 } from '../../src/domain/explanations';
 import { FLAG_COPY } from '../../src/domain/flags';
@@ -26,6 +28,12 @@ describe('reasons', () => {
       { id: 'all_within', text: 'Within your preferred temperature range, with low wind and precipitation in the forecast.' },
     ]);
     expect(r[0]?.text).not.toMatch(/no rain|dry/i);
+  });
+
+  it('does not call small penalties reasons (5% chance is not "higher")', () => {
+    expect(explain(one({ precipProbabilityPct: 5 }), 'metric').map((r) => r.id)).toEqual(['all_within']);
+    expect(explain(one({ feelsLikeC: 26 }), 'metric').map((r) => r.id)).toEqual(['mostly_within']);
+    expect(explain(one({ precipProbabilityPct: 17.5 }), 'metric').map((r) => r.id)).toEqual(['precipitation']); // R = .25
   });
 
   it('uses measured values in the selected units', () => {
@@ -84,6 +92,11 @@ describe('reasons', () => {
       const c = w.contributions;
       if (c === null) continue;
       for (const d of drivers(w)) expect(c[d]).toBeGreaterThan(0);
+      const named = explain(w, 'metric').map((r) => r.id);
+      const peak = peakPenalties(w);
+      if (named.includes('precipitation')) expect(peak.precipitation).toBeGreaterThanOrEqual(NOTABLE_PENALTY);
+      if (named.includes('wind')) expect(peak.wind).toBeGreaterThanOrEqual(NOTABLE_PENALTY);
+      if (named.includes('warmer') || named.includes('colder')) expect(peak.temperature).toBeGreaterThanOrEqual(NOTABLE_PENALTY);
     }
   });
 });

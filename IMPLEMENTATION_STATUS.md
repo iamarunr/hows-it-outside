@@ -1,6 +1,6 @@
 # Implementation status
 
-Last updated: 11 November 2026 · Milestone: **M2 complete (uncommitted)** · Branch: `main` · Last-known-good commit: `479891b` (M1; M0 `6342d19`)
+Last updated: 11 November 2026 · Milestone: **M3 complete (uncommitted)** · Branch: `main` · Last-known-good commit: `f7174e2` (M2; M1 `479891b`, M0 `6342d19`)
 
 ## Baseline
 Folder contained only the single-file spec (v1.1). Not a git repository; `git init -b main` run. Spec split into repository paths (README.md, START_HERE.md, PRODUCT.md, AGENTS.md, WORKFLOW.md, DESIGN.md, docs/01–10); original kept at `docs/archive/Outside_Complete_Agent_Specification.md`.
@@ -72,6 +72,25 @@ M2 command results (11 Nov 2026): `npm run check` 0 errors · `npm run lint` cle
 
 Bundle after M2 (gzip -9): JS 87.3 KB of 100 KB (React DOM 65.7, react 3.0, island 18.5); CSS 1.4 KB. **Budget risk:** ~12.7 KB remain for M3–M4, and the scoring/windows/explanations modules are not yet imported by the island. M3 must measure after each slice; if the budget is exceeded, the owner decides between accepting the overage, trimming, or Preact.
 
+## M3 — Complete product experience
+| Area | Module | Evidence |
+|---|---|---|
+| Results view model (pure; no network) | `controller/results.ts` | `results.test.ts` |
+| Activity, units, duration and daylight controls (native radios/checkbox) | `components/Controls.tsx` | E2E |
+| Next-hour summary: flags first, headline, ≤2 reasons, comparison; stale → "Suggestions paused" | `components/Summary.tsx` | E2E |
+| Ranked windows and empty states with horizon flags | `components/WindowSuggestions.tsx` | E2E |
+| 24-hour timeline (one Tab stop, arrows/Home/End) and selected-hour details | `components/HourlyTimeline.tsx` | E2E |
+| Preferences (comfort range in display units with inline errors, rain, wind, per-activity reset) and device data controls (remember, forget, reset, clear all) | `components/PreferencesPanel.tsx` | E2E |
+| Explanation threshold for notable factors | `domain/explanations.ts` | `explanations.test.ts` |
+
+E2E journeys added (`tests/e2e/experience.spec.ts`): all activities switch with one forecast request; duration, wind preference and units apply instantly, persist after reload and never refetch; invalid comfort edits keep the last valid range; remember location off by default, restored as Saved location without stealing focus, Forget clears settings location and session cache; missing probability → Limited data, no positive match; thunderstorm hours lead the summary, show in the timeline and are excluded from windows; timeline single Tab stop; Chicago fall-back shows unique 1:00 AM CDT/CST labels and the date after midnight. `tests/e2e/screenshots.spec.ts` captures review screenshots when `SCREENSHOT_DIR` is set.
+
+Screenshot review (360×800 and 1440×900, synthetic London): layout readable, no horizontal page overflow at 360 px; fixed in this milestone: trivial-penalty reasons (IMP-023), "then Light rain" capitalization, native checkbox color. Remaining for M4: desktop two-column summary/Now layout, visual hierarchy polish, supporting pages, contrast verification.
+
+M3 command results (11 Nov 2026): `npm run check` 0 errors · `npm run lint` clean · `npm run test` 16 files, 219 tests · `npm run build` clean · `npm run test:e2e` 20 passed, 2 skipped (screenshots), stable over 3 repeats.
+
+Bundle after M3 (gzip -9): **JS 94.8 KB of 100 KB** (React DOM 65.7, react 3.0, island 26.0); CSS 2.3 KB of 30 KB. About 5 KB of JS headroom remains for M4; supporting pages are static and add no JS.
+
 ## Not done / pending
 - CI has never run (no GitHub remote). Firefox/WebKit not run (Chromium only by default; `E2E_ALL_BROWSERS=1` adds them).
 - axe checks not yet wired (M4).
@@ -79,7 +98,7 @@ Bundle after M2 (gzip -9): JS 87.3 KB of 100 KB (React DOM 65.7, react 3.0, isla
 - README.md is still the handoff README; contributor README is M5.
 
 ## Next exact task
-M3: activity radio group, units control, next-hour summary with reasons and flags, duration/daylight controls, ranked windows, 24-hour timeline (single Tab stop) with hour details, preferences disclosure with per-activity reset, remember-location checkbox and Forget location; E2E proving activity/unit/preference changes make no network request.
+M4: apply DESIGN.md (desktop two-column summary/Now, hierarchy, spacing), verify token contrast and fix failing pairs, offline and storage-disabled notices, settings reset notice, methodology and privacy pages, wire axe checks into E2E, 200%/400% zoom, 320 px reflow, forced colors and reduced motion checks.
 
 ## Local preview
 ```

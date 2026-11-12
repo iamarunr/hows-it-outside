@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### M3 — Complete product experience (11 November 2026)
+- Activity choice (Outdoors, Walk, Run, Bike, Hang out), units, outing length and daylight-only controls; all recompute locally without refetching.
+- Next-hour summary with concerning-weather notices first, up to two reasons and a comparison with the best window.
+- Up to three suggested windows with empty-state explanations; 24-hour timeline with keyboard navigation and hour details.
+- Preferences disclosure with per-activity comfort range, rain and wind tolerance, per-activity reset, remember location, forget location, reset all and clear all local data.
+- Explanations name a factor only when it is notable (no "higher chance of precipitation" for a 5% chance).
+
 ### M2 — Data and location slice (11 November 2026)
 - Forecast provider (validate, normalize, dedupe in-flight requests) and freshness tiers.
 - Session forecast cache (LRU 5, re-validated on read) and versioned local settings with remember-location opt-in; storage failures fall back to memory.

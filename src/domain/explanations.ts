@@ -9,7 +9,7 @@ import type { ActivityPreset } from './activities';
 import type { Dimension, DimensionValues, MatchLabel } from './types';
 import type { EmptyReason, NextHourComparison, WindowAssessment } from './windows';
 
-export type ReasonId = 'warmer' | 'colder' | 'precipitation' | 'wind' | 'all_within';
+export type ReasonId = 'warmer' | 'colder' | 'precipitation' | 'wind' | 'all_within' | 'mostly_within';
 export type Reason = { id: ReasonId; text: string };
 
 /** Deterministic tie order (spec §8). */
@@ -17,6 +17,26 @@ export const DIMENSION_ORDER: readonly Dimension[] = ['temperature', 'precipitat
 
 function ranked(values: DimensionValues): Dimension[] {
   return [...DIMENSION_ORDER].sort((a, b) => values[b] - values[a] || DIMENSION_ORDER.indexOf(a) - DIMENSION_ORDER.indexOf(b));
+}
+
+/**
+ * A factor is named as a reason only when its unweighted penalty in some hour of
+ * the window reaches this level, so a 5% rain chance is not called "higher".
+ * Ranking still uses the scoring contributions (IMP-023).
+ */
+export const NOTABLE_PENALTY = 0.25;
+
+/** Highest unweighted penalty per dimension across the window's hours. */
+export function peakPenalties(w: WindowAssessment): DimensionValues {
+  const out = { temperature: 0, precipitation: 0, wind: 0 };
+  for (const p of w.parts) {
+    const pen = p.assessment.penalties;
+    if (pen === null) continue;
+    out.temperature = Math.max(out.temperature, pen.temperature);
+    out.precipitation = Math.max(out.precipitation, pen.precipitation);
+    out.wind = Math.max(out.wind, pen.wind);
+  }
+  return out;
 }
 
 /** Dimensions driving the result, most important first. Uses the scoring engine's own values. */
@@ -67,14 +87,14 @@ function reasonFor(d: Dimension, w: WindowAssessment, units: UnitSystem): Reason
 /** Up to two reasons for a scored window or next-hour summary. Empty when unscored. */
 export function explain(w: WindowAssessment, units: UnitSystem): Reason[] {
   if (w.contributions === null) return [];
-  const ds = drivers(w).slice(0, 2);
+  const peak = peakPenalties(w);
+  const ds = drivers(w)
+    .filter((d) => peak[d] >= NOTABLE_PENALTY)
+    .slice(0, 2);
   if (ds.length === 0) {
-    return [
-      {
-        id: 'all_within',
-        text: 'Within your preferred temperature range, with low wind and precipitation in the forecast.',
-      },
-    ];
+    return peak.temperature === 0
+      ? [{ id: 'all_within', text: 'Within your preferred temperature range, with low wind and precipitation in the forecast.' }]
+      : [{ id: 'mostly_within', text: 'Close to your preferred temperature range, with low wind and precipitation in the forecast.' }];
   }
   return ds.map((d) => reasonFor(d, w, units));
 }

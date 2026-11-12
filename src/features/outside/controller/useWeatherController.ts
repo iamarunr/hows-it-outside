@@ -19,6 +19,7 @@ import {
   createSettingsStore,
   defaultSettings,
   forgetLocation as forgetSaved,
+  resetPreferences,
   withRemember,
   withSavedLocation,
   type LoadNotice,
@@ -99,6 +100,8 @@ export type WeatherController = {
   updateSettings: (update: (s: Settings) => Settings) => void;
   setRemember: (remember: boolean) => void;
   forgetLocation: () => void;
+  resetAllPreferences: () => void;
+  clearAllData: () => void;
 };
 
 export function useWeatherController(depsFactory: () => ControllerDeps = browserDeps): WeatherController {
@@ -249,6 +252,15 @@ export function useWeatherController(depsFactory: () => ControllerDeps = browser
     dispatch({ type: 'clear_location' });
   }, [deps]);
 
+  const resetAllPreferences = useCallback(() => setSettings((s) => resetPreferences(s)), []);
+
+  const clearAllData = useCallback(() => {
+    abortRef.current?.abort();
+    deps.cache.clear();
+    setSettings(defaultSettings());
+    dispatch({ type: 'clear_location' });
+  }, [deps]);
+
   return {
     view: forecastView(state, now),
     now,
@@ -269,5 +281,7 @@ export function useWeatherController(depsFactory: () => ControllerDeps = browser
     updateSettings: setSettings,
     setRemember,
     forgetLocation,
+    resetAllPreferences,
+    clearAllData,
   };
 }

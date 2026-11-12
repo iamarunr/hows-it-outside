@@ -19,7 +19,7 @@ export function ConditionsSummary({ current, timezone, units, now }: ConditionsS
 
   return (
     <section className="now" aria-labelledby="now-heading">
-      <h2 id="now-heading">Now</h2>
+      <h3 id="now-heading">Now</h3>
       {current === null && <p className="hint">Current conditions are unavailable. The hourly forecast may still be available.</p>}
       {usable === 'too_old' && <p className="hint">Current conditions are out of date and are hidden.</p>}
       {usable === 'in_future' && (
