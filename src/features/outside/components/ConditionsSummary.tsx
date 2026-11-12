@@ -1,8 +1,7 @@
 import { currentIsUsable } from '../../../domain/freshness';
 import type { CurrentConditions } from '../../../domain/types';
-import { conditionText } from '../../../domain/weatherCodes';
 import { formatTime, zoneName } from '../../../lib/time';
-import { formatPercent, formatTemperature, formatWind, type UnitSystem } from '../../../lib/units';
+import { formatPercent, formatWind, type UnitSystem } from '../../../lib/units';
 
 const UNAVAILABLE = 'Unavailable';
 
@@ -13,7 +12,10 @@ export type ConditionsSummaryProps = {
   now: number;
 };
 
-/** "Now" measurements from the provider's current block, kept separate from the next-hour match. */
+/**
+ * "Now" details from the provider's current block, kept separate from the next-hour match.
+ * Temperature, feels-like and condition are shown once, in the sky readout above.
+ */
 export function ConditionsSummary({ current, timezone, units, now }: ConditionsSummaryProps) {
   const usable = current === null ? null : currentIsUsable(current.time, now);
 
@@ -27,16 +29,7 @@ export function ConditionsSummary({ current, timezone, units, now }: ConditionsS
       )}
       {current !== null && usable === 'ok' && (
         <>
-          <p className="now-condition">{conditionText(current.weatherCode)}</p>
           <dl className="metrics">
-            <div>
-              <dt>Temperature</dt>
-              <dd>{formatTemperature(current.temperatureC, units) ?? UNAVAILABLE}</dd>
-            </div>
-            <div>
-              <dt>Feels like</dt>
-              <dd>{formatTemperature(current.feelsLikeC, units) ?? UNAVAILABLE}</dd>
-            </div>
             <div>
               <dt>Wind</dt>
               <dd>{formatWind(current.windKmh, units) ?? UNAVAILABLE}</dd>

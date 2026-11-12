@@ -44,12 +44,12 @@ test('two cities load in turn with their own values and time zones', async ({ pa
   const heading = page.getByRole('heading', { name: 'Weather for London, England, United Kingdom' });
   await expect(heading).toBeFocused();
   await expect(page.getByText('Times shown for Europe/London')).toBeVisible();
-  await expect(page.getByRole('definition').first()).toHaveText('11°C');
+  await expect(page.locator('.readout-temp')).toHaveText('11°C');
 
   await choose(page, 'Chennai', /Chennai/);
   await expect(page.getByRole('heading', { name: /Weather for Chennai/ })).toBeFocused();
   await expect(page.getByText('Times shown for Asia/Kolkata')).toBeVisible();
-  await expect(page.getByRole('definition').first()).toHaveText('29°C');
+  await expect(page.locator('.readout-temp')).toHaveText('29°C');
   await expect(page.getByText(/London/)).toHaveCount(0);
 
   expect(forecastRequests(h.providerRequests)).toHaveLength(2);
@@ -65,11 +65,11 @@ test('a slow response for an earlier place cannot overwrite the newer selection'
 
   await choose(page, 'London', /London, England/);
   await choose(page, 'Chennai', /Chennai/);
-  await expect(page.getByRole('definition').first()).toHaveText('29°C');
+  await expect(page.locator('.readout-temp')).toHaveText('29°C');
 
   await page.waitForTimeout(2000); // let the delayed London response arrive (real time)
   await expect(page.getByRole('heading', { name: /Weather for Chennai/ })).toBeVisible();
-  await expect(page.getByRole('definition').first()).toHaveText('29°C');
+  await expect(page.locator('.readout-temp')).toHaveText('29°C');
   await expect(page.getByText('11°C')).toHaveCount(0);
   expect(h.unmatched).toEqual([]);
 });
@@ -87,7 +87,7 @@ test('no location prompt before the button; denied permission leaves search usab
   await expect(page.getByRole('button', { name: 'Use my location' })).toBeEnabled();
 
   await choose(page, 'London', /London, England/);
-  await expect(page.getByRole('definition').first()).toHaveText('11°C');
+  await expect(page.locator('.readout-temp')).toHaveText('11°C');
   await expect(page.getByRole('alert')).toHaveCount(0);
   expectClean(h);
 });
@@ -120,10 +120,10 @@ test('null current values show Unavailable, never zero', async ({ page }) => {
   await page.goto('/');
   await choose(page, 'London', /London, England/);
   const now = page.getByRole('region', { name: 'Now' });
-  await expect(now.getByText('Conditions unavailable')).toBeVisible();
-  await expect(now.getByRole('definition').nth(0)).toHaveText('Unavailable');
-  await expect(now.getByRole('definition').nth(2)).toHaveText('Unavailable');
-  await expect(now.getByText('0°C')).toHaveCount(0);
+  await expect(page.locator('.readout-condition')).toContainText('Conditions unavailable');
+  await expect(page.locator('.readout-temp')).toHaveText(/Temperature unavailable/);
+  await expect(now.getByRole('definition').nth(0)).toHaveText('Unavailable'); // wind
+  await expect(page.locator('.weather').getByText('0°C')).toHaveCount(0);
   expectClean(h);
 });
 
@@ -143,7 +143,7 @@ test('provider outage: one automatic retry, then a clear error; Try again recove
 
   handlers.shift();
   await page.getByRole('button', { name: 'Try again' }).click();
-  await expect(page.getByRole('definition').first()).toHaveText('11°C');
+  await expect(page.locator('.readout-temp')).toHaveText('11°C');
   expect(forecastRequests(h.providerRequests)).toHaveLength(3);
 });
 
@@ -162,10 +162,10 @@ test('the session cache serves a recently loaded place without a new request', a
   const h = await setUp(page, { referenceNow: NOW, handlers: baseHandlers() });
   await page.goto('/');
   await choose(page, 'London', /London, England/);
-  await expect(page.getByRole('definition').first()).toHaveText('11°C');
+  await expect(page.locator('.readout-temp')).toHaveText('11°C');
   await page.reload();
   await choose(page, 'London', /London, England/);
-  await expect(page.getByRole('definition').first()).toHaveText('11°C');
+  await expect(page.locator('.readout-temp')).toHaveText('11°C');
   expect(forecastRequests(h.providerRequests)).toHaveLength(1);
 });
 
@@ -174,13 +174,13 @@ test('a failed refresh keeps the forecast; after an hour it is marked stale', as
   const h = await setUp(page, { referenceNow: NOW, handlers });
   await page.goto('/');
   await choose(page, 'London', /London, England/);
-  await expect(page.getByRole('definition').first()).toHaveText('11°C');
+  await expect(page.locator('.readout-temp')).toHaveText('11°C');
 
   handlers.unshift({ match: isForecastAt('51.51', '-0.13'), status: 503, body: {} });
   await page.clock.fastForward('16:00');
   await page.clock.runFor(61_000); // minute check → refresh → retry → fail
   await expect(page.getByText(/Couldn't refresh\. Forecast retrieved at/)).toBeVisible();
-  await expect(page.getByRole('definition').first()).toHaveText('11°C');
+  await expect(page.locator('.readout-temp')).toHaveText('11°C');
 
   await page.clock.fastForward('45:00');
   await page.clock.runFor(61_000);

@@ -109,3 +109,12 @@ Capture answers in the decision register. Do not invent them or stop ordinary im
 | 2026-11-12 | Owner supplies the public repository URL; the local `gh` account is not used to create it | `PUBLIC_SOURCE_URL` and README links follow that URL |
 | 2026-11-12 | Security reports go through GitHub private vulnerability reporting on the public repository | No email address is published |
 | 2026-11-12 | Deploy to Cloudflare Pages on the owner's account: verify a preview, then attach outside.knnaresh.com and verify production | Existing knnaresh.com DNS records are left untouched |
+| 2026-11-12 | Published commits use the owner's GitHub noreply address (3859170+iamarunr@users.noreply.github.com) | History rewritten before the first push; content unchanged |
+| 2026-11-12 | Redesign after the Dutchblue site reference: its look, tool-first; self-hosted Bebas Neue for display; weather-aware CSS sky instead of photos | Supersedes the original calm green editorial direction in DESIGN.md; PRODUCT.md's "no gradients / compact" lines are superseded for visuals |
+| 2026-11-12 | IMP-039 | Display type Bebas Neue self-hosted via @fontsource (latin 400, 13.8 KB woff2, preloaded); reading text stays system sans | Owner choice; no font CDN keeps the CSP `font-src 'self'` |
+| 2026-11-12 | IMP-040 | Sky gradient driven by registered `@property` colours with per-sky veil layers; contrast tested against both stops at full veil strength | Signature move without images or JS; every sky stays AA |
+| 2026-11-12 | IMP-041 | Full-bleed bands painted with `border-image` outset and a `::before` layer, with `body { overflow-x: clip }` | Full-bleed look without horizontal scrolling (320 px reflow test) |
+| 2026-11-12 | IMP-042 | Once a place is chosen the h1 is visually hidden; the sky readout heading carries "Weather for …" via aria-label | Slim header so the answer leads; one H1 kept for assistive tech |
+| 2026-11-12 | IMP-043 | Now panel keeps wind, gusts, humidity and timestamp; temperature, feels-like and condition appear once, in the readout | Design review: no duplicated facts |
+| 2026-11-12 | IMP-044 | Unicode status glyphs replaced by drawn SVG marks; notices use tinted field, hairline border and a masked SVG mark | Design review (craft floor): no glyph icons, no thick side stripes |
+| 2026-11-12 | IMP-045 | Hover fills only under `@media (hover: hover)` | Tapped buttons stayed filled on phones |

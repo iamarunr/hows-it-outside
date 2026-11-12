@@ -1,6 +1,6 @@
 # Implementation status
 
-Last updated: 11 November 2026 · Milestone: **M6 in progress (awaiting owner decisions)** · Branch: `main` · Last-known-good commit: `0b96078` (M5; M4 `feff8ab`, M3 `fabd1db`, M2 `f7174e2`, M1 `479891b`, M0 `6342d19`)
+Last updated: 12 November 2026 · Milestone: **M6 in progress (redesign done; deployment next)** · Branch: `main` · Last-known-good commit: `0ab22c7` (M5; M4 `e692375`, M3 `0c0126a`, M2 `f91f0df`, M1 `f159c50`, M0 `1f0934e`)
 
 ## Baseline
 Folder contained only the single-file spec (v1.1). Not a git repository; `git init -b main` run. Spec split into repository paths (README.md, START_HERE.md, PRODUCT.md, AGENTS.md, WORKFLOW.md, DESIGN.md, docs/01–10); original kept at `docs/archive/Outside_Complete_Agent_Specification.md`.
@@ -125,6 +125,9 @@ M5 command results (11 Nov 2026): `npm run check` 0 errors · `npm run lint` cle
 - CI has never run (no GitHub remote). CI runs Chromium only; Firefox/WebKit were run locally.
 - Manual screen-reader and real iOS/Android device checks not done.
 - `fsevents` install script not approved by npm's allowScripts (macOS-only optional dependency; no effect on build/tests).
+
+## Redesign (12 November 2026)
+Owner asked to follow the Dutchblue reference (Landbook). Decisions: its look but tool-first; self-hosted Bebas Neue; weather-aware CSS sky. Built with the Impeccable skill, code-led (no image generation). Independent finish review: round 1 fix (8 items) → round 2 seven resolved, one partial → owner funded a third round → **ship**. DESIGN.md and `.impeccable/design.json` rewritten from the build. Checks: 279 unit tests; 101 E2E across Chromium, Firefox, WebKit; 0 axe violations; detector clean. JS 95.9 KB gzip, CSS 6.0 KB, font 13.8 KB; LCP 560–568 ms, CLS 0.
 
 ## Owner decisions (resolved 2026-11-12)
 1. Free Open-Meteo API: owner confirms non-commercial use.

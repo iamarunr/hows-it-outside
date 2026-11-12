@@ -7,6 +7,7 @@ import { hourLabels } from '../../../lib/time';
 import { formatPercent, formatPrecipitation, formatTemperature, formatWind, type UnitSystem } from '../../../lib/units';
 import type { Results } from '../controller/results';
 import { formatRange, MATCH_TEXT } from './copy';
+import { MatchIcon } from './MatchIcon';
 import { FlagNotices } from './Summary';
 
 const NA = 'Unavailable';
@@ -105,7 +106,7 @@ export function HourlyTimeline({ results, units, timezone, now, announce }: Prop
                   {l?.zone !== null && l?.zone !== undefined && ` ${l.zone}`}
                 </span>
                 <span className="hour-match">
-                  <span aria-hidden="true">{m.symbol} </span>
+                  <MatchIcon label={a.label} />
                   {m.text}
                 </span>
                 <span>{formatTemperature(a.interval.feelsLikeC, units) ?? NA} feels like</span>
@@ -142,8 +143,8 @@ function HourDetails({
   return (
     <section className="hour-details" aria-labelledby="hour-details-heading" aria-live="off">
       <h4 id="hour-details-heading">{formatRange(i.start, i.end, timezone, now)}</h4>
-      <p className="window-label">
-        <span aria-hidden="true">{m.symbol} </span>
+      <p className={`match-label match-${assessment.label}`}>
+        <MatchIcon label={assessment.label} />
         {m.text}
       </p>
       <FlagNotices flags={assessment.flags} notes={assessment.notes} />

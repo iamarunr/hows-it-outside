@@ -4,7 +4,7 @@ import type { FlagId, NoteId } from '../../../domain/types';
 import { formatTime } from '../../../lib/time';
 import type { UnitSystem } from '../../../lib/units';
 import type { Results } from '../controller/results';
-import { MATCH_TEXT } from './copy';
+import { MatchIcon } from './MatchIcon';
 
 export function FlagNotices({ flags, notes = [] }: { flags: readonly FlagId[]; notes?: readonly NoteId[] }) {
   if (flags.length === 0 && notes.length === 0) return null;
@@ -12,7 +12,6 @@ export function FlagNotices({ flags, notes = [] }: { flags: readonly FlagId[]; n
     <ul className="flag-list">
       {flags.map((f) => (
         <li key={f} className="notice notice-concern">
-          <span aria-hidden="true">! </span>
           {FLAG_COPY[f]}
         </li>
       ))}
@@ -28,27 +27,24 @@ export function FlagNotices({ flags, notes = [] }: { flags: readonly FlagId[]; n
 /** Next-hour summary: concerning notices first, then the verdict and up to two reasons. */
 export function NextHourSummary({ results, units, timezone }: { results: Results; units: UnitSystem; timezone: string }) {
   const { next, activity, recommendationsAllowed, comparison } = results;
-  const label = MATCH_TEXT[next.label];
   const reasons = explain(next, units);
   const compare = comparisonText(comparison, (t) => formatTime(t, timezone));
 
   return (
     <section className={`summary summary-${next.label}`} aria-labelledby="summary-heading">
-      <p className="eyebrow">Next hour</p>
       <FlagNotices flags={next.flags} notes={next.notes} />
       {!recommendationsAllowed ? (
         <>
           <h3 id="summary-heading">Suggestions paused</h3>
-          <p>The weather below is from an earlier forecast and may be out of date.</p>
+          <p className="summary-when">Next hour · The weather below is from an earlier forecast and may be out of date.</p>
         </>
       ) : (
         <>
           <h3 id="summary-heading">
-            <span className="match-symbol" aria-hidden="true">
-              {label.symbol}
-            </span>{' '}
+            <MatchIcon label={next.label} className="summary-icon" />
             {summaryHeadline(next, activity)}
           </h3>
+          <p className="summary-when">Next hour, from {formatTime(next.start, timezone)}</p>
           {next.label === 'limited' && <p>{emptyReasonText('data')}</p>}
           {reasons.length > 0 && (
             <ul className="reasons">

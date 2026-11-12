@@ -98,7 +98,7 @@ test('interactive targets are at least 24×24 px (WCAG 2.2 minimum; 44 px prefer
   await loaded(page);
   await page.getByText('Preferences and saved data').click();
   const small = await page.evaluate(() =>
-    [...document.querySelectorAll<HTMLElement>('button, a, input, select, summary, .segmented-option span')]
+    [...document.querySelectorAll<HTMLElement>('button, a, input, select, summary, .segmented-option > span')]
       .filter((el) => el.offsetParent !== null && !(el instanceof HTMLInputElement && el.type === 'radio'))
       .map((el) => ({ el: `${el.tagName.toLowerCase()} ${(el.textContent ?? '').trim().slice(0, 30)}`, r: el.getBoundingClientRect() }))
       .filter(({ r }) => r.width < 24 || r.height < 24)

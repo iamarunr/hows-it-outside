@@ -10,7 +10,7 @@ A worldwide public audience, frequently on a phone before leaving home. Someone 
 Useful conditions in two interactions: select location, optionally select activity. Explain why a period matches preferences. Do not frame weather suitability as a universal safety verdict.
 
 ## Primary surface
-Operate mode: an immediately useful weather tool. Compact light interface, clear typography, restrained color, generous touch targets. No marketing hero before the tool, stock photos, signup gate, or onboarding questionnaire.
+Operate mode: an immediately useful weather tool, the answer first. Since 2026-11-12 its look follows the owner-chosen Dutchblue reference: place and temperature in large self-hosted display capitals over a CSS sky that reflects the weather (see DESIGN.md). Clear typography, generous touch targets. No marketing sections before the tool, no stock photos, signup gate, or onboarding questionnaire.
 
 ## Scope
 General Outdoors, Walk, Run, Bike, Hang out; now and 24-hour outlook; 30/60/90/120-minute windows; optional preferences; local settings; location search; accessibility; open-source deployment docs. Air quality, UV, official alerts, route planning, maps, accounts, and notifications are future work.

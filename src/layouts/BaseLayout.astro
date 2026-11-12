@@ -1,4 +1,6 @@
 ---
+import '@fontsource/bebas-neue/latin-400.css';
+import bebasNeue from '@fontsource/bebas-neue/files/bebas-neue-latin-400-normal.woff2?url';
 import '../styles/tokens.css';
 import '../styles/global.css';
 import '../styles/outside.css';
@@ -21,6 +23,7 @@ const noindex = import.meta.env.PUBLIC_NOINDEX === 'true';
     <link rel="canonical" href={canonical.toString()} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href={bebasNeue} as="font" type="font/woff2" crossorigin />
     <script is:inline>document.documentElement.classList.add('js');</script>
   </head>
   <body>

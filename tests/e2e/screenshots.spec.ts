@@ -49,9 +49,54 @@ for (const [name, viewport] of [
     await input.press('Enter');
     await page.getByRole('button', { name: /London, England/ }).click();
     await page.locator('.summary').waitFor();
+    await page.waitForTimeout(1500); // let the sky transition settle (real time; CSS is not on the page clock)
     await page.screenshot({ path: `${dir}/${name}-loaded.png`, fullPage: true });
     await page.screenshot({ path: `${dir}/${name}-first-screen.png` });
     await page.getByText('Preferences and saved data').click();
+    await page.mouse.move(0, 0); // no lingering hover state in the capture
     await page.locator('.settings').screenshot({ path: `${dir}/${name}-preferences.png` });
   });
+}
+
+/** One capture per sky so the weather layers can be reviewed (synthetic weather). */
+const SKIES = [
+  { id: 'cloudy', code: 3, day: 1 },
+  { id: 'rain', code: 63, day: 1 },
+  { id: 'night-clear', code: 0, day: 0 },
+  { id: 'snow', code: 73, day: 1 },
+  { id: 'storm', code: 95, day: 1 },
+  { id: 'fog', code: 45, day: 1 },
+] as const;
+
+for (const sky of SKIES) {
+  for (const width of [1440, 390]) {
+    test(`sky ${sky.id} at ${width}`, async ({ page }) => {
+      test.skip(dir === undefined, 'SCREENSHOT_DIR not set');
+      await page.setViewportSize({ width, height: width === 390 ? 844 : 900 });
+      await setUp(page, {
+        referenceNow: NOW,
+        handlers: [
+          { match: (u) => u.pathname === '/v1/search', body: { results: [LONDON] } },
+          {
+            match: (u) => u.pathname === '/v1/forecast',
+            body: syntheticForecast({
+              start: NOW - 8 * 3600,
+              timezone: 'Europe/London',
+              current: { time: NOW, temperature_2m: 11, apparent_temperature: 9, weather_code: sky.code },
+              hourly: () => ({ weather_code: sky.code, is_day: sky.day }),
+            }),
+          },
+        ],
+      });
+      await page.goto('/');
+      const input = page.getByLabel('Search city or place');
+      await input.fill('London');
+      await input.press('Enter');
+      await page.getByRole('button', { name: /London, England/ }).click();
+      await page.locator(`.sky[data-sky="${sky.id}"]`).waitFor();
+      await page.waitForTimeout(1500);
+      await page.mouse.move(0, 0);
+      await page.screenshot({ path: `${dir}/sky-${sky.id}-${width}.png` });
+    });
+  }
 }

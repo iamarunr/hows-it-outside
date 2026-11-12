@@ -11,3 +11,6 @@ coverage/
 .DS_Store
 # Local editor/agent tooling
 .claude/
+.impeccable/review/
+.impeccable/mocks/
+.impeccable/config.local.json

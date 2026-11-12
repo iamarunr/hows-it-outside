@@ -11,10 +11,11 @@ The Outside? source code is MIT-licensed (see [LICENSE](LICENSE)). That license 
 | zod (`zod/mini`) | 4.6.7 | MIT |
 | astro (island hydration runtime) | 7.4.11 | MIT |
 | @astrojs/react | 7.1.8 | MIT |
+| Bebas Neue font, © 2019 The Bebas Neue Project Authors (@fontsource/bebas-neue, latin subset, self-hosted) | 5.3.0 | SIL Open Font License 1.1 |
 
 Full license texts are in each package under `node_modules/` after `npm ci`. Build and test tools (TypeScript, Vitest, Playwright, ESLint and plugins, axe-core) are development dependencies and are not shipped.
 
-No third-party fonts, icons, images or scripts are included. The favicon is original to this project.
+No third-party icons, images or scripts are included. The only third-party font is Bebas Neue (above), served from the site itself, with no font CDN. Status marks and the favicon are original to this project.
 
 ## Data and services
 

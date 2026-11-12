@@ -1,18 +1,91 @@
-/* Design tokens (DESIGN.md). Contrast pairs are verified by tests/unit/contrast.test.ts. */
+/*
+ * Design tokens. Direction: Dutchblue-inspired scoreboard-over-sky (owner-pinned, 2026-11-12).
+ * Every text/background pair below is verified by tests/unit/contrast.test.ts.
+ */
 :root {
-  --color-bg: #f7f8f4;
+  /* Ground and ink */
+  --color-bg: #f3f5f7;
   --color-surface: #ffffff;
-  --color-text: #202820;
-  --color-text-secondary: #526052;
-  --color-brand: #2d6848;
-  --color-divider: #d9e0d7; /* decorative only; never the sole boundary of a control */
-  --color-control-border: #7c8a7c; /* ≥3:1 on surface and background */
-  --color-selected: #eef4ef;
-  --color-good: #245c3d;
-  --color-mixed: #785315;
-  --color-concern: #9b3030;
+  --color-text: #1d2321;
+  --color-text-secondary: #4a5662;
+  --color-brand: #233651; /* navy: selection, actions, links */
+  --color-slate: #4d6a88; /* secondary accent ink */
+  --color-sand: #cdb89c; /* hairline detail; text only on the dark band */
+  --color-divider: #dde2e7; /* decorative only; never the sole boundary of a control */
+  --color-control-border: #7a8794; /* ≥3:1 on surface and background */
+  --color-selected: #e7edf4;
 
+  /* Charcoal-olive band (planning section) */
+  --color-band: #262b25;
+  --color-band-text: #eef1ec;
+  --color-band-text-secondary: #b8c2b4;
+  --color-band-border: #8e9a8a;
+  --color-good-on-band: #8fd1a6;
+  --color-mixed-on-band: #e5c07b;
+  --color-concern-on-band: #f2a6a1;
+
+  /* Status ink on light surfaces (paired with drawn marks, never color alone) */
+  --color-good: #1f6a44;
+  --color-mixed: #7a5310;
+  --color-concern: #9e2f2d;
+  --color-concern-text: #8e2a28;
+  --color-concern-tint: #fbedec;
+  --color-mixed-text: #6e4a0e;
+  --color-mixed-tint: #fbf3e4;
+
+  /* Skies: top, bottom, veil (layered clouds/glow/banding, at most veil-strength), ink.
+     Ink holds ≥4.5:1 against both stops, alone and fully veiled. */
+  --sky-clear-top: #5e95cc;
+  --sky-clear-bottom: #d3e6f5;
+  --sky-clear-veil: #ffffff;
+  --sky-clear-veil-strength: 75%;
+  --sky-clear-ink: #0e1e36;
+  --sky-cloudy-top: #8c9dad;
+  --sky-cloudy-bottom: #dde4ea;
+  --sky-cloudy-veil: #ffffff;
+  --sky-cloudy-veil-strength: 60%;
+  --sky-cloudy-ink: #121b26;
+  --sky-rain-top: #44546a;
+  --sky-rain-bottom: #56677a;
+  --sky-rain-veil: #16202c;
+  --sky-rain-veil-strength: 40%;
+  --sky-rain-ink: #ffffff;
+  --sky-snow-top: #bfcddb;
+  --sky-snow-bottom: #f0f4f8;
+  --sky-snow-veil: #ffffff;
+  --sky-snow-veil-strength: 50%;
+  --sky-snow-ink: #14202e;
+  --sky-storm-top: #252b37;
+  --sky-storm-bottom: #4c5666;
+  --sky-storm-veil: #0a0e14;
+  --sky-storm-veil-strength: 45%;
+  --sky-storm-ink: #ffffff;
+  --sky-fog-top: #aeb5b9;
+  --sky-fog-bottom: #e4e7e8;
+  --sky-fog-veil: #ffffff;
+  --sky-fog-veil-strength: 55%;
+  --sky-fog-ink: #151b20;
+  --sky-night-clear-top: #0c1830;
+  --sky-night-clear-bottom: #294266;
+  --sky-night-clear-veil: #020611;
+  --sky-night-clear-veil-strength: 45%;
+  --sky-night-clear-ink: #ffffff;
+  --sky-night-cloudy-top: #1c2530;
+  --sky-night-cloudy-bottom: #3a4754;
+  --sky-night-cloudy-veil: #05080c;
+  --sky-night-cloudy-veil-strength: 40%;
+  --sky-night-cloudy-ink: #ffffff;
+  --sky-unknown-top: #7f8c99;
+  --sky-unknown-bottom: #d6dde3;
+  --sky-unknown-veil: #ffffff;
+  --sky-unknown-veil-strength: 40%;
+  --sky-unknown-ink: #111a24;
+
+  /* Type */
   --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'Bebas Neue', 'Arial Narrow', 'Roboto Condensed', sans-serif;
+
+  /* Space and shape */
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
@@ -20,7 +93,10 @@
   --space-5: 24px;
   --space-6: 32px;
   --space-7: 48px;
-  --radius: 8px;
-  --content-max: 1120px;
+  --space-8: 72px;
+  --radius: 6px;
+  --radius-pill: 999px;
+  --content-max: 1180px;
   --target-min: 44px;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }

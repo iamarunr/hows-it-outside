@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### Redesign (12 November 2026)
+- New look after the Dutchblue site reference: place and temperature in self-hosted Bebas Neue capitals over a CSS sky that changes with the weather (clear, cloudy, rain, snow, storm, fog, night).
+- Navy pills for choices, thin outlined buttons for actions, a full-bleed charcoal band for best times shown as scoreboard rows, drawn status marks.
+- Slimmer header once a place is chosen; compact °C/°F unit pills; no repeated facts between the readout and the Now panel.
+- Every text colour on every sky and band is contrast-tested; hover effects limited to devices that hover.
+
 ### M5 — Open-source and release preparation (11 November 2026)
 - Contributor README, MIT license, third-party notices, contributing and security guides, issue forms and PR template.
 - Preview deployments can be marked noindex; hosted builds require a canonical site URL.

@@ -3,7 +3,9 @@ import { ACTIVITY_PRESETS } from '../../domain/activities';
 import { summaryHeadline } from '../../domain/explanations';
 import { defaultUnitSystem } from '../../lib/units';
 import { resetActivity } from '../../services/settings';
+import { skyFor } from '../../domain/sky';
 import { ConditionsSummary } from './components/ConditionsSummary';
+import { SkyReadout } from './components/SkyReadout';
 import { ActivityPicker, UnitsPicker, WindowControls } from './components/Controls';
 import { DataStatus } from './components/DataStatus';
 import { HourlyTimeline } from './components/HourlyTimeline';
@@ -67,6 +69,11 @@ export default function OutsideApp({ depsFactory = browserDeps }: OutsideAppProp
   }, [location, saved, view.kind]);
 
   const timezone = view.kind === 'data' ? view.forecast.timezone : 'UTC';
+  const firstHour = results?.timeline[0]?.interval;
+  const sky =
+    view.kind === 'data'
+      ? skyFor(view.forecast.current?.weatherCode ?? firstHour?.weatherCodes[0] ?? null, firstHour?.daylight ?? null)
+      : 'unknown';
 
   return (
     <div className="outside-app">
@@ -93,9 +100,14 @@ export default function OutsideApp({ depsFactory = browserDeps }: OutsideAppProp
 
       {location !== null && (
         <section className="weather" aria-labelledby="weather-heading">
-          <h2 id="weather-heading" ref={headingRef} tabIndex={-1} className="weather-heading">
-            Weather for {location.label}
-          </h2>
+          <SkyReadout
+            label={location.label}
+            sky={sky}
+            current={view.kind === 'data' ? view.forecast.current : null}
+            units={units}
+            now={c.now}
+            headingRef={headingRef}
+          />
           <DataStatus view={view} now={c.now} cooldownUntil={c.cooldownUntil} onRetry={c.retry} />
 
           {view.kind === 'data' && results !== null && (

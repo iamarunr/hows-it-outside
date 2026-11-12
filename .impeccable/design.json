@@ -1,0 +1,744 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-12T00:00:00Z",
+  "title": "Design System: Outside?",
+  "extensions": {
+    "colorMeta": {
+      "ground": {
+        "role": "neutral",
+        "displayName": "Cool Paper",
+        "canonical": "#f3f5f7",
+        "tonalRamp": [
+          "#0a0b0d",
+          "#232426",
+          "#3e4041",
+          "#5c5e5f",
+          "#7f8082",
+          "#a3a5a7",
+          "#c9cbcd",
+          "#edeff1"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "White",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#242424",
+          "#404040",
+          "#5d5d5d",
+          "#808080",
+          "#a4a4a4",
+          "#cacaca",
+          "#eeeeee"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Charcoal Ink",
+        "canonical": "#1d2321",
+        "tonalRamp": [
+          "#070c0b",
+          "#202624",
+          "#3b413f",
+          "#585f5d",
+          "#7b8280",
+          "#9fa7a4",
+          "#c5cdca",
+          "#e8f1ee"
+        ]
+      },
+      "ink-secondary": {
+        "role": "neutral",
+        "displayName": "Graphite",
+        "canonical": "#4a5662",
+        "tonalRamp": [
+          "#040c15",
+          "#1a2530",
+          "#36414d",
+          "#535f6b",
+          "#75828f",
+          "#99a6b4",
+          "#beccda",
+          "#e2f0ff"
+        ]
+      },
+      "navy": {
+        "role": "primary",
+        "displayName": "Harbour Navy",
+        "canonical": "#233651",
+        "tonalRamp": [
+          "#000a21",
+          "#12243e",
+          "#2d415c",
+          "#4a5f7c",
+          "#6c82a1",
+          "#8fa6c7",
+          "#b5ccee",
+          "#d8f1ff"
+        ]
+      },
+      "slate": {
+        "role": "secondary",
+        "displayName": "Weathered Slate",
+        "canonical": "#4d6a88",
+        "tonalRamp": [
+          "#000b22",
+          "#0a253f",
+          "#26425e",
+          "#44607e",
+          "#6583a2",
+          "#89a8c9",
+          "#aecef0",
+          "#d1f2ff"
+        ]
+      },
+      "sand": {
+        "role": "secondary",
+        "displayName": "Dune Sand",
+        "canonical": "#cdb89c",
+        "tonalRamp": [
+          "#160700",
+          "#312108",
+          "#4e3c24",
+          "#6d5a41",
+          "#907d62",
+          "#b6a186",
+          "#dcc7ab",
+          "#ffebce"
+        ]
+      },
+      "divider": {
+        "role": "neutral",
+        "displayName": "Mist Rule",
+        "canonical": "#dde2e7",
+        "tonalRamp": [
+          "#080c0f",
+          "#212428",
+          "#3c4044",
+          "#5a5e62",
+          "#7c8185",
+          "#a0a5aa",
+          "#c6cbd0",
+          "#eaeff4"
+        ]
+      },
+      "control-border": {
+        "role": "neutral",
+        "displayName": "Control Steel",
+        "canonical": "#7a8794",
+        "tonalRamp": [
+          "#040c15",
+          "#1a2530",
+          "#36414d",
+          "#535f6b",
+          "#75828f",
+          "#99a6b4",
+          "#beccda",
+          "#e2f0ff"
+        ]
+      },
+      "selected": {
+        "role": "neutral",
+        "displayName": "Selected Wash",
+        "canonical": "#e7edf4",
+        "tonalRamp": [
+          "#080c10",
+          "#20242a",
+          "#3b4046",
+          "#595e64",
+          "#7b8187",
+          "#a0a5ac",
+          "#c5cbd2",
+          "#e9eff6"
+        ]
+      },
+      "band": {
+        "role": "tertiary",
+        "displayName": "Charcoal Olive",
+        "canonical": "#262b25",
+        "tonalRamp": [
+          "#080d08",
+          "#212620",
+          "#3c423b",
+          "#5a5f59",
+          "#7c827b",
+          "#a0a79f",
+          "#c6cdc5",
+          "#eaf1e9"
+        ]
+      },
+      "band-text": {
+        "role": "tertiary",
+        "displayName": "Band Chalk",
+        "canonical": "#eef1ec",
+        "tonalRamp": [
+          "#0a0c09",
+          "#232521",
+          "#3e413d",
+          "#5c5e5a",
+          "#7e817d",
+          "#a3a6a1",
+          "#c9ccc7",
+          "#edf0eb"
+        ]
+      },
+      "band-text-secondary": {
+        "role": "tertiary",
+        "displayName": "Band Sage",
+        "canonical": "#b8c2b4",
+        "tonalRamp": [
+          "#070d05",
+          "#1f271c",
+          "#3a4337",
+          "#586154",
+          "#7a8476",
+          "#9ea89a",
+          "#c4cec0",
+          "#e8f2e4"
+        ]
+      },
+      "band-border": {
+        "role": "tertiary",
+        "displayName": "Band Rule",
+        "canonical": "#8e9a8a",
+        "tonalRamp": [
+          "#060e04",
+          "#1e271a",
+          "#394335",
+          "#566153",
+          "#798475",
+          "#9da999",
+          "#c2cfbe",
+          "#e6f3e2"
+        ]
+      },
+      "good-on-band": {
+        "role": "status",
+        "displayName": "Good on Band",
+        "canonical": "#8fd1a6",
+        "tonalRamp": [
+          "#001400",
+          "#00300e",
+          "#004d2a",
+          "#2b6c47",
+          "#509068",
+          "#75b68c",
+          "#9addb1",
+          "#beffd4"
+        ]
+      },
+      "mixed-on-band": {
+        "role": "status",
+        "displayName": "Mixed on Band",
+        "canonical": "#e5c07b",
+        "tonalRamp": [
+          "#1d0200",
+          "#3a1c00",
+          "#593900",
+          "#785705",
+          "#9d7a35",
+          "#c39f5a",
+          "#eac580",
+          "#ffe9a3"
+        ]
+      },
+      "concern-on-band": {
+        "role": "status",
+        "displayName": "Concern on Band",
+        "canonical": "#f2a6a1",
+        "tonalRamp": [
+          "#260000",
+          "#46090d",
+          "#682928",
+          "#8a4745",
+          "#b06a66",
+          "#d88e89",
+          "#ffb4ae",
+          "#ffd7d2"
+        ]
+      },
+      "good": {
+        "role": "status",
+        "displayName": "Good",
+        "canonical": "#1f6a44",
+        "tonalRamp": [
+          "#001500",
+          "#00300f",
+          "#004e2a",
+          "#236d47",
+          "#4a9169",
+          "#6fb78c",
+          "#95deb2",
+          "#b9ffd5"
+        ]
+      },
+      "mixed": {
+        "role": "status",
+        "displayName": "Mixed",
+        "canonical": "#7a5310",
+        "tonalRamp": [
+          "#1f0000",
+          "#3d1a00",
+          "#5c3600",
+          "#7c5513",
+          "#a1783b",
+          "#c79c60",
+          "#efc285",
+          "#ffe6a8"
+        ]
+      },
+      "concern": {
+        "role": "status",
+        "displayName": "Concern",
+        "canonical": "#9e2f2d",
+        "tonalRamp": [
+          "#2d0000",
+          "#4f0000",
+          "#721c1b",
+          "#963d39",
+          "#bd615a",
+          "#e6857d",
+          "#ffaba2",
+          "#ffcfc5"
+        ]
+      },
+      "concern-text": {
+        "role": "status",
+        "displayName": "Concern Text",
+        "canonical": "#8e2a28",
+        "tonalRamp": [
+          "#2d0000",
+          "#4f0000",
+          "#721c1b",
+          "#963d39",
+          "#bd615a",
+          "#e6857d",
+          "#ffaba2",
+          "#ffcfc5"
+        ]
+      },
+      "concern-tint": {
+        "role": "status",
+        "displayName": "Concern Tint",
+        "canonical": "#fbedec",
+        "tonalRamp": [
+          "#110908",
+          "#2b2121",
+          "#483d3c",
+          "#665a5a",
+          "#897d7c",
+          "#aea1a0",
+          "#d4c7c6",
+          "#f9ebea"
+        ]
+      },
+      "mixed-text": {
+        "role": "status",
+        "displayName": "Mixed Text",
+        "canonical": "#6e4a0e",
+        "tonalRamp": [
+          "#1e0100",
+          "#3b1b00",
+          "#5a3700",
+          "#7a561d",
+          "#9f7842",
+          "#c59d66",
+          "#ecc38b",
+          "#ffe7ae"
+        ]
+      },
+      "mixed-tint": {
+        "role": "status",
+        "displayName": "Mixed Tint",
+        "canonical": "#fbf3e4",
+        "tonalRamp": [
+          "#100a03",
+          "#292318",
+          "#453f33",
+          "#645d50",
+          "#867f72",
+          "#aba496",
+          "#d1cabb",
+          "#f6eedf"
+        ]
+      },
+      "sky-clear-top": {
+        "role": "sky",
+        "displayName": "Sky clear top",
+        "note": "Veil #ffffff at max 75%; ink tested against both stops, unveiled and fully veiled."
+      },
+      "sky-clear-bottom": {
+        "role": "sky",
+        "displayName": "Sky clear bottom",
+        "note": "Veil #ffffff at max 75%; ink tested against both stops, unveiled and fully veiled."
+      },
+      "sky-clear-ink": {
+        "role": "sky",
+        "displayName": "Sky clear ink",
+        "note": "Veil #ffffff at max 75%; ink tested against both stops, unveiled and fully veiled."
+      },
+      "sky-cloudy-top": {
+        "role": "sky",
+        "displayName": "Sky cloudy top",
+        "note": "Veil #ffffff at max 60%; ink tested against both stops, unveiled and fully veiled."
+      },
+      "sky-cloudy-bottom": {
+        "role": "sky",
+        "displayName": "Sky cloudy bottom",
+        "note": "Veil #ffffff at max 60%; ink tested against both stops, unveiled and fully veiled."
+      },
+      "sky-cloudy-ink": {
+        "role": "sky",
+        "displayName": "Sky cloudy ink",
+        "note": "Veil #ffffff at max 60%; ink tested against both stops, unveiled and fully veiled."
+      },
+      "sky-rain-top": {
+        "role": "sky",
+        "displayName": "Sky rain top",
+        "note": "Veil #16202c at max 40%; ink tested against both stops, unveiled and fully veiled."
+      },
+      "sky-rain-bottom": {
+        "role": "sky",
+        "displayName": "Sky rain bottom",
+        "note": "Veil #16202c at max 40%; ink tested against both stops, unveiled and fully veiled."
+      },
+      "sky-rain-ink": {
+        "role": "sky",
+        "displayName": "Sky rain ink",
+        "note": "Veil #16202c at max 40%; ink tested against both stops, unveiled and fully veiled."
+      },
+      "sky-snow-top": {
+        "role": "sky",
+        "displayName": "Sky snow top",
+        "note": "Veil #ffffff at max 50%; ink tested against both stops, unveiled and fully veiled."
+      },
+      "sky-snow-bottom": {
+        "role": "sky",
+        "displayName": "Sky snow bottom",
+        "note": "Veil #ffffff at max 50%; ink tested against both stops, unveiled and fully veiled."
+      },
+      "sky-snow-ink": {
+        "role": "sky",
+        "displayName": "Sky snow ink",
+        "note": "Veil #ffffff at max 50%; ink tested against both stops, unveiled and fully veiled."
+      },
+      "sky-storm-top": {
+        "role": "sky",
+        "displayName": "Sky storm top",
+        "note": "Veil #0a0e14 at max 45%; ink tested against both stops, unveiled and fully veiled."
+      },
+      "sky-storm-bottom": {
+        "role": "sky",
+        "displayName": "Sky storm bottom",
+        "note": "Veil #0a0e14 at max 45%; ink tested against both stops, unveiled and fully veiled."
+      },
+      "sky-storm-ink": {
+        "role": "sky",
+        "displayName": "Sky storm ink",
+        "note": "Veil #0a0e14 at max 45%; ink tested against both stops, unveiled and fully veiled."
+      },
+      "sky-fog-top": {
+        "role": "sky",
+        "displayName": "Sky fog top",
+        "note": "Veil #ffffff at max 55%; ink tested against both stops, unveiled and fully veiled."
+      },
+      "sky-fog-bottom": {
+        "role": "sky",
+        "displayName": "Sky fog bottom",
+        "note": "Veil #ffffff at max 55%; ink tested against both stops, unveiled and fully veiled."
+      },
+      "sky-fog-ink": {
+        "role": "sky",
+        "displayName": "Sky fog ink",
+        "note": "Veil #ffffff at max 55%; ink tested against both stops, unveiled and fully veiled."
+      },
+      "sky-night-clear-top": {
+        "role": "sky",
+        "displayName": "Sky night-clear top",
+        "note": "Veil #020611 at max 45%; ink tested against both stops, unveiled and fully veiled."
+      },
+      "sky-night-clear-bottom": {
+        "role": "sky",
+        "displayName": "Sky night-clear bottom",
+        "note": "Veil #020611 at max 45%; ink tested against both stops, unveiled and fully veiled."
+      },
+      "sky-night-clear-ink": {
+        "role": "sky",
+        "displayName": "Sky night-clear ink",
+        "note": "Veil #020611 at max 45%; ink tested against both stops, unveiled and fully veiled."
+      },
+      "sky-night-cloudy-top": {
+        "role": "sky",
+        "displayName": "Sky night-cloudy top",
+        "note": "Veil #05080c at max 40%; ink tested against both stops, unveiled and fully veiled."
+      },
+      "sky-night-cloudy-bottom": {
+        "role": "sky",
+        "displayName": "Sky night-cloudy bottom",
+        "note": "Veil #05080c at max 40%; ink tested against both stops, unveiled and fully veiled."
+      },
+      "sky-night-cloudy-ink": {
+        "role": "sky",
+        "displayName": "Sky night-cloudy ink",
+        "note": "Veil #05080c at max 40%; ink tested against both stops, unveiled and fully veiled."
+      },
+      "sky-unknown-top": {
+        "role": "sky",
+        "displayName": "Sky unknown top",
+        "note": "Veil #ffffff at max 40%; ink tested against both stops, unveiled and fully veiled."
+      },
+      "sky-unknown-bottom": {
+        "role": "sky",
+        "displayName": "Sky unknown bottom",
+        "note": "Veil #ffffff at max 40%; ink tested against both stops, unveiled and fully veiled."
+      },
+      "sky-unknown-ink": {
+        "role": "sky",
+        "displayName": "Sky unknown ink",
+        "note": "Veil #ffffff at max 40%; ink tested against both stops, unveiled and fully veiled."
+      }
+    },
+    "typographyMeta": {
+      "display-temperature": {
+        "displayName": "Display / Temperature",
+        "purpose": "Current temperature in the sky readout. Bebas Neue (SIL OFL), self-hosted latin 400 woff2, 13.8 KB, preloaded."
+      },
+      "display-place": {
+        "displayName": "Display / Place",
+        "purpose": "City in the readout heading."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Page h1 before a place is chosen; supporting-page h1."
+      },
+      "headline-band": {
+        "displayName": "Headline / Band",
+        "purpose": "Planning band heading."
+      },
+      "verdict": {
+        "displayName": "Verdict",
+        "purpose": "Next-hour verdict with drawn mark."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Now, Next 24 hours, supporting-page h2."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "All reading text; tabular numerals."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Uppercase legends, metric terms, hour dates, window rank. Names fields; never a kicker."
+      },
+      "button": {
+        "displayName": "Button",
+        "purpose": "Uppercase ghost and primary button labels."
+      }
+    },
+    "shadows": [
+      {
+        "name": "hour-selected-underbar",
+        "value": "inset 0 -4px 0 var(--color-brand)",
+        "purpose": "State mark under the selected hourly tile."
+      },
+      {
+        "name": "band-pill-selected-ring",
+        "value": "0 0 0 1.5px var(--color-band), 0 0 0 3px var(--color-sand)",
+        "purpose": "Sand ring around the chosen pill on the planning band."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Shared easing for every transition."
+      },
+      {
+        "name": "sky-shift",
+        "value": "--sky-top 1200ms, --sky-bottom 1200ms, color 600ms (ease-out)",
+        "purpose": "Signature: registered @property sky colours move when conditions change. Disabled under prefers-reduced-motion."
+      },
+      {
+        "name": "control-state",
+        "value": "160ms ease-out",
+        "purpose": "Background/border/colour changes on buttons and pills."
+      },
+      {
+        "name": "disclosure-plus",
+        "value": "transform 220ms ease-out (rotate 45deg)",
+        "purpose": "Preferences disclosure mark."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "readout-split",
+        "value": "720px"
+      },
+      {
+        "name": "window-subgrid",
+        "value": "760px"
+      },
+      {
+        "name": "overview-grid",
+        "value": "900px"
+      },
+      {
+        "name": "content-max",
+        "value": "1180px"
+      }
+    ],
+    "fonts": [
+      {
+        "family": "Bebas Neue",
+        "license": "SIL OFL",
+        "source": "@fontsource/bebas-neue latin-400 woff2 (13.8 KB), self-hosted, preloaded",
+        "use": "display only"
+      }
+    ],
+    "forcedColors": "Sky and planning band fall back to Canvas/CanvasText; veil layer and timeline fade removed; selection shown with a 3px Highlight outline and bold weight.",
+    "verification": {
+      "contrast": "tests/unit/contrast.test.ts",
+      "axe": "Chromium, Firefox, WebKit",
+      "screenshots": "tests/e2e/screenshots.spec.ts (SCREENSHOT_DIR), one capture per sky",
+      "budgets": "initial JS 95.8/100 KB gzip; CSS ~5 KB; LCP 536-552 ms (lab)"
+    }
+  },
+  "components": [
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Default action: thin navy outline, uppercase sans; fills navy on hover.",
+      "html": "<button class=\"ds-btn-ghost\">Change location</button>",
+      "css": ".ds-btn-ghost{min-height:44px;padding:0 16px;font:inherit;font-family:var(--font-sans);font-size:.8125rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;border:1.5px solid currentColor;border-radius:4px;background:transparent;color:var(--color-brand,#233651);cursor:pointer;transition:background-color 160ms cubic-bezier(.16,1,.3,1),color 160ms cubic-bezier(.16,1,.3,1)}.ds-btn-ghost:hover{background:var(--color-brand,#233651);border-color:var(--color-brand,#233651);color:#fff}.ds-btn-ghost:focus-visible{outline:3px solid var(--color-brand,#233651);outline-offset:2px}"
+    },
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one primary action in a group (e.g. search submit).",
+      "html": "<button class=\"ds-btn-primary\">Search</button>",
+      "css": ".ds-btn-primary{min-height:44px;padding:0 16px;font-family:var(--font-sans);font-size:.8125rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;border:1.5px solid var(--color-brand,#233651);border-radius:4px;background:var(--color-brand,#233651);color:#fff;cursor:pointer;transition:background-color 160ms cubic-bezier(.16,1,.3,1)}.ds-btn-primary:hover{background:var(--color-text,#1d2321);border-color:var(--color-text,#1d2321)}.ds-btn-primary:focus-visible{outline:3px solid var(--color-brand,#233651);outline-offset:2px}"
+    },
+    {
+      "name": "Choice Pills",
+      "kind": "chip",
+      "refersTo": "pill",
+      "description": "Native radios in a fieldset, drawn as pills; navy fill when chosen.",
+      "html": "<fieldset class=\"ds-pills\"><legend>Activity</legend><label><input type=\"radio\" name=\"ds-a\" checked><span>Outdoors</span></label><label><input type=\"radio\" name=\"ds-a\"><span>Walk</span></label><label><input type=\"radio\" name=\"ds-a\"><span>Run</span></label></fieldset>",
+      "css": ".ds-pills{border:0;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}.ds-pills legend{width:100%;font-family:var(--font-sans);font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;padding:0;color:var(--color-text,#1d2321)}.ds-pills label{position:relative}.ds-pills input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer}.ds-pills span{display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border:1.5px solid var(--color-control-border,#7a8794);border-radius:999px;background:var(--color-surface,#fff);color:var(--color-text,#1d2321);font-family:var(--font-sans);font-weight:600;transition:background-color 160ms cubic-bezier(.16,1,.3,1),border-color 160ms cubic-bezier(.16,1,.3,1)}.ds-pills input:hover+span{border-color:var(--color-brand,#233651)}.ds-pills input:checked+span{background:var(--color-brand,#233651);border-color:var(--color-brand,#233651);color:#fff}.ds-pills input:focus-visible+span{outline:3px solid var(--color-brand,#233651);outline-offset:2px}"
+    },
+    {
+      "name": "Search Field",
+      "kind": "input",
+      "refersTo": "input-field",
+      "description": "White field, steel hairline, 44px; uppercase sans label above.",
+      "html": "<div class=\"ds-field\"><label for=\"ds-q\">Search city or place</label><input id=\"ds-q\" type=\"search\" placeholder=\"e.g. Utrecht\"></div>",
+      "css": ".ds-field label{display:block;font-family:var(--font-sans);font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;color:var(--color-text,#1d2321)}.ds-field input{min-height:44px;width:100%;max-width:24rem;padding:0 12px;font-family:var(--font-sans);font-size:1rem;color:var(--color-text,#1d2321);background:var(--color-surface,#fff);border:1px solid var(--color-control-border,#7a8794);border-radius:4px}.ds-field input::placeholder{color:var(--color-text-secondary,#4a5662)}.ds-field input:focus-visible{outline:3px solid var(--color-brand,#233651);outline-offset:2px}"
+    },
+    {
+      "name": "Header Navigation",
+      "kind": "nav",
+      "refersTo": "navigation",
+      "description": "Bebas wordmark left; uppercase sans links right, navy and underlined on hover.",
+      "html": "<header class=\"ds-nav\"><a class=\"ds-nav-mark\" href=\"#\">Outside?</a><nav><a href=\"#\">How it works</a><a href=\"#\">About</a></nav></header>",
+      "css": ".ds-nav{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px 24px;padding:8px 0;border-bottom:1px solid var(--color-divider,#dde2e7);background:var(--color-bg,#f3f5f7)}.ds-nav-mark{font-family:var(--font-display);font-size:1.875rem;line-height:1;letter-spacing:.02em;color:var(--color-text,#1d2321);text-decoration:none;min-height:44px;display:inline-flex;align-items:center}.ds-nav nav{display:flex;gap:4px 24px}.ds-nav nav a{display:inline-flex;align-items:center;min-height:44px;color:var(--color-text,#1d2321);text-decoration:none;font-family:var(--font-sans);font-size:.875rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase}.ds-nav nav a:hover{color:var(--color-brand,#233651);text-decoration:underline}.ds-nav a:focus-visible{outline:3px solid var(--color-brand,#233651);outline-offset:2px}"
+    },
+    {
+      "name": "Sky Readout",
+      "kind": "custom",
+      "refersTo": "sky-readout",
+      "description": "Signature: place and temperature in Bebas capitals over the clear-day sky with its veil layer.",
+      "html": "<div class=\"ds-sky\"><h2 class=\"ds-sky-place\"><span class=\"ds-sky-city\">London</span><span class=\"ds-sky-region\">England, United Kingdom</span></h2><div class=\"ds-sky-now\"><p class=\"ds-sky-temp\">11°C</p><p class=\"ds-sky-cond\">Mainly clear <span>Feels like 9°C</span></p></div></div>",
+      "css": ".ds-sky{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:12px 32px;padding:48px 24px 24px;color:var(--sky-clear-ink,#0e1e36);background:radial-gradient(120% 85% at 82% 118%,color-mix(in srgb,#fff 75%,transparent),transparent 62%),linear-gradient(180deg,var(--sky-clear-top,#5e95cc),var(--sky-clear-bottom,#d3e6f5))}.ds-sky-place{margin:0;font-weight:400}.ds-sky-city{display:block;font-family:var(--font-display);font-size:clamp(3.25rem,1.8rem + 7vw,6.5rem);line-height:.88;letter-spacing:.005em}.ds-sky-region{display:block;margin-top:8px;font-family:var(--font-sans);font-size:.875rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}.ds-sky-now{text-align:right}.ds-sky-now p{margin:0}.ds-sky-temp{font-family:var(--font-display);font-size:clamp(5rem,2.5rem + 11vw,10rem);line-height:.82;letter-spacing:-.01em}.ds-sky-cond{margin-top:8px!important;font-family:var(--font-sans);font-size:1.0625rem;font-weight:600}.ds-sky-cond span{font-weight:400;margin-left:12px}"
+    },
+    {
+      "name": "Scoreboard Window Row",
+      "kind": "custom",
+      "refersTo": "planning-band",
+      "description": "Best-window row on the charcoal-olive band: display time, rank label, drawn mark, reasons; sand hairlines.",
+      "html": "<div class=\"ds-band\"><ol class=\"ds-windows\"><li class=\"ds-window\"><div><h4 class=\"ds-window-time\">12:00 PM – 1:00 PM</h4><p class=\"ds-window-rank\">Best match in the next 24 hours</p><p class=\"ds-match\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 18 18\" aria-hidden=\"true\"><circle cx=\"9\" cy=\"9\" r=\"8\" fill=\"currentColor\"/><path d=\"M5.2 9.3l2.4 2.4 5.2-5.4\" fill=\"none\" stroke=\"#262b25\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>Good match</p></div><ul><li>Within your preferred temperature range, with low wind in the forecast.</li></ul></li></ol></div>",
+      "css": ".ds-band{background:var(--color-band,#262b25);color:var(--color-band-text,#eef1ec);padding:32px 24px;font-family:var(--font-sans)}.ds-windows{list-style:none;margin:0;padding:0;border-top:1px solid var(--color-sand,#cdb89c)}.ds-window{display:grid;grid-template-columns:max-content minmax(0,1fr);align-items:center;gap:4px 32px;padding:16px 0;border-bottom:1px solid color-mix(in srgb,var(--color-sand,#cdb89c) 55%,transparent)}.ds-window-time{margin:0;font-family:var(--font-display);font-weight:400;font-size:clamp(3rem,2rem + 4vw,4.5rem);line-height:.95;letter-spacing:.02em}.ds-window-rank{margin:4px 0;font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--color-band-text-secondary,#b8c2b4)}.ds-match{display:inline-flex;align-items:center;gap:6px;margin:0;font-weight:700;color:var(--color-good-on-band,#8fd1a6)}.ds-window ul{margin:0;padding-left:1.1rem;font-size:.9375rem}"
+    },
+    {
+      "name": "Hourly Tile",
+      "kind": "custom",
+      "refersTo": "hour-tile",
+      "description": "One stop in the next-24-hours strip; selected tile gets navy border, wash and inset underbar.",
+      "html": "<div class=\"ds-hours\"><button class=\"ds-hour\" aria-checked=\"true\" role=\"radio\"><span class=\"ds-hour-date\">Sun, Nov 15</span><span class=\"ds-hour-time\">8:00 AM</span><span>8°C feels like</span><span>60% precip.</span></button><button class=\"ds-hour\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\"><span class=\"ds-hour-time\">9:00 AM</span><span>9°C feels like</span><span>60% precip.</span></button></div>",
+      "css": ".ds-hours{display:flex;gap:8px}.ds-hour{display:grid;gap:2px;min-width:8.75rem;padding:12px;text-align:left;font-family:var(--font-sans);font-size:.875rem;color:var(--color-text,#1d2321);background:var(--color-surface,#fff);border:1.5px solid var(--color-control-border,#7a8794);border-radius:6px;cursor:pointer}.ds-hour:hover{background:var(--color-selected,#e7edf4);border-color:var(--color-brand,#233651)}.ds-hour[aria-checked=true]{border:2px solid var(--color-brand,#233651);background:var(--color-selected,#e7edf4);box-shadow:inset 0 -4px 0 var(--color-brand,#233651)}.ds-hour:focus-visible{outline:3px solid var(--color-brand,#233651);outline-offset:2px}.ds-hour-date{font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--color-text-secondary,#4a5662)}.ds-hour-time{font-family:var(--font-display);font-size:1.5rem;line-height:1;letter-spacing:.02em}"
+    },
+    {
+      "name": "Concern Notice",
+      "kind": "card",
+      "refersTo": "notice-concern",
+      "description": "Tinted field, hairline border, drawn triangle mark; never a side stripe.",
+      "html": "<div class=\"ds-notice\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 18 18\" aria-hidden=\"true\"><path d=\"M9 1.8l7.6 13.4H1.4z\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/><path d=\"M9 6.6v4\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"/><circle cx=\"9\" cy=\"13\" r=\"1\" fill=\"currentColor\"/></svg><p>Weather couldn't load. Try again or choose another location.</p><button class=\"ds-notice-btn\">Retry</button></div>",
+      "css": ".ds-notice{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:12px 16px;border:1px solid currentColor;border-radius:6px;font-family:var(--font-sans);font-size:.9375rem;color:var(--color-concern-text,#8e2a28);background:var(--color-concern-tint,#fbedec)}.ds-notice svg{flex:none}.ds-notice p{flex:1 1 16rem;margin:0}.ds-notice-btn{min-height:44px;padding:0 16px;font-family:var(--font-sans);font-size:.8125rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;border:1.5px solid currentColor;border-radius:4px;background:transparent;color:inherit;cursor:pointer}.ds-notice-btn:hover{background:var(--color-concern-text,#8e2a28);color:#fff}.ds-notice-btn:focus-visible{outline:3px solid var(--color-brand,#233651);outline-offset:2px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Scoreboard Against the Sky",
+    "overview": "**Creative North Star: \"The Scoreboard Against the Sky\"**\n\nThe answer is a scoreboard set against the sky. The place and the current temperature stand in huge condensed capitals over a full-bleed band whose colours are today's weather: blue for a clear day, grey for cloud, slate with fine diagonal streaks for rain, near-black for a storm, deep navy at night. Under the sky, the next-hour verdict uses the same display capitals and gives two plain reasons. This rejects the category default, a small icon-and-number weather card. The weather is the hero, and the tool works as a tool from the first viewport down. The look follows the owner-pinned Dutchblue reference (2026-11-12) and replaces the earlier calm green editorial world.\n\nTwo typefaces split the work. Bebas Neue capitals carry every display line: the wordmark, the place, the temperature, the verdict, section titles, and the times in the window rows and hourly tiles. The system sans carries everything people read: reasons, measurements, labels and controls. The ground is cool and pale with white surfaces and charcoal ink. Navy marks selection and action, slate is the secondary ink, and warm sand appears only as hairline detail. One full-bleed charcoal-olive band holds the planning section. Choices are pills that fill with navy when selected. Actions are thin outlined ghost buttons. Status is shown by drawn SVG marks next to words.\n\nThe page is dense but calm. Dividers and two full-bleed bands do the structuring, so there are no nested cards and no elevation shadows. Motion is limited to one event: when the conditions change, the sky moves to its new colours.",
+    "keyCharacteristics": [
+      "A weather-aware CSS sky behind the place and temperature: nine skies, each a two-stop gradient plus a veil layer drawn for that weather.",
+      "Bebas Neue for display only, self-hosted and preloaded. All reading text uses the system sans.",
+      "Pills for choices, ghost buttons for actions, and the navy fill means \"chosen\".",
+      "One charcoal-olive planning band with sand hairlines between scoreboard rows.",
+      "Drawn status marks and words together, never colour alone. Every token pair is contrast-tested."
+    ],
+    "rules": [
+      {
+        "name": "The Tested Pair Rule",
+        "body": "Every text-on-background pair in the tokens is verified by `tests/unit/contrast.test.ts`. That covers each sky's ink against both of its gradient stops, both with no veil and fully veiled, plus the band text and the on-band status colours. A new colour pair needs a test before it ships.",
+        "section": "colors"
+      },
+      {
+        "name": "The Navy Means Chosen Rule",
+        "body": "Navy fill is reserved for \"this is selected\" and \"this is the primary action\". Do not use it for decoration.",
+        "section": "colors"
+      },
+      {
+        "name": "The Sand Is Thread Rule",
+        "body": "Sand is a hairline and a ring. It is never a fill, and it is text only on the dark band.",
+        "section": "colors"
+      },
+      {
+        "name": "The Two Voices Rule",
+        "body": "Bebas Neue is only for display lines, at weight 400. Sentences, numbers inside reasons, and control text always use the system sans.",
+        "section": "typography"
+      },
+      {
+        "name": "The Label Follows Rule",
+        "body": "Uppercase sans labels name a field, a term or a group (legend, `dt`, a rank under a time). They never sit above a heading as an invented tagline.",
+        "section": "typography"
+      },
+      {
+        "name": "The Bands Not Boxes Rule",
+        "body": "Separate regions with a full-bleed band, a divider or a white field. Do not lift them with shadows or nest them as cards.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** use Bebas Neue at weight 400 for display lines only, and the system sans for all reading text.",
+      "**Do** keep the temperature at `clamp(5rem, 2.5rem + 11vw, 10rem)` and the place at `clamp(3.25rem, 1.8rem + 7vw, 6.5rem)` in the readout.",
+      "**Do** add any new sky as a top stop, bottom stop, veil colour, veil strength and ink in tokens.css, and extend `tests/unit/contrast.test.ts` so the ink is checked against both stops, with no veil and fully veiled.",
+      "**Do** use navy fill only for the selected state and the single primary action.",
+      "**Do** pair every status colour with a drawn SVG mark and a word.",
+      "**Do** keep every control at least 44×44px and give it a steel (≥3:1) boundary.",
+      "**Do** turn off transitions under `prefers-reduced-motion` and fall back to Canvas/CanvasText in forced colours."
+    ],
+    "donts": [
+      "**Don't** use gradients outside the sky (the timeline's edge-fade mask is an overflow cue, not decoration).",
+      "**Don't** animate the sky continuously. It moves only when the conditions change.",
+      "**Don't** add elevation shadows or nested cards. Use bands, dividers and white fields.",
+      "**Don't** use Unicode glyphs or icon fonts for status, or a thick side stripe for notices.",
+      "**Don't** use sand as text on light ground, or the divider as the only edge of a control.",
+      "**Don't** request fonts or icons from a CDN.",
+      "**Don't** put uppercase labels above headings as kickers or eyebrows."
+    ]
+  }
+}

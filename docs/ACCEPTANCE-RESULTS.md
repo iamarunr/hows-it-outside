@@ -1,6 +1,6 @@
 # Acceptance results
 
-Recorded 11 November 2026 on macOS (Apple Silicon), Node 26.8.1, Playwright 1.65.0 (Chromium, Firefox and WebKit builds bundled with Playwright), against the production build served with its generated `_headers`. Commit: the M5 commit that adds this file (M4 last-known-good: `feff8ab`).
+Recorded 11 November 2026 on macOS (Apple Silicon), Node 26.8.1, Playwright 1.65.0 (Chromium, Firefox and WebKit builds bundled with Playwright), against the production build served with its generated `_headers`. Commit: the M5 commit that adds this file (M4 last-known-good: `e692375`).
 
 All weather in automated tests is **synthetic fixture data**. Live-provider evidence is limited to the field-availability check (`docs/FIELD-AVAILABILITY.md`) and one captured sample response. Results that need the real deployment are marked **Pending (release)**.
 
@@ -45,7 +45,7 @@ All weather in automated tests is **synthetic fixture data**. Live-provider evid
 | 14 | No-JS supporting pages and home explanation | `accessibility.spec.ts` | Pass |
 | 15 | CSP permits intended requests, blocks others | `security.spec.ts` (and every journey fails on any CSP report) | Pass |
 
-Cross-browser run: `E2E_ALL_BROWSERS=1 npm run test:e2e` → 101 passed, 16 skipped (15 opt-in screenshot/perf, 1 Firefox denial). Chromium-only suite stable over 3 repeats (102/102 at M4).
+Cross-browser run (after the 2026-11-12 redesign): `E2E_ALL_BROWSERS=1 npm run test:e2e` → 101 passed; skips are opt-in screenshot/perf captures and the Firefox denial case (15 opt-in screenshot/perf, 1 Firefox denial). Chromium-only suite stable over 3 repeats (102/102 at M4).
 
 ## Performance (lab)
 
@@ -53,9 +53,10 @@ Configuration: Chromium, 390×844, CPU 4× slowdown, network about 1.6 Mbps down
 
 | Metric | Budget | Measured (3 runs) |
 |---|---|---|
-| Initial first-party JS (gzip -9) | ≤ 100 KB | 94.9 KB |
-| CSS (gzip -9) | ≤ 30 KB | 2.7 KB |
-| LCP, static first render | ≤ 2.5 s | 416–436 ms |
+| Initial first-party JS (gzip -9) | ≤ 100 KB | 95.9 KB |
+| CSS (gzip -9) | ≤ 30 KB | 6.0 KB |
+| Display font (self-hosted woff2) | not budgeted | 13.8 KB |
+| LCP, static first render | ≤ 2.5 s | 560–568 ms (after the 2026-11-12 redesign; 416–436 ms before the display font) |
 | CLS | ≤ 0.1 | 0 |
 | Activity switch to next paint | < 100 ms | 23–40 ms |
 

@@ -6,18 +6,20 @@ import type { UnitSystem } from '../../../lib/units';
 type RadioGroupProps<T extends string | number> = {
   legend: string;
   name: string;
-  options: readonly { value: T; label: string }[];
+  /** `short` is shown; the full label stays available to assistive technology. */
+  options: readonly { value: T; label: string; short?: string }[];
+  hideLegend?: boolean;
   value: T;
   onChange: (value: T) => void;
   className?: string;
 };
 
 /** Native radios styled as segmented buttons (DESIGN: not tabs; wraps on narrow screens). */
-function SegmentedRadios<T extends string | number>({ legend, name, options, value, onChange, className }: RadioGroupProps<T>) {
+function SegmentedRadios<T extends string | number>({ legend, name, options, value, onChange, className, hideLegend }: RadioGroupProps<T>) {
   const id = useId();
   return (
     <fieldset className={`segmented ${className ?? ''}`}>
-      <legend>{legend}</legend>
+      <legend className={hideLegend === true ? 'visually-hidden' : undefined}>{legend}</legend>
       <div className="segmented-options">
         {options.map((o) => (
           <label key={String(o.value)} className="segmented-option">
@@ -28,7 +30,14 @@ function SegmentedRadios<T extends string | number>({ legend, name, options, val
               checked={o.value === value}
               onChange={() => onChange(o.value)}
             />
-            <span>{o.label}</span>
+            {o.short === undefined ? (
+              <span>{o.label}</span>
+            ) : (
+              <span>
+                <span aria-hidden="true">{o.short}</span>
+                <span className="visually-hidden">{o.label}</span>
+              </span>
+            )}
           </label>
         ))}
       </div>
@@ -55,8 +64,8 @@ export function UnitsPicker({ value, onChange }: { value: UnitSystem; onChange: 
       name="units"
       className="segmented-compact"
       options={[
-        { value: 'metric', label: '°C, km/h, mm' },
-        { value: 'us', label: '°F, mph, in' },
+        { value: 'metric', label: '°C, km/h, mm', short: '°C' },
+        { value: 'us', label: '°F, mph, in', short: '°F' },
       ]}
       value={value}
       onChange={onChange}

@@ -64,7 +64,7 @@ test('duration, wind preference and units apply instantly, persist after reload,
   await page.getByText('Preferences and saved data').click();
   await page.getByLabel('Wind').selectOption('low');
   await page.getByRole('group', { name: 'Units' }).getByLabel('°F, mph, in').check();
-  await expect(page.getByRole('region', { name: 'Now' }).getByRole('definition').first()).toHaveText('64°F');
+  await expect(page.locator('.readout-temp')).toHaveText('64°F');
   expect(forecasts(h.providerRequests)).toHaveLength(1);
 
   await page.reload();
