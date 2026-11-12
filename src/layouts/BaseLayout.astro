@@ -22,7 +22,10 @@ const noindex = import.meta.env.PUBLIC_NOINDEX === 'true';
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical.toString()} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico?v=2" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2" />
+    <meta name="theme-color" content="#233651" />
     <link rel="preload" href={bebasNeue} as="font" type="font/woff2" crossorigin />
     <script is:inline>document.documentElement.classList.add('js');</script>
   </head>
