@@ -1,0 +1,31 @@
+{
+  "_fixture": {
+    "synthetic": true,
+    "invariant": "Two same-name places are both listed with region and country so the visitor can disambiguate; coordinates are rounded to two decimals.",
+    "referenceNow": 1794729600,
+    "note": "Values shaped like the Open-Meteo geocoding response; not a captured response."
+  },
+  "results": [
+    {
+      "id": 4407066,
+      "name": "St. Louis",
+      "latitude": 38.62727,
+      "longitude": -90.19789,
+      "country_code": "US",
+      "timezone": "America/Chicago",
+      "country": "United States",
+      "admin1": "Missouri"
+    },
+    {
+      "id": 4407067,
+      "name": "St. Louis",
+      "latitude": 43.40832,
+      "longitude": -84.60667,
+      "country_code": "US",
+      "timezone": "America/Detroit",
+      "country": "United States",
+      "admin1": "Michigan"
+    }
+  ],
+  "generationtime_ms": 0.5
+}

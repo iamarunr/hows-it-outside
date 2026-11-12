@@ -1,0 +1,115 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html {
+  font-family: var(--font-sans);
+  font-size: 100%;
+  line-height: 1.5;
+  color: var(--color-text);
+  background: var(--color-bg);
+  font-variant-numeric: tabular-nums;
+}
+body {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+a {
+  color: var(--color-brand);
+}
+:focus-visible {
+  outline: 3px solid var(--color-brand);
+  outline-offset: 2px;
+}
+.skip-link {
+  position: absolute;
+  left: var(--space-2);
+  top: -100px;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-surface);
+}
+.skip-link:focus {
+  top: var(--space-2);
+}
+.site-header,
+main,
+.site-footer {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: var(--space-4);
+}
+.site-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--color-divider);
+}
+.site-header nav {
+  display: flex;
+  gap: var(--space-4);
+}
+.wordmark {
+  font-weight: 700;
+  color: var(--color-text);
+  text-decoration: none;
+}
+h1 {
+  font-size: clamp(1.75rem, 1.4rem + 1.5vw, 2.5rem);
+  line-height: 1.2;
+}
+.site-footer {
+  border-top: 1px solid var(--color-divider);
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+}
+.search-form label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: var(--space-2);
+}
+.search-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.search-row input {
+  flex: 1 1 16rem;
+  min-height: var(--target-min);
+  padding: 0 var(--space-3);
+  font: inherit;
+  border: 1px solid var(--color-text-secondary);
+  border-radius: var(--radius);
+}
+button {
+  min-height: var(--target-min);
+  padding: 0 var(--space-4);
+  font: inherit;
+  border: 1px solid var(--color-brand);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  color: var(--color-brand);
+  cursor: pointer;
+}
+.search-results {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: var(--space-2);
+}
+.search-results button {
+  width: 100%;
+  text-align: left;
+  color: var(--color-text);
+}
+.search-error {
+  color: var(--color-concern);
+}
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

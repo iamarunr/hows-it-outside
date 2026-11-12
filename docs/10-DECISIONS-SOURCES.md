@@ -1,0 +1,72 @@
+# 10 — Architecture decisions, assumptions and references
+
+## Decision register
+| ID | Decision | Reason / consequence |
+|---|---|---|
+| ADR-001 | Separate Astro app/repo | Portable open-source project and independent portfolio deployment |
+| ADR-002 | Static output plus single React island | Simple hosting and one coherent interactive state tree |
+| ADR-003 | Direct public provider calls for eligible deployments | Zero secrets/backend; provider sees client network metadata |
+| ADR-004 | No reverse geocoding | Fewer services/privacy exposure; GPS selection is labeled Current area |
+| ADR-005 | Two-decimal coordinate rounding | Reduce unnecessary precision; not an anonymity guarantee |
+| ADR-006 | UTC arithmetic, IANA display | DST correctness and remote-city support |
+| ADR-007 | Normalize preceding-hour fields separately | Prevent rain/gust from being shifted into the wrong outing hour |
+| ADR-008 | Pure deterministic heuristics | Testable, inspectable, no AI cost or fabricated advice |
+| ADR-009 | Missing critical inputs block recommendation | Avoid false favorable verdicts |
+| ADR-010 | Independent concerning-weather flags | User tolerance cannot erase forecast concerns |
+| ADR-011 | Local preferences; opt-in saved location | Useful returning experience without accounts |
+| ADR-012 | No maps, AQI or official alerts in MVP | Keep scope honest and manageable; disclose exclusions |
+| ADR-013 | Static Pages; Workers if server proxy needed | Avoid stale SSR adapter assumptions |
+| ADR-014 | MIT app code; data licenses separate | Make forks usable without misrepresenting provider rights |
+| ADR-015 | Worst-factor cap on interval score | A single fully unacceptable dimension (e.g. steady rain when avoiding rain) yields Poor instead of being averaged to Mixed |
+| ADR-016 | Freshness tiers: refetch at 15 min, pause suggestions at 60 min, expire at 2 h | Avoid pausing useful suggestions for briefly offline visitors; refresh never blanks results |
+| ADR-017 | Cache key uses request units only | Display-unit switches never refetch |
+| ADR-018 | CSP via generated `_headers` with build-time hashes | Header-only directives work; no unsafe-inline; verified in CI |
+| ADR-019 | Playwright clock + route interception for E2E | Deterministic time-dependent tests with no test hooks in production |
+| ADR-020 | Search at 2 code points; Enter submits any non-empty query | Supports short and CJK place names worldwide |
+| ADR-021 | Timeline as single Tab stop with arrow navigation | Keyboard users are not forced through 24 stops |
+
+## Assumptions to record during implementation
+Outside? is a working brand, not a trademark clearance. No existing app repo has been reviewed. Cloudflare is a recommended deployment target; actual DNS account/zone is unverified. Current provider API eligibility for a professional-portfolio subdomain remains unresolved. Scoring thresholds are product proposals, not researched medical thresholds. Date/time examples and fixtures are synthetic unless explicitly noted.
+
+## Verified primary documentation, checked 11 November 2026
+Use these as integration references and recheck at implementation/release. External contracts can change. This pack intentionally summarizes only the needed integration facts and specifies its own product behavior.
+
+1. Open-Meteo forecast reference: https://open-meteo.com/en/docs — requested field names, units, temporal interpretation and weather codes. Integration requirement: distinguish instantaneous values from preceding-hour precipitation/probability/gust aggregates.
+2. Open-Meteo geocoding reference: https://open-meteo.com/en/docs/geocoding-api — search endpoint, query parameters, result structure and location attribution.
+3. Open-Meteo pricing: https://open-meteo.com/en/pricing — hosted free access is noncommercial; published limits include 10,000 calls/day, alongside other caps. Paid access uses customer endpoints. Recheck before launch.
+4. Open-Meteo terms: https://open-meteo.com/en/terms — deployment eligibility and conditions; open-source application status alone does not decide hosted service rights.
+5. Open-Meteo repository: https://github.com/open-meteo/open-meteo — provider attribution and source information.
+6. Astro Cloudflare deployment: https://docs.astro.build/en/guides/deploy/cloudflare/ — current deployment guidance; distinguish static hosting from current adapter-backed server targets.
+7. Cloudflare Astro Pages guide: https://developers.cloudflare.com/pages/framework-guides/deploy-an-astro-site/ — static build command/output and hosting project setup.
+8. Cloudflare build configuration: https://developers.cloudflare.com/pages/configuration/build-configuration/ — project build settings.
+9. MDN getCurrentPosition: https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/getCurrentPosition — secure context and user permission requirements.
+10. MDN Geolocation API: https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API — browser permission and policy model.
+
+## Conflict handling
+Some older Astro documentation supports server-rendered Pages configurations that current adapter guidance no longer supports. The proposed MVP avoids this conflict by using plain static output. If implementation adds server routes, check documentation for the exact installed adapter version and prefer the currently supported Workers path. Do not treat historical docs as current instructions.
+
+## Release questions, not coding blockers
+- What is the exact public GitHub repository URL?
+- What public contact/reporting method should appear?
+- Does the intended hosting/provider usage qualify as noncommercial? If unclear, seek provider clarification or use an appropriate paid deployment.
+- Who controls the Cloudflare/DNS zone and authorizes release?
+
+Capture answers in the decision register. Do not invent them or stop ordinary implementation while they remain open.
+
+## Open product calls (owner may revisit; current defaults stand)
+- Daylight-only defaults on for every activity, which excludes most winter daytime at high latitudes and all early-morning runs. Consider defaulting it off for Run.
+- Unit defaults follow `en-US` locale, which many non-US browsers report; the override covers it.
+- No telemetry means provider contract changes surface only through user reports. An optional scheduled live smoke check (outside unit CI) would detect them; not created by this pack.
+
+## Implementation decision log
+
+| Date | ID | Decision | Reason / deviation |
+|---|---|---|---|
+| 2026-11-11 | IMP-001 | Node 26 LTS, Astro 7.4, React 19.3, TypeScript pinned `~6.0.3` | TypeScript 7 is current but typescript-eslint requires <6.1 and @astrojs/check requires ^5 or ^6 |
+| 2026-11-11 | IMP-002 | `eslint-plugin-jsx-a11y-x` instead of `eslint-plugin-jsx-a11y` | The original does not support ESLint 10; eslint-plugin-astro accepts the fork |
+| 2026-11-11 | IMP-003 | Own post-build CSP hasher (`scripts/csp-headers.ts`) rather than Astro's `security.csp` | Astro's stable CSP emits a `<meta>` policy for static output; header delivery is required (ADR-018). One hash source avoids two diverging policies |
+| 2026-11-11 | IMP-004 | `build.inlineStylesheets: 'never'` | Keeps page CSS external so only Astro's tiny island style needs a hash |
+| 2026-11-11 | IMP-005 | E2E runs against `scripts/serve-dist.ts`, not `astro preview` | `astro preview` ignores `_headers`; tests must enforce the real CSP. `npm run preview` remains `astro preview` |
+| 2026-11-11 | IMP-006 | CI runs Chromium only; Firefox/WebKit opt-in via `E2E_ALL_BROWSERS=1` | Review recommendation; full matrix before release |
+| 2026-11-11 | IMP-007 | `zod/mini` for runtime validation | Full `zod` added ~17 KB gzip; React DOM already uses ~66 KB of the 100 KB budget |
+| 2026-11-11 | IMP-008 | Time-zone fixture asserts wall-clock date/time/offset, not display strings | Zone abbreviations vary across ICU builds (IST vs GMT+5:30) |

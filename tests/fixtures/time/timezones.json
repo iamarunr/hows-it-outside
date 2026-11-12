@@ -1,0 +1,122 @@
+{
+  "_fixture": {
+    "synthetic": true,
+    "referenceNow": 1793507400,
+    "invariant": "Target-location IANA formatting independent of device zone; DST and non-hour offsets.",
+    "note": "expectedLocal gives wall-clock date, time and UTC offset in the target zone (ICU-independent). Display strings are not fixed here because zone abbreviations differ across ICU builds (e.g. IST vs GMT+5:30)."
+  },
+  "cases": [
+    {
+      "id": "chicago-fall-back-repeated-1am",
+      "timezone": "America/Chicago",
+      "epochs": [
+        1793509200,
+        1793512800,
+        1793516400,
+        1793520000
+      ],
+      "invariant": "01:00 appears twice (CDT then CST); labels must be unique via zone abbreviation; four distinct hourly intervals.",
+      "expectedLocal": [
+        {
+          "date": "2026-11-01",
+          "time": "00:00",
+          "offsetMinutes": -300
+        },
+        {
+          "date": "2026-11-01",
+          "time": "01:00",
+          "offsetMinutes": -300
+        },
+        {
+          "date": "2026-11-01",
+          "time": "01:00",
+          "offsetMinutes": -360
+        },
+        {
+          "date": "2026-11-01",
+          "time": "02:00",
+          "offsetMinutes": -360
+        }
+      ]
+    },
+    {
+      "id": "chicago-spring-forward-missing-2am",
+      "timezone": "America/Chicago",
+      "epochs": [
+        1772953200,
+        1772956800,
+        1772960400
+      ],
+      "invariant": "02:00 local does not exist; 01:00 CST is followed by 03:00 CDT one elapsed hour later.",
+      "expectedLocal": [
+        {
+          "date": "2026-03-08",
+          "time": "01:00",
+          "offsetMinutes": -360
+        },
+        {
+          "date": "2026-03-08",
+          "time": "03:00",
+          "offsetMinutes": -300
+        },
+        {
+          "date": "2026-03-08",
+          "time": "04:00",
+          "offsetMinutes": -300
+        }
+      ]
+    },
+    {
+      "id": "kolkata-half-hour-offset",
+      "timezone": "Asia/Kolkata",
+      "epochs": [
+        1794420000,
+        1794421800
+      ],
+      "invariant": "UTC+05:30; 18:30Z is local midnight and the date changes.",
+      "expectedLocal": [
+        {
+          "date": "2026-11-11",
+          "time": "23:30",
+          "offsetMinutes": 330
+        },
+        {
+          "date": "2026-11-12",
+          "time": "00:00",
+          "offsetMinutes": 330
+        }
+      ]
+    },
+    {
+      "id": "kathmandu-quarter-hour-offset",
+      "timezone": "Asia/Kathmandu",
+      "epochs": [
+        1794420900
+      ],
+      "invariant": "UTC+05:45; 18:15Z is local midnight.",
+      "expectedLocal": [
+        {
+          "date": "2026-11-12",
+          "time": "00:00",
+          "offsetMinutes": 345
+        }
+      ]
+    },
+    {
+      "id": "invalid-iana-falls-back-to-utc",
+      "timezone": "Mars/Olympus_Mons",
+      "epochs": [
+        1794398400
+      ],
+      "invariant": "Invalid zone: format in UTC and show a visible time-zone warning; never device time.",
+      "expectFallback": "UTC",
+      "expectedLocal": [
+        {
+          "date": "2026-11-11",
+          "time": "12:00",
+          "offsetMinutes": 0
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "_fixture": {
+    "synthetic": true,
+    "referenceNow": 1794736800,
+    "invariant": "Interval [t0,t1) takes instantaneous fields (temperature, apparent temperature, humidity, sustained wind) from t0 and preceding-hour fields (precipitation, precipitation probability, gusts) from t1. Every field has a distinct value per sample so a one-index shift is detectable. Daylight is true only when both endpoints are 1.",
+    "note": "Times are 2026-11-15T10:00Z, 11:00Z, 12:00Z. M1 normalization tests consume this; expectedIntervals is the contract."
+  },
+  "timezone": "UTC",
+  "utc_offset_seconds": 0,
+  "hourly_units": {
+    "time": "unixtime",
+    "temperature_2m": "°C",
+    "apparent_temperature": "°C",
+    "relative_humidity_2m": "%",
+    "precipitation_probability": "%",
+    "precipitation": "mm",
+    "weather_code": "wmo code",
+    "wind_speed_10m": "km/h",
+    "wind_gusts_10m": "km/h",
+    "is_day": ""
+  },
+  "hourly": {
+    "time": [1794736800, 1794740400, 1794744000],
+    "temperature_2m": [10.1, 11.1, 12.1],
+    "apparent_temperature": [9.2, 10.2, 11.2],
+    "relative_humidity_2m": [60, 61, 62],
+    "precipitation_probability": [0, 40, 80],
+    "precipitation": [0, 0.4, 1.6],
+    "weather_code": [1, 61, 3],
+    "wind_speed_10m": [5.5, 6.5, 7.5],
+    "wind_gusts_10m": [10.5, 20.5, 30.5],
+    "is_day": [1, 1, 0]
+  },
+  "expectedIntervals": [
+    {
+      "start": 1794736800,
+      "end": 1794740400,
+      "temperatureC": 10.1,
+      "feelsLikeC": 9.2,
+      "humidityPct": 60,
+      "windKmh": 5.5,
+      "gustKmh": 20.5,
+      "precipMm": 0.4,
+      "precipProbabilityPct": 40,
+      "weatherCodes": [1, 61],
+      "weatherCodeComplete": true,
+      "daylight": true
+    },
+    {
+      "start": 1794740400,
+      "end": 1794744000,
+      "temperatureC": 11.1,
+      "feelsLikeC": 10.2,
+      "humidityPct": 61,
+      "windKmh": 6.5,
+      "gustKmh": 30.5,
+      "precipMm": 1.6,
+      "precipProbabilityPct": 80,
+      "weatherCodes": [61, 3],
+      "weatherCodeComplete": true,
+      "daylight": false
+    }
+  ]
+}

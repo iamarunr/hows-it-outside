@@ -1,0 +1,46 @@
+---
+import '../styles/tokens.css';
+import '../styles/global.css';
+import { SITE_LINKS } from '../lib/config';
+
+type Props = { title: string; description: string };
+const { title, description } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical.toString()} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <a class="wordmark" href="/">Outside?</a>
+      <nav aria-label="Site">
+        <a href="/about/">About</a>
+        {SITE_LINKS.source !== undefined && <a href={SITE_LINKS.source}>Source</a>}
+      </nav>
+    </header>
+    <main id="main">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <p>
+        Weather data by <a href="https://open-meteo.com/">Open-Meteo</a>. Location data by GeoNames via Open-Meteo.
+      </p>
+      {
+        SITE_LINKS.author !== undefined && (
+          <p>
+            Made by <a href={SITE_LINKS.author}>Naresh Kumar</a>
+          </p>
+        )
+      }
+    </footer>
+  </body>
+</html>

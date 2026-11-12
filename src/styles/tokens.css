@@ -1,0 +1,24 @@
+/* Proposed initial tokens (DESIGN.md). Contrast to be verified in M4. */
+:root {
+  --color-bg: #f7f8f4;
+  --color-surface: #ffffff;
+  --color-text: #202820;
+  --color-text-secondary: #526052;
+  --color-brand: #2d6848;
+  --color-divider: #d9e0d7;
+  --color-good: #245c3d;
+  --color-mixed: #785315;
+  --color-concern: #9b3030;
+
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --radius: 8px;
+  --content-max: 1120px;
+  --target-min: 44px;
+}
