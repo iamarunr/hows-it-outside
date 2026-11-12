@@ -34,6 +34,7 @@ legend {
 }
 .location {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-3);
 }
 .location-current {
@@ -54,6 +55,7 @@ legend {
 }
 .location-panel {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-3);
   max-width: 40rem;
 }
@@ -284,6 +286,25 @@ legend {
   --ink: var(--sky-night-cloudy-ink);
   --on-ink: var(--sky-top);
 }
+.sky[data-sky='dawn'] {
+  --veil: color-mix(in srgb, var(--sky-dawn-veil) var(--sky-dawn-veil-strength), transparent);
+  --sky-layers: radial-gradient(95% 80% at 10% 115%, var(--veil), transparent 62%),
+    radial-gradient(34% 9% at 68% 30%, color-mix(in srgb, var(--veil) 70%, transparent), transparent 70%),
+    radial-gradient(22% 6% at 80% 25%, color-mix(in srgb, var(--veil) 60%, transparent), transparent 70%);
+  --sky-top: var(--sky-dawn-top);
+  --sky-bottom: var(--sky-dawn-bottom);
+  --ink: var(--sky-dawn-ink);
+}
+.sky[data-sky='dusk'] {
+  --veil: color-mix(in srgb, var(--sky-dusk-veil) var(--sky-dusk-veil-strength), transparent);
+  --sky-layers: radial-gradient(95% 80% at 90% 115%, var(--veil), transparent 62%),
+    radial-gradient(36% 8% at 30% 34%, color-mix(in srgb, var(--veil) 70%, transparent), transparent 70%),
+    radial-gradient(24% 6% at 18% 28%, color-mix(in srgb, var(--veil) 60%, transparent), transparent 70%);
+  --sky-top: var(--sky-dusk-top);
+  --sky-bottom: var(--sky-dusk-bottom);
+  --ink: var(--sky-dusk-ink);
+  --on-ink: var(--sky-top);
+}
 /* Static weather layer (doubled in width so drifting skies can loop seamlessly). */
 .sky::before,
 .sky::after {
@@ -302,6 +323,8 @@ legend {
 .sky[data-sky='rain']::before,
 .sky[data-sky='snow']::before,
 .sky[data-sky='fog']::before,
+.sky[data-sky='dawn']::before,
+.sky[data-sky='dusk']::before,
 .sky[data-sky='night-clear']::before {
   background-size: 100% 100%;
   background-repeat: no-repeat;
@@ -423,12 +446,22 @@ legend {
   margin-inline: calc(50% - 50vw);
   min-height: calc(100svh - 62px);
   display: flex;
+  flex-direction: column;
+  /* Height of the landscape strip. Text never sits on it. */
+  --scene-h: clamp(84px, 17svh, 210px);
+}
+.sky-hero-idle {
+  --scene-h: clamp(120px, 23svh, 280px);
+}
+.sky-hero-idle .hero-inner {
+  padding-block: clamp(var(--space-5), 5svh, var(--space-7)) var(--space-4);
 }
 .hero-inner {
   width: 100%;
   max-width: var(--content-max);
   margin: 0 auto;
   padding: var(--space-5) clamp(var(--space-4), 4vw, var(--space-6)) clamp(var(--space-6), 5vw, var(--space-7));
+  flex: 1 0 auto;
   display: flex;
   flex-direction: column;
   gap: clamp(var(--space-5), 4vw, var(--space-7));
@@ -437,14 +470,34 @@ legend {
   justify-content: space-between;
 }
 .sky-hero-idle .hero-inner {
-  justify-content: center;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: center;
+  gap: var(--space-6);
+}
+.hero-copy {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-5);
+  min-width: 0;
+}
+.hero-cards {
+  min-width: 0;
+  /* Reserved before the cards hydrate, so nothing below them shifts. */
+  min-height: 14.5rem;
+}
+@media (min-width: 1000px) {
+  .sky-hero-idle .hero-inner {
+    grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr);
+    align-items: center;
+    gap: var(--space-7);
+  }
 }
 .hero-title {
   margin: 0;
   font-family: var(--font-display);
   font-weight: 400;
-  font-size: clamp(4.75rem, 1.5rem + 15vw, 14rem);
+  font-size: clamp(4rem, min(1rem + 15vw, 18svh), 10.5rem);
   line-height: 0.84;
   letter-spacing: 0.005em;
 }
@@ -470,13 +523,52 @@ legend {
     color: var(--on-ink);
   }
 }
-.sky .search-row button[type='submit'] {
-  background: var(--ink);
-  border-color: var(--ink);
-  color: var(--on-ink);
+/* Search: one white pill on every sky; its ring and focus outline use the sky's ink. */
+.sky-hero button {
+  border-radius: var(--radius-pill);
 }
-.sky input[type='search'] {
-  border-color: var(--ink);
+.sky .search-row {
+  flex-wrap: nowrap;
+  gap: var(--space-1);
+  max-width: 36rem;
+  padding: 5px;
+  background: var(--color-surface);
+  border: 1.5px solid var(--ink);
+  border-radius: var(--radius-pill);
+  box-shadow: 0 16px 32px -20px rgb(8 18 36 / 0.6);
+}
+.sky .search-row input[type='search'] {
+  /* width: 0 stops Firefox and WebKit sizing the field from its default 20-character width. */
+  flex: 1 1 0;
+  width: 0;
+  min-width: 0;
+  padding-inline: var(--space-4) var(--space-2);
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+}
+.sky .search-row input:focus-visible {
+  outline: none;
+}
+.sky .search-row:has(input:focus-visible) {
+  outline: 3px solid var(--ink);
+  outline-offset: 3px;
+}
+.sky .search-row button[type='submit'] {
+  flex: none;
+  background: var(--color-brand);
+  border-color: var(--color-brand);
+  color: #fff;
+}
+@media (hover: hover) {
+  .sky .search-row button[type='submit']:hover:not(:disabled) {
+    background: var(--color-text);
+    border-color: var(--color-text);
+    color: #fff;
+  }
+}
+.sky-hero .search-results button {
+  border-radius: var(--radius);
 }
 .sky .search-results button {
   color: var(--color-text);
@@ -532,12 +624,12 @@ legend {
   width: 100%;
 }
 .sky-hero-idle .search-row input {
-  min-height: 56px;
+  min-height: 52px;
   font-size: 1.125rem;
 }
 .sky-hero-idle .search-row button {
-  min-height: 56px;
-  padding-inline: var(--space-5);
+  min-height: 52px;
+  padding-inline: clamp(var(--space-4), 4vw, var(--space-5));
 }
 
 /* Readout: place and temperature. */
@@ -1138,8 +1230,17 @@ legend {
     color: CanvasText;
   }
   .sky::before,
-  .sky::after {
+  .sky::after,
+  .sky-extras,
+  .scene,
+  .postcard-disc {
     display: none;
+  }
+  .sky .search-row,
+  .sky .postcard {
+    background: Canvas;
+    border: 1.5px solid ButtonText;
+    box-shadow: none;
   }
   .sky .segmented-option > span,
   .sky .segmented-option input:checked + span,
@@ -1170,4 +1271,388 @@ legend {
 }
 .best-windows .match-icon {
   --match-knock: var(--color-band);
+}
+
+/*
+ * The landscape scene. A strip of layered hills closes the hero; the sun or moon rides an arc set
+ * by --arc (0 rise, 0.5 highest, 1 set), written by SkyScene from the real sun position.
+ * Everything here is decorative and sits outside the text's layout box or behind dark-ink skies only.
+ */
+.sky-extras {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+.scene {
+  position: relative;
+  flex: none;
+  height: var(--scene-h);
+  pointer-events: none;
+}
+.scene-hill {
+  position: absolute;
+  inset: auto 0 0;
+  width: 100%;
+  height: 64%;
+}
+.scene-hill-1 {
+  fill: color-mix(in srgb, var(--sky-bottom) 58%, var(--scene-land));
+}
+.scene-hill-2 {
+  fill: color-mix(in srgb, var(--sky-bottom) 30%, var(--scene-land));
+}
+.scene-hill-3 {
+  fill: color-mix(in srgb, var(--sky-bottom) 8%, var(--scene-land));
+}
+.scene-body,
+.sky-star,
+.sky-birds,
+.sky-flash,
+.scene-fog {
+  display: none;
+  position: absolute;
+}
+.scene-body {
+  --arc-h: calc(var(--scene-h) * 0.4);
+  width: clamp(44px, 6.5vw, 100px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  left: calc(6% + var(--arc, 0.5) * 88%);
+  bottom: calc(var(--scene-h) * 0.6);
+  bottom: calc(var(--scene-h) * 0.32 + sin(var(--arc, 0.5) * 180deg) * var(--arc-h));
+  translate: -50% 50%;
+}
+/* Sun: shown under clear and lightly clouded day skies. Like the moon it stays inside the strip, clear of all text;
+   its halo is the sky's own tested veil colour. */
+.sky-hero[data-body='sun']:is([data-sky='clear'], [data-sky='dawn'], [data-sky='dusk'], [data-sky='cloudy']) .scene-body {
+  display: block;
+  background: radial-gradient(circle at 40% 38%, #fffdf3, var(--scene-sun) 60%, #ffd98c);
+  box-shadow:
+    0 0 50px 18px var(--veil),
+    0 0 180px 90px color-mix(in srgb, var(--veil) 45%, transparent);
+}
+.sky-hero[data-sky='cloudy'] .scene-body {
+  opacity: 0.6;
+  box-shadow: none;
+}
+.sky-hero[data-sky='dusk'] .scene-body {
+  background: radial-gradient(circle at 40% 38%, #fff1d0, #ffc27a 60%, #ff9f5a);
+}
+/* Moon: always stays inside the strip, because night skies use white ink. */
+.sky-hero[data-body='moon']:is([data-sky='night-clear'], [data-sky='night-cloudy']) .scene-body {
+  display: block;
+  width: clamp(36px, 4.5vw, 68px);
+  background: radial-gradient(circle at 34% 34%, #fff, var(--scene-moon) 60%, #b9c6da);
+  box-shadow: 0 0 26px 4px rgb(210 225 255 / 0.3);
+}
+.sky-hero[data-sky='night-cloudy'] .scene-body {
+  opacity: 0.55;
+}
+
+/* Rare sky moments. */
+.sky-hero[data-body='sun']:is([data-sky='clear'], [data-sky='dawn'], [data-sky='dusk'], [data-sky='cloudy']) .sky-birds {
+  display: block;
+  bottom: calc(var(--scene-h) * 0.8);
+  left: 62%;
+  width: clamp(56px, 7vw, 104px);
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  opacity: 0.5;
+}
+.sky-hero[data-sky='night-clear'] .sky-star {
+  top: 12%;
+  left: 70%;
+  width: 130px;
+  height: 1.5px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #fff, transparent);
+  rotate: -24deg;
+  opacity: 0;
+}
+.sky-hero[data-sky='storm'] .sky-flash {
+  inset: 0;
+  background: radial-gradient(70% 55% at 72% 0%, #fff, transparent 70%);
+  opacity: 0;
+}
+.sky-hero[data-sky='fog'] .scene-fog {
+  display: block;
+  inset: -30% -50% 20%;
+  background: linear-gradient(180deg, transparent, var(--veil) 45%, var(--veil) 60%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 25%, #000 75%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 25%, #000 75%, transparent);
+}
+
+/* Shortcut cards: three places, each under its own current sky (day, dusk, dawn or night there). */
+.postcards {
+  list-style: none;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(11.5rem, 1fr);
+  gap: var(--space-3);
+  margin: 0 -6px;
+  padding: 6px 6px var(--space-4);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+}
+.postcards::-webkit-scrollbar {
+  display: none;
+}
+.postcards > li {
+  scroll-snap-align: start;
+  scroll-margin-inline: 6px;
+  min-width: 0;
+}
+.sky .postcard {
+  display: grid;
+  justify-items: start;
+  width: 100%;
+  min-height: 0;
+  padding: var(--space-4) var(--space-4) var(--space-3);
+  border: 0;
+  border-radius: 20px;
+  text-align: left;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--ink);
+  box-shadow:
+    0 26px 44px -26px rgb(6 14 34 / 0.75),
+    0 8px 18px -10px rgb(6 14 34 / 0.4),
+    inset 0 0 0 1px rgb(255 255 255 / 0.3);
+  transition:
+    scale 260ms var(--ease-out),
+    rotate 260ms var(--ease-out);
+}
+.sky .postcard:hover:not(:disabled) {
+  background: linear-gradient(180deg, var(--sky-top), var(--sky-bottom));
+  color: var(--ink);
+}
+.sky .postcard:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: -6px;
+}
+.postcard-disc {
+  position: absolute;
+  z-index: -1;
+  top: 14px;
+  right: 16px;
+  width: 34px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--scene-sun);
+  box-shadow: 0 0 22px 8px var(--veil);
+}
+.postcard[data-body='moon'] .postcard-disc {
+  width: 24px;
+  background: var(--scene-moon);
+  box-shadow: 0 0 14px 2px rgb(210 225 255 / 0.3);
+}
+.postcard-city {
+  margin-top: var(--space-5);
+  padding-right: 2.5rem;
+  font-family: var(--font-display);
+  font-size: 2.125rem;
+  line-height: 0.95;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.postcard-country {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.postcard-time {
+  margin-top: var(--space-2);
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 2.4rem + 2.2vw, 4.25rem);
+  line-height: 0.95;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+.postcard-cue {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+  min-height: 28px;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+.postcard-cue svg {
+  transition: translate 200ms var(--ease-out);
+}
+@media (hover: hover) {
+  .postcard:hover .postcard-cue svg {
+    translate: 4px 0;
+  }
+}
+/* Wide screens: the cards become a loose, overlapping deck beside the title. */
+@media (min-width: 1000px) {
+  .hero-cards {
+    min-height: clamp(30rem, 60svh, 35rem);
+  }
+  .postcards {
+    display: block;
+    position: relative;
+    height: clamp(30rem, 60svh, 35rem);
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+  }
+  .postcards > li {
+    position: absolute;
+    width: min(16rem, 54%);
+  }
+  .postcards > li:nth-child(1) {
+    left: 0;
+    top: 0;
+    rotate: -6deg;
+  }
+  .postcards > li:nth-child(2) {
+    right: 0;
+    top: 21%;
+    rotate: 5deg;
+  }
+  .postcards > li:nth-child(3) {
+    left: 12%;
+    bottom: 0;
+    rotate: -2deg;
+  }
+  .postcards > li:has(.postcard:focus-visible) {
+    z-index: 2;
+  }
+  @media (hover: hover) {
+    .postcards > li:hover {
+      z-index: 2;
+    }
+    .postcards > li:hover .postcard {
+      scale: 1.05;
+      rotate: 1.5deg;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .scene-body {
+    transition:
+      left 1800ms var(--ease-out),
+      bottom 1800ms var(--ease-out);
+  }
+  .sky-hero .sky-birds {
+    animation: sky-glide 52s linear infinite;
+  }
+  .sky-hero[data-sky='night-clear'] .sky-star {
+    display: block;
+    animation: sky-shoot 17s linear 4s infinite;
+  }
+  .sky-hero[data-sky='storm'] .sky-flash {
+    display: block;
+    animation: sky-flash 11s linear infinite;
+  }
+  .sky-hero[data-sky='fog'] .scene-fog {
+    animation: sky-fog 44s ease-in-out infinite alternate;
+  }
+  /* Arrival: cards, live numbers and the verdict rise in; the 'good' tick draws itself. */
+  .postcards > li,
+  .readout-now,
+  .hero-verdict {
+    animation: rise-in 800ms var(--ease-out) backwards;
+  }
+  .postcards > li:nth-child(2) {
+    animation-delay: 90ms;
+  }
+  .postcards > li:nth-child(3),
+  .hero-verdict {
+    animation-delay: 180ms;
+  }
+  .hero-verdict .summary-icon .knock {
+    stroke-dasharray: 12;
+    animation: tick-draw 520ms var(--ease-out) 520ms backwards;
+  }
+  /* Depth on scroll: far hills sink faster than near ones. Browsers without scroll timelines keep them still. */
+  @supports (animation-timeline: scroll()) {
+    .scene-hill-1,
+    .scene-hill-2 {
+      animation: hill-far linear both;
+      animation-timeline: scroll();
+      animation-range: 0 100svh;
+    }
+    .scene-hill-2 {
+      animation-name: hill-mid;
+    }
+  }
+}
+@keyframes sky-glide {
+  from {
+    transform: translate(-75vw, 10px);
+  }
+  to {
+    transform: translate(45vw, -14px);
+  }
+}
+@keyframes sky-shoot {
+  0%,
+  92% {
+    opacity: 0;
+    transform: none;
+  }
+  93.5% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-300px);
+  }
+}
+/* Two soft pulses per cycle, far below the three-per-second flash limit, at a level that keeps text contrast. */
+@keyframes sky-flash {
+  0%,
+  90%,
+  93%,
+  100% {
+    opacity: 0;
+  }
+  91% {
+    opacity: 0.16;
+  }
+  94.5% {
+    opacity: 0.11;
+  }
+}
+@keyframes sky-fog {
+  from {
+    transform: translateX(-12%);
+  }
+  to {
+    transform: translateX(12%);
+  }
+}
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    translate: 0 22px;
+  }
+}
+@keyframes tick-draw {
+  from {
+    stroke-dashoffset: 12;
+  }
+}
+@keyframes hill-far {
+  to {
+    transform: translateY(34%);
+  }
+}
+@keyframes hill-mid {
+  to {
+    transform: translateY(17%);
+  }
 }

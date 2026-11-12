@@ -43,6 +43,13 @@ async function loaded(page: Page) {
 async function axe(page: Page) {
   // axe relies on timers; the harness pauses the page clock, so let it run.
   await page.clock.resume().catch(() => undefined);
+  // Measure contrast at rest: let one-shot arrival animations (cards, numbers, verdict) finish first.
+  await page.waitForFunction(() =>
+    document
+      .getAnimations()
+      // Keyframe animations only: Firefox leaves a zero-progress colour transition 'running' under forced colours.
+      .every((a) => !('animationName' in a) || a.timeline !== document.timeline || a.effect?.getComputedTiming().iterations === Infinity || a.playState !== 'running'),
+  );
   const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']).analyze();
   return results.violations.map(
     (v) =>

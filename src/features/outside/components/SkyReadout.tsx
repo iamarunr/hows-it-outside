@@ -35,7 +35,8 @@ export function SkyReadout({ label, current, units, now, headingRef }: Props) {
           <span className="readout-city">{city}</span>
           {region !== '' && <span className="readout-region">{region}</span>}
         </h2>
-        <div className="readout-now">
+        {/* Keyed so the numbers rise in when live conditions arrive. */}
+        <div className="readout-now" key={usable ? 'live' : 'none'}>
           <p className="readout-temp">
             {temp ?? (
               <>

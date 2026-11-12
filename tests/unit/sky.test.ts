@@ -23,4 +23,14 @@ describe('skyFor', () => {
   ] as const)('code %s, daylight %s → %s', (code, daylight, expected) => {
     expect(skyFor(code, daylight)).toBe(expected);
   });
+
+  it.each([
+    [0, true, 'rising', 'dawn'],
+    [1, true, 'setting', 'dusk'],
+    [0, false, 'setting', 'night-clear'],
+    [3, true, 'setting', 'cloudy'],
+    [61, true, 'rising', 'rain'],
+  ] as const)('code %s, daylight %s, low sun %s → %s', (code, daylight, low, expected) => {
+    expect(skyFor(code, daylight, low)).toBe(expected);
+  });
 });

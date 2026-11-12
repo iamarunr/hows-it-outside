@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+### Living landscape (12 November 2026)
+- A strip of layered hills closes the sky, with a sun or moon riding its arc: from the real sun position for a chosen place, and from the visitor's clock before one is chosen.
+- Two new skies, dawn and dusk, when the sun is within 50 minutes of the horizon under a clear sky.
+- Three shortcut cards (London, Chennai, Sydney) show the local time and day/night sky there and open that place in one tap. They never show weather before it is loaded.
+- Search is a single white pill on every sky.
+- Choosing a place melts the first-screen sky into that place's sky; the live numbers and verdict rise in and the "good" tick draws itself.
+- Rare sky moments: birds by day, a shooting star on clear nights, soft lightning in storms, fog rolling over the hills. Hills shift with scroll where the browser supports scroll timelines.
+- All motion is CSS and is off with reduced motion; the sun, moon and hills never sit behind text.
+- Tested from 320 px phones to 2560 px screens, including phone landscape, in Chromium, Firefox and WebKit.
+
 ### Bolder pass (12 November 2026)
 - The first screen is now the sky: a giant "How's it outside?" over a day or night sky before a place is chosen; city, a huge temperature, the verdict and activities on the place's own sky after.
 - Slow ambient motion: drifting cloud banks, falling rain and snow, twinkling stars; off with reduced motion.

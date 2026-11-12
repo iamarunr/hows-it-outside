@@ -75,11 +75,26 @@
   --sky-night-cloudy-veil: #05080c;
   --sky-night-cloudy-veil-strength: 40%;
   --sky-night-cloudy-ink: #ffffff;
+  --sky-dawn-top: #6f95cf;
+  --sky-dawn-bottom: #ffd3a0;
+  --sky-dawn-veil: #ffffff;
+  --sky-dawn-veil-strength: 55%;
+  --sky-dawn-ink: #0e1e36;
+  --sky-dusk-top: #2a3565;
+  --sky-dusk-bottom: #984536;
+  --sky-dusk-veil: #ffb070;
+  --sky-dusk-veil-strength: 20%;
+  --sky-dusk-ink: #ffffff;
   --sky-unknown-top: #7f8c99;
   --sky-unknown-bottom: #d6dde3;
   --sky-unknown-veil: #ffffff;
   --sky-unknown-veil-strength: 40%;
   --sky-unknown-ink: #111a24;
+
+  /* Landscape scene under the sky (decorative; no text ever sits on it). */
+  --scene-land: #14253b;
+  --scene-sun: #ffe9a8;
+  --scene-moon: #e6ecf6;
 
   /* Type */
   --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;

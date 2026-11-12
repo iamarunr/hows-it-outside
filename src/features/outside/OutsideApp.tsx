@@ -3,7 +3,8 @@ import { ACTIVITY_PRESETS } from '../../domain/activities';
 import { summaryHeadline } from '../../domain/explanations';
 import { defaultUnitSystem } from '../../lib/units';
 import { resetActivity } from '../../services/settings';
-import { skyFor, type SkyId } from '../../domain/sky';
+import { skyFor } from '../../domain/sky';
+import { clockSunState, reconcileSun, sunState, type SunState } from '../../domain/sun';
 import { ConditionsSummary } from './components/ConditionsSummary';
 import { SkyReadout } from './components/SkyReadout';
 import { ActivityPicker, UnitsPicker, WindowControls } from './components/Controls';
@@ -11,10 +12,15 @@ import { DataStatus } from './components/DataStatus';
 import { HourlyTimeline } from './components/HourlyTimeline';
 import { LocationPicker } from './components/LocationPicker';
 import { PreferencesPanel, StorageControls } from './components/PreferencesPanel';
+import { PlaceCards } from './components/PlaceCards';
+import { SkyScene } from './components/SkyScene';
 import { NextHourSummary } from './components/Summary';
 import { WindowSuggestions } from './components/WindowSuggestions';
 import { computeResults } from './controller/results';
 import { browserDeps, useWeatherController, type ControllerDeps } from './controller/useWeatherController';
+
+/** Shown until the island hydrates, so server and client markup agree. */
+const NOON: SunState = { body: 'sun', arc: 0.5, low: null };
 
 export type OutsideAppProps = { depsFactory?: () => ControllerDeps };
 
@@ -73,13 +79,20 @@ export default function OutsideApp({ depsFactory = browserDeps }: OutsideAppProp
 
   const timezone = view.kind === 'data' ? view.forecast.timezone : 'UTC';
   const firstHour = results?.timeline[0]?.interval;
+  const idle = location === null;
+  // The disc follows the real sun for a chosen place, and the visitor's own clock before one is chosen.
+  const localDate = new Date(c.now * 1000);
+  const sun: SunState = !c.hydrated
+    ? NOON
+    : location === null
+      ? clockSunState(localDate.getHours() + localDate.getMinutes() / 60)
+      : reconcileSun(sunState(location.latitude, location.longitude, c.now), firstHour?.daylight ?? null);
   const sky =
-    view.kind === 'data'
-      ? skyFor(view.forecast.current?.weatherCode ?? firstHour?.weatherCodes[0] ?? null, firstHour?.daylight ?? null)
-      : 'unknown';
-  // Before a place is chosen the sky follows the visitor's own clock: day or night.
-  const localHour = new Date(c.now * 1000).getHours();
-  const idleSky: SkyId = !c.hydrated || (localHour >= 6 && localHour < 19) ? 'clear' : 'night-clear';
+    location === null
+      ? skyFor(0, sun.body === 'sun', sun.low)
+      : view.kind === 'data'
+        ? skyFor(view.forecast.current?.weatherCode ?? firstHour?.weatherCodes[0] ?? null, sun.body === 'sun', sun.low)
+        : 'unknown';
 
   const toolbar = (
     <div className="hero-toolbar">
@@ -107,23 +120,25 @@ export default function OutsideApp({ depsFactory = browserDeps }: OutsideAppProp
         <p className="notice notice-mixed">Your saved settings couldn&apos;t be read, so the default settings are in use.</p>
       )}
 
-      {location === null ? (
-        <section className="sky sky-hero sky-hero-idle" data-sky={idleSky} aria-labelledby="page-title">
-          <div className="hero-inner">
-            <h1 id="page-title" className="hero-title">
-              <span>How&apos;s it</span> <span>outside?</span>
-            </h1>
-            <p className="hero-lede">
-              Pick a place. See whether now is good for a walk, a run, a ride or just being outside, and when it gets
-              better.
-            </p>
-            {toolbar}
-          </div>
-        </section>
-      ) : (
-        <section className="weather" aria-labelledby="weather-heading">
-          <h1 className="visually-hidden">How&apos;s it outside?</h1>
-          <div className="sky sky-hero" data-sky={sky}>
+      <section className="weather" aria-labelledby={idle ? 'page-title' : 'weather-heading'}>
+        {!idle && <h1 className="visually-hidden">How&apos;s it outside?</h1>}
+        {/* One sky element for both states, so choosing a place melts one sky into the next. */}
+        <div className={`sky sky-hero${idle ? ' sky-hero-idle' : ''}`} data-sky={sky} data-body={sun.body}>
+          {location === null ? (
+            <div className="hero-inner">
+              <div className="hero-copy">
+                <h1 id="page-title" className="hero-title">
+                  <span>How&apos;s it</span> <span>outside?</span>
+                </h1>
+                <p className="hero-lede">
+                  Pick a place. See whether now is good for a walk, a run, a ride or just being outside, and when it
+                  gets better.
+                </p>
+                {toolbar}
+              </div>
+              <div className="hero-cards">{c.hydrated && <PlaceCards now={c.now} onSelect={c.selectPlace} />}</div>
+            </div>
+          ) : (
             <div className="hero-inner hero-results">
               {toolbar}
               <SkyReadout
@@ -141,40 +156,41 @@ export default function OutsideApp({ depsFactory = browserDeps }: OutsideAppProp
                 </div>
               )}
             </div>
-          </div>
-
-          {view.kind === 'data' && results !== null && (
-            <>
-              <ConditionsSummary current={view.forecast.current} timezone={timezone} units={units} now={c.now} />
-
-              <section className="best-windows" aria-labelledby="windows-heading">
-                <h3 id="windows-heading">Best times in the next 24 hours</h3>
-                <WindowControls
-                  duration={settings.durationMinutes}
-                  daylightOnly={results.prefs.daylightOnly}
-                  onDuration={(durationMinutes) => updateSettings((s) => ({ ...s, durationMinutes }))}
-                  onDaylightOnly={(daylightOnly) =>
-                    updateSettings((s) => ({
-                      ...s,
-                      activities: { ...s.activities, [s.activity]: { ...s.activities[s.activity], daylightOnly } },
-                    }))
-                  }
-                />
-                <WindowSuggestions results={results} units={units} timezone={timezone} now={c.now} />
-              </section>
-
-              <section className="next-24" aria-labelledby="timeline-heading">
-                <h3 id="timeline-heading">Next 24 hours</h3>
-                <p className="hint">
-                  Times shown for {timezone}
-                  {location.source === 'device' && ' · Based on your approximate location'}
-                </p>
-                <HourlyTimeline results={results} units={units} timezone={timezone} now={c.now} announce={announce} />
-              </section>
-            </>
           )}
-        </section>
-      )}
+          <SkyScene sun={sun} />
+        </div>
+
+        {location !== null && view.kind === 'data' && results !== null && (
+          <>
+            <ConditionsSummary current={view.forecast.current} timezone={timezone} units={units} now={c.now} />
+
+            <section className="best-windows" aria-labelledby="windows-heading">
+              <h3 id="windows-heading">Best times in the next 24 hours</h3>
+              <WindowControls
+                duration={settings.durationMinutes}
+                daylightOnly={results.prefs.daylightOnly}
+                onDuration={(durationMinutes) => updateSettings((s) => ({ ...s, durationMinutes }))}
+                onDaylightOnly={(daylightOnly) =>
+                  updateSettings((s) => ({
+                    ...s,
+                    activities: { ...s.activities, [s.activity]: { ...s.activities[s.activity], daylightOnly } },
+                  }))
+                }
+              />
+              <WindowSuggestions results={results} units={units} timezone={timezone} now={c.now} />
+            </section>
+
+            <section className="next-24" aria-labelledby="timeline-heading">
+              <h3 id="timeline-heading">Next 24 hours</h3>
+              <p className="hint">
+                Times shown for {timezone}
+                {location.source === 'device' && ' · Based on your approximate location'}
+              </p>
+              <HourlyTimeline results={results} units={units} timezone={timezone} now={c.now} announce={announce} />
+            </section>
+          </>
+        )}
+      </section>
 
       {c.hydrated && (
         <details className="settings">
