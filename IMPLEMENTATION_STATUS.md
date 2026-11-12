@@ -129,7 +129,7 @@ M5 command results (11 Nov 2026): `npm run check` 0 errors · `npm run lint` cle
 ## Redesign (12 November 2026)
 Owner asked to follow the Dutchblue reference (Landbook). Decisions: its look but tool-first; self-hosted Bebas Neue; weather-aware CSS sky. Built with the Impeccable skill, code-led (no image generation). Independent finish review: round 1 fix (8 items) → round 2 seven resolved, one partial → owner funded a third round → **ship**. DESIGN.md and `.impeccable/design.json` rewritten from the build. Checks: 279 unit tests; 101 E2E across Chromium, Firefox, WebKit; 0 axe violations; detector clean. JS 95.9 KB gzip, CSS 6.0 KB, font 13.8 KB; LCP 560–568 ms, CLS 0.
 
-## Bolder pass (12 November 2026)
+## Bolder pass (12 November 2026) — released as `70c4b0d`
 Owner: "looks pretty blank… make this site look stunning". Answers: both screens; sky fills the first screen; slow ambient motion. Independent review: recapture (320 px scroll defect, fixed) → fix (7 items) → six resolved; DESIGN.md rewritten by the documenter. JS 96.1 KB, CSS 6.9 KB, LCP 596 ms, CLS 0; 279 unit and 101 E2E tests in three engines, 0 axe violations.
 
 ## Release (12 November 2026)
