@@ -883,6 +883,8 @@ legend {
   font-weight: 600;
 }
 .checkbox input {
+  /* Never let a long, wrapping label squeeze the box below its 24px target (seen with Linux fonts in CI). */
+  flex: none;
   width: 1.5rem;
   height: 1.5rem;
   margin: 0;

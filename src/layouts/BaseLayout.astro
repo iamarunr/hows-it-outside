@@ -31,9 +31,7 @@ const noindex = import.meta.env.PUBLIC_NOINDEX === 'true';
       // 'js' enables script-dependent styles; 'scrolled' turns the menu solid once the page has moved.
       (function (root) {
         root.classList.add('js');
-        var sync = function () {
-          root.classList.toggle('scrolled', window.scrollY > 8);
-        };
+        const sync = () => root.classList.toggle('scrolled', window.scrollY > 8);
         window.addEventListener('scroll', sync, { passive: true });
         sync();
       })(document.documentElement);
