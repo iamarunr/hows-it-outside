@@ -16,6 +16,8 @@ export type SyntheticOptions = {
   current?: Partial<Record<string, number | null>> & { time: number };
   latitude?: number;
   longitude?: number;
+  /** Sunrise/sunset epoch seconds per day. Omit for a payload without a daily block. */
+  daily?: { sunrise: number[]; sunset: number[] };
 };
 
 const BASE: Record<string, number> = {
@@ -47,6 +49,7 @@ export function syntheticForecast(o: SyntheticOptions): Record<string, unknown> 
     generationtime_ms: 0.1,
     utc_offset_seconds: o.utcOffsetSeconds ?? 0,
     timezone: o.timezone,
+    ...(o.daily !== undefined && { daily_units: { time: 'unixtime', sunrise: 'unixtime', sunset: 'unixtime' }, daily: { time: o.daily.sunrise, ...o.daily } }),
     timezone_abbreviation: 'GMT',
     elevation: 10,
     current_units: {

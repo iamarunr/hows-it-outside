@@ -69,6 +69,7 @@ export const forecastSchema = z.object({
   fetchedAt: z.int(),
   current: z.nullable(currentSchema),
   intervals: z.array(intervalSchema),
+  sunEvents: z.array(z.object({ kind: z.enum(['sunrise', 'sunset']), time: z.int() })),
   diagnostics: z.array(z.string()),
 });
 

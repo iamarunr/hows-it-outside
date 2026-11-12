@@ -162,7 +162,7 @@ export default function OutsideApp({ depsFactory = browserDeps }: OutsideAppProp
 
         {location !== null && view.kind === 'data' && results !== null && (
           <>
-            <ConditionsSummary current={view.forecast.current} timezone={timezone} units={units} now={c.now} />
+            <ConditionsSummary current={view.forecast.current} sunEvents={view.forecast.sunEvents} timezone={timezone} units={units} now={c.now} />
 
             <section className="best-windows" aria-labelledby="windows-heading">
               <h3 id="windows-heading">Best times in the next 24 hours</h3>
@@ -177,7 +177,7 @@ export default function OutsideApp({ depsFactory = browserDeps }: OutsideAppProp
                   }))
                 }
               />
-              <WindowSuggestions results={results} units={units} timezone={timezone} now={c.now} />
+              <WindowSuggestions results={results} units={units} timezone={timezone} now={c.now} coords={location} />
             </section>
 
             <section className="next-24" aria-labelledby="timeline-heading">
@@ -186,7 +186,7 @@ export default function OutsideApp({ depsFactory = browserDeps }: OutsideAppProp
                 Times shown for {timezone}
                 {location.source === 'device' && ' · Based on your approximate location'}
               </p>
-              <HourlyTimeline results={results} units={units} timezone={timezone} now={c.now} announce={announce} />
+              <HourlyTimeline results={results} units={units} timezone={timezone} now={c.now} coords={location} announce={announce} />
             </section>
           </>
         )}

@@ -15,11 +15,11 @@
   --color-control-border: #7a8794; /* ≥3:1 on surface and background */
   --color-selected: #e7edf4;
 
-  /* Charcoal-olive band (planning section) */
-  --color-band: #262b25;
-  --color-band-text: #eef1ec;
-  --color-band-text-secondary: #b8c2b4;
-  --color-band-border: #8e9a8a;
+  /* The ground: the deep navy the hills settle into. Carries Now, Best times and the footer. */
+  --color-band: #14253b;
+  --color-band-text: #eef2f6;
+  --color-band-text-secondary: #b9c4d2;
+  --color-band-border: #8a98aa;
   --color-good-on-band: #8fd1a6;
   --color-mixed-on-band: #e5c07b;
   --color-concern-on-band: #f2a6a1;

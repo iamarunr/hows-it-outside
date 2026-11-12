@@ -38,6 +38,8 @@ Implement equivalent concrete runtime schemas. Arrays can contain nulls. Finite 
 ## 2. Provider requests
 Forecast endpoint: https://api.open-meteo.com/v1/forecast. Request one rounded coordinate pair; temperature_unit=celsius, wind_speed_unit=kmh, precipitation_unit=mm, timezone=auto, timeformat=unixtime, forecast_days=3.
 
+Daily block (IMP-063): the same request adds `daily=sunrise,sunset` (unixtime). Normalized to `Forecast.sunEvents`, time-ordered. Optional: a missing block, wrong unit, non-integer, zero or out-of-range value is dropped with a diagnostic and never invented; the interface then shows no sun times.
+
 Hourly field list: temperature_2m, apparent_temperature, relative_humidity_2m, precipitation_probability, precipitation, weather_code, wind_speed_10m, wind_gusts_10m, is_day.
 
 Current field list: temperature_2m, apparent_temperature, relative_humidity_2m, weather_code, wind_speed_10m, wind_gusts_10m.

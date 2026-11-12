@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import { explain } from '../../../domain/explanations';
+import { hourSky } from '../../../domain/hourSky';
 import type { IntervalAssessment } from '../../../domain/score';
 import { conditionText } from '../../../domain/weatherCodes';
 import { assessWindow } from '../../../domain/windows';
@@ -17,16 +18,31 @@ type Props = {
   units: UnitSystem;
   timezone: string;
   now: number;
+  /** Used only to draw each hour's sky (day, dusk, night) from the sun's position. */
+  coords: { latitude: number; longitude: number };
   announce: (text: string) => void;
 };
+
+/** Vertical position (0 top – 100 bottom) of a temperature inside the plot; warmer is higher. */
+function plotY(value: number, min: number, max: number): number {
+  return max === min ? 50 : 86 - ((value - min) / (max - min)) * 72;
+}
 
 /**
  * Next 24 hours as a single-select group with one Tab stop (ADR-021):
  * arrows move between hours, Home/End jump to the ends. Every value is
  * visible text; nothing is hover-only.
  */
-export function HourlyTimeline({ results, units, timezone, now, announce }: Props) {
+export function HourlyTimeline({ results, units, timezone, now, coords, announce }: Props) {
   const items = results.timeline;
+  // The line shows the same feels-like temperature each tile prints.
+  const temps = items.map((a) => a.interval.feelsLikeC);
+  const known = temps.filter((t): t is number => t !== null);
+  const [min, max] = [Math.min(...known), Math.max(...known)];
+  const yAt = (i: number): number | null => {
+    const t = temps[i];
+    return t === null || t === undefined ? null : plotY(t, min, max);
+  };
   const labels = hourLabels(
     items.map((a) => a.interval.start),
     timezone,
@@ -85,6 +101,8 @@ export function HourlyTimeline({ results, units, timezone, now, announce }: Prop
             const l = labels[i];
             const m = MATCH_TEXT[a.label];
             const isSelected = i === selectedIndex;
+            const y = yAt(i);
+            const rain = a.interval.precipProbabilityPct;
             return (
               <button
                 key={a.interval.start}
@@ -96,7 +114,8 @@ export function HourlyTimeline({ results, units, timezone, now, announce }: Prop
                 role="radio"
                 aria-checked={isSelected}
                 tabIndex={isSelected ? 0 : -1}
-                className={`hour hour-${a.label}`}
+                className={`sky hour hour-${a.label}`}
+                data-sky={hourSky(a.interval, coords.latitude, coords.longitude).sky}
                 onClick={() => select(i, false)}
                 onKeyDown={onKeyDown}
               >
@@ -105,13 +124,25 @@ export function HourlyTimeline({ results, units, timezone, now, announce }: Prop
                   {l?.time}
                   {l?.zone !== null && l?.zone !== undefined && ` ${l.zone}`}
                 </span>
-                <span className="hour-match">
-                  <MatchIcon label={a.label} />
-                  {m.text}
-                </span>
+                {/* Decorative: this hour's stretch of the temperature line, over its chance of precipitation. */}
+                <svg className="hour-plot" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                  {rain !== null && rain > 0 && (
+                    <rect className="hour-plot-rain" x="0" y={100 - rain * 0.6} width="100" height={rain * 0.6} />
+                  )}
+                  {y !== null && (
+                    <>
+                      <polyline points={`0,${(y + (yAt(i - 1) ?? y)) / 2} 50,${y} 100,${(y + (yAt(i + 1) ?? y)) / 2}`} />
+                      <line className="hour-plot-dot" x1="50" y1={y} x2="50" y2={y} />
+                    </>
+                  )}
+                </svg>
                 <span className="hour-temp">
                   {formatTemperature(a.interval.feelsLikeC, units) ?? NA}
                   <span className="hour-temp-label"> feels like</span>
+                </span>
+                <span className="hour-match">
+                  <MatchIcon label={a.label} />
+                  {m.text}
                 </span>
                 <span>{formatPercent(a.interval.precipProbabilityPct) ?? NA} precip.</span>
                 <span>{formatWind(a.interval.windKmh, units) ?? NA} wind</span>

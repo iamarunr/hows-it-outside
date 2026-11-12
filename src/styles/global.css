@@ -160,10 +160,20 @@ main {
   padding-bottom: var(--space-7);
 }
 .site-footer {
-  border-top: 1px solid var(--color-divider);
-  color: var(--color-text-secondary);
+  /* The page ends on the same ground the hills settle into. */
+  --footer-pad: clamp(var(--space-4), 4vw, var(--space-6));
+  max-width: none;
+  padding-inline: max(var(--footer-pad), calc((100% - var(--content-max)) / 2 + var(--footer-pad)));
+  background: var(--color-band);
+  color: var(--color-band-text-secondary);
   font-size: 0.875rem;
   padding-block: var(--space-5) var(--space-6);
+}
+.site-footer a {
+  color: var(--color-band-text);
+}
+.site-footer :focus-visible {
+  outline-color: var(--color-sand);
 }
 .site-footer p {
   margin: var(--space-2) 0;

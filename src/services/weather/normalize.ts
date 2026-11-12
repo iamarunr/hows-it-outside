@@ -9,7 +9,7 @@
  * - Per-field time semantics come from FIELD_SEMANTICS; no global index shift.
  * - Missing or invalid values become null; never zero; never clamped.
  */
-import type { CurrentConditions, Forecast, Interval } from '../../domain/types';
+import type { CurrentConditions, Forecast, Interval, SunEvent } from '../../domain/types';
 import { isKnownWeatherCode } from '../../domain/weatherCodes';
 import { resolveTimeZone } from '../../lib/time';
 import {
@@ -168,6 +168,30 @@ function normalizeCurrent(payload: Record<string, unknown>, diag: Diagnostics): 
   };
 }
 
+/**
+ * Sunrise and sunset instants from the daily block. Optional data: anything
+ * missing, mis-typed or out of range is dropped (never invented), with a
+ * diagnostic. Days without a sunrise or sunset simply contribute nothing.
+ */
+function normalizeSunEvents(payload: Record<string, unknown>, diag: Diagnostics): SunEvent[] {
+  const daily = payload['daily'];
+  const units = payload['daily_units'];
+  if (!isRecord(daily) || !isRecord(units)) return [];
+  const events: SunEvent[] = [];
+  for (const kind of ['sunrise', 'sunset'] as const) {
+    const values = daily[kind];
+    if (units[kind] !== 'unixtime' || !Array.isArray(values)) {
+      diag.add(`unusable:daily.${kind}`);
+      continue;
+    }
+    for (const t of values as unknown[]) {
+      // Open-Meteo reports 0 for a day with no sunrise or sunset.
+      if (typeof t === 'number' && Number.isInteger(t) && t >= MIN_EPOCH && t <= MAX_EPOCH) events.push({ kind, time: t });
+    }
+  }
+  return events.sort((a, b) => a.time - b.time);
+}
+
 export function normalizeForecast(
   payload: unknown,
   context: { locationKey: string; fetchedAt: number },
@@ -246,6 +270,7 @@ export function normalizeForecast(
       fetchedAt: context.fetchedAt,
       current,
       intervals,
+      sunEvents: normalizeSunEvents(payload, diag),
       diagnostics: diag.list(),
     },
   };

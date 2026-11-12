@@ -17,6 +17,7 @@ function forecast(locationKey: string, fetchedAt: number): Forecast {
     fetchedAt,
     current: null,
     intervals: [makeInterval(NOW)],
+    sunEvents: [],
     diagnostics: [],
   };
 }

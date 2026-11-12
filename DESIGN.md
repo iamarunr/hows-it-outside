@@ -296,7 +296,7 @@ components:
 
 The answer is a scoreboard set against the sky. The whole first screen below the slim header is a full-bleed sky whose colours are today's weather: blue for a clear day, grey for cloud, slate with falling streaks for rain, near-black for a storm, deep navy with stars at night. The place and the current temperature stand on it in huge condensed capitals, and the next-hour verdict follows on the same sky in the same display capitals with two plain reasons. Before a place is chosen, the sky is the visitor's own day or night and carries the question "How's it outside?" at full scale, with the search set into it. This rejects the category default, a small icon-and-number weather card. The weather is the hero, and the tool works as a tool from the first viewport down. The look follows the owner-pinned Dutchblue reference (2026-11-12) and replaces the earlier calm green editorial world. The bolder pass of 2026-11-12 follows three owner answers: "Both screens" should stop feeling blank, "Sky fills first screen", and "Slow ambient motion".
 
-Two typefaces split the work. Bebas Neue capitals carry every display line: the wordmark, the empty-state headline, the place, the temperature, the verdict, section titles, the Now numbers, and the times and temperatures in the window rows and hourly tiles. The system sans carries everything people read: the lede, reasons, measurements, labels and controls. Below the sky the ground is cool and pale with white surfaces and charcoal ink. Navy marks selection and action there, slate is the secondary ink, and warm sand appears only as hairline detail. On the sky, every control takes that sky's ink instead. One full-bleed charcoal-olive band holds the planning section. Choices are pills that fill when selected. Actions are thin outlined ghost buttons. Status is shown by drawn SVG marks next to words.
+Two typefaces split the work. Bebas Neue capitals carry every display line: the wordmark, the empty-state headline, the place, the temperature, the verdict, section titles, the Now numbers, and the times and temperatures in the window rows and hourly tiles. The system sans carries everything people read: the lede, reasons, measurements, labels and controls. Below the sky the ground is cool and pale with white surfaces and charcoal ink. Navy marks selection and action there, slate is the secondary ink, and warm sand appears only as hairline detail. On the sky, every control takes that sky's ink instead. Below the sky, one full-bleed navy ground holds Now and the planning section, and the footer closes on it. Choices are pills that fill when selected. Actions are thin outlined ghost buttons. Status is shown by drawn SVG marks next to words.
 
 Below the sky the page is dense but calm. Dividers and two full-bleed bands do the structuring, so there are no nested cards and no elevation shadows. The sky moves in two ways: its colours transition when the conditions change, and a slow ambient layer (cloud drift, rain, snow, star twinkle) runs in CSS for visitors who have not asked for reduced motion. The motion never carries meaning.
 
@@ -304,12 +304,12 @@ Below the sky the page is dense but calm. Dividers and two full-bleed bands do t
 - A weather-aware CSS sky that fills the first screen: eleven skies, each a two-stop gradient, a veil layer drawn for that weather, and an optional slow ambient layer.
 - Bebas Neue for display only, self-hosted and preloaded. All reading text uses the system sans.
 - Pills for choices, ghost buttons for actions, and a fill means "chosen": navy on the ground, the sky's ink on the sky, chalk on the band.
-- One charcoal-olive planning band with sand hairlines between scoreboard rows.
+- One navy ground under the hills, carrying Now, Best times and the footer, with sand accents.
 - Drawn status marks and words together, never colour alone. Every token pair is contrast-tested.
 
 ## Colors
 
-The palette is a cool pale day: grey-white ground, charcoal ink and navy action, with a warm sand thread and a dark olive band for planning. The sky colours change with the weather, but each sky's ink is fixed.
+The palette is a cool pale day: grey-white ground, charcoal ink and navy action, with a warm sand thread and a deep navy ground under the hills. The sky colours change with the weather, but each sky's ink is fixed.
 
 ### Primary
 - **Harbour Navy** (`navy`): the one action and selection colour off the sky. It fills selected pills and the primary button, draws ghost-button outlines and their text, sets links, focus rings, `::selection`, `accent-color` and `caret-color`, and marks the selected hourly tile. It is also the browser `theme-color` and the ground of the favicon.
@@ -319,7 +319,7 @@ The palette is a cool pale day: grey-white ground, charcoal ink and navy action,
 - **Dune Sand** (`sand`): hairline detail only. It rules the top of the window list and, mixed at 55% toward transparent, the lines between window rows. It is also the focus outline and the outer ring of a selected pill on the band, and the horizon line in the favicon. It is never used for text on light ground.
 
 ### Tertiary
-- **Charcoal Olive** (`band`) with **Band Chalk** (`band-text`), **Band Sage** (`band-text-secondary`) and **Band Rule** (`band-border`): the full-bleed planning band, its text, its secondary text (rank labels and hints), and its unselected pill outlines.
+- **Ground Navy** (`band`) with **Band Chalk** (`band-text`), **Band Mist** (`band-text-secondary`) and **Band Rule** (`band-border`): the full-bleed ground (Now, Best times, footer), its text, its secondary text (rank labels and hints), and its unselected pill outlines.
 - **On-band status** (`good-on-band`, `mixed-on-band`, `concern-on-band`): lightened status inks that stay legible on the band.
 
 ### Neutral
@@ -397,7 +397,7 @@ Without JavaScript, the home page shows its own h1 and a notice inside a no-JS b
 
 ## Elevation & Depth
 
-The system is flat. Depth comes from the two full-bleed bands (the sky hero and the charcoal-olive planning band) against the pale ground, plus white surfaces and dividers. Inside the sky, the veil and particle layers sit behind the content as painted weather, not as elevation. No surface has an ambient or elevation shadow. `box-shadow` appears only as a state mark: an inset 4px navy bar under the selected hourly tile, and a band-coloured gap plus a 3px sand ring around the selected pill on the band.
+The system is mostly flat. Depth comes from the sky hero running into the navy ground, then the pale page with white surfaces. Three things carry a soft drop shadow because they are objects resting on a surface: the shortcut cards, the best-window card and the hour-details panel. Inside the sky, the veil and particle layers sit behind the content as painted weather, not as elevation. Otherwise `box-shadow` is a state mark: a 3px inset ink ring on the selected hourly tile, and a band-coloured gap plus a 3px sand ring around the selected pill on the ground.
 
 ### Named Rules
 **The Bands Not Boxes Rule.** Separate regions with a full-bleed band, a hairline, a divider or a white field. On the sky, group with a hairline in the sky's ink, never a panel. Do not lift regions with shadows or nest them as cards.
@@ -458,11 +458,16 @@ Two painted layers sit behind the content:
 
 The animations run only under `prefers-reduced-motion: no-preference`, and the global reduced-motion rule also turns every transition off. In forced colours the sky drops its gradient, both layers, the landscape strip and the sky moments and uses Canvas/CanvasText, and controls on it fall back to ButtonFace/ButtonText.
 
-### Planning Band and Scoreboard Rows
-Best windows are rows, not cards. Each row shows a display time, the rank as a sans label under it, a drawn mark with a match word in the on-band status colour, then the reasons. A sand hairline runs above the list and 55% sand lines separate the rows. The best row's time is larger. In forced colours the band falls back to Canvas/CanvasText.
+### The Ground: Now, Best Times, Footer
+Below the sky the page stands on one deep navy ground (`--color-band`, the colour of the front hill), with light ink, cool secondary text and sand accents. All on-ground pairs are contrast-tested.
+- **Now:** three half-dials (wind, gusts, humidity). The value sits inside the arc in display type; the sand arc is a display scale only and is hidden from assistive technology. A missing value reads "Unavailable" and draws no arc. The arc draws in over 1100ms.
+- **Sunrise and sunset:** the next of each from the provider, soonest first, as a display-type time with a plain countdown beneath. Beside the dials from 1000px, below them on smaller screens. Omitted when the provider has none.
+- **Day strip:** 24 bars, one per hour. Height and colour encode the match (good full height, mixed 62%, otherwise 28%; limited is a dashed outline); a sand line marks the best window. Decorative and hidden from assistive technology, with a one-line key.
+- **Best window card:** the first suggestion is a nested sky for the hour it starts in, with that sky's ink and a small sun or moon. Other options are hairline-separated rows on the ground.
+- **Footer:** the same ground, full width, closing the page.
 
-### Hourly Timeline
-A strip of white 8.75rem tiles that scrolls horizontally, with a 2.5rem fade at the trailing edge as the overflow cue (removed in forced colours). Each tile shows the date label, the time in display type, the drawn mark with the match word, the feels-like temperature at 2.5rem display with its "feels like" label below, and then precipitation and wind. The selected tile has a 2px navy border, the Selected Wash and an inset navy underbar. The detail below sits on a white 6px field.
+### Hourly Ribbon
+The next 24 hours are one continuous ribbon of touching tiles, 8.75rem each, scrolling horizontally with a trailing fade. Each tile is a nested sky for that hour and uses that sky's ink for all its text and marks. A feels-like temperature line runs through the tiles (each draws its own stretch, meeting its neighbours at the tile edge) over a faint column for the chance of precipitation. The selected tile has a 3px inset ring in ink; focus adds a second ring inside it. It remains a single-select group with one Tab stop.
 
 ### Notices
 A tinted field with a 1px `currentColor` hairline, a 6px radius, and a drawn 18px mark (a triangle for concern, a circle with an exclamation for mixed), with 0.9375rem text. Buttons inside a notice inherit its ink. On the sky, notices are transparent with a 1.5px ink border, ink text and the drawn mark in ink.

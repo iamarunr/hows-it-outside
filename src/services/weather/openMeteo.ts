@@ -77,6 +77,7 @@ export const REQUEST_OPTIONS = {
   timezone: 'auto',
   timeformat: 'unixtime',
   forecast_days: '3',
+  daily: 'sunrise,sunset',
 } as const;
 
 export function buildForecastUrl(coords: Coordinates): URL {

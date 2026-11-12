@@ -49,6 +49,8 @@ export type CurrentConditions = {
   weatherCode: number | null;
 };
 
+export type SunEvent = { kind: 'sunrise' | 'sunset'; time: number };
+
 export type Forecast = {
   schemaVersion: 1;
   provider: 'open-meteo';
@@ -60,6 +62,8 @@ export type Forecast = {
   fetchedAt: number;
   current: CurrentConditions | null;
   intervals: Interval[];
+  /** Sunrise and sunset instants from the provider, in time order. Empty when unavailable (for example polar day or night). */
+  sunEvents: SunEvent[];
   /** Generic diagnostic codes; never contain coordinates, queries or payload text. */
   diagnostics: string[];
 };

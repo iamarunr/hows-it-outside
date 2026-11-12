@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### The ground below the sky (12 November 2026)
+- The hills now run into a deep navy ground that carries Now, Best times and the footer (replacing the white Now strip and the charcoal band).
+- Now: wind, gusts and humidity are half-dials with the value inside. A missing value shows "Unavailable" with no arc.
+- Sunrise and sunset: the next of each, from the forecast provider's daily data, with a countdown ("Sunset 4:06 PM, in 6 h 6 min"). Omitted when the provider has none (polar day or night).
+- Best times: a 24-bar strip shows the day at a glance (taller is a better match, the best window is marked), and the best window is a card under the sky expected at that time.
+- Next 24 hours: one continuous ribbon. Each hour sits under its own sky (day, dawn, dusk, night, rain and so on), joined by a feels-like temperature line over the chance of precipitation.
+
 ### Menu on the sky (12 November 2026)
 - The menu no longer sits in a grey bar above the sky. At the top of the home page it is transparent, in the sky's own ink, with the sky running behind it; once you scroll it becomes a solid navy bar that stays at the top.
 - Other pages, and the home page without JavaScript, use the solid navy bar.

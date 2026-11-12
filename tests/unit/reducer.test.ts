@@ -22,6 +22,7 @@ function forecastFor(loc: Location, fetchedAt = NOW): Forecast {
     fetchedAt,
     current: null,
     intervals: [],
+    sunEvents: [],
     diagnostics: [],
   };
 }

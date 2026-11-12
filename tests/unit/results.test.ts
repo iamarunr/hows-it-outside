@@ -17,6 +17,7 @@ function forecast(at: (i: number) => Partial<Interval> = () => ({})): Forecast {
     fetchedAt: T0,
     current: null,
     intervals: Array.from({ length: 48 }, (_, i) => makeInterval(T0 + i * H, at(i))),
+    sunEvents: [],
     diagnostics: [],
   };
 }
