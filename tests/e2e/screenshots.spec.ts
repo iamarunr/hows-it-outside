@@ -43,6 +43,8 @@ for (const [name, viewport] of [
       ],
     });
     await page.goto('/');
+    await page.getByLabel('Search city or place').waitFor();
+    await page.waitForTimeout(1500);
     await page.screenshot({ path: `${dir}/${name}-empty.png`, fullPage: true });
     const input = page.getByLabel('Search city or place');
     await input.fill('London');

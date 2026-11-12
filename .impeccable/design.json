@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-12T00:00:00Z",
+  "generatedAt": "2026-11-12T12:00:00Z",
   "title": "Design System: Outside?",
   "extensions": {
     "colorMeta": {
@@ -501,21 +501,37 @@
       }
     },
     "typographyMeta": {
+      "display-hero": {
+        "displayName": "Display / Hero",
+        "purpose": "Empty-state headline \"How's it / outside?\" on the sky; the page h1 before a place is chosen."
+      },
       "display-temperature": {
         "displayName": "Display / Temperature",
-        "purpose": "Current temperature in the sky readout. Bebas Neue (SIL OFL), self-hosted latin 400 woff2, 13.8 KB, preloaded."
+        "purpose": "Current temperature in the sky readout, up to 14rem (supersedes the earlier 10rem cap at the owner's request). Bebas Neue (SIL OFL), self-hosted latin 400 woff2, 13.8 KB, preloaded."
       },
       "display-place": {
         "displayName": "Display / Place",
-        "purpose": "City in the readout heading."
+        "purpose": "City in the readout heading, up to 8.5rem."
       },
       "headline": {
         "displayName": "Headline",
-        "purpose": "Page h1 before a place is chosen; supporting-page h1."
+        "purpose": "No-JS home h1 and supporting-page h1."
       },
       "headline-band": {
         "displayName": "Headline / Band",
-        "purpose": "Planning band heading."
+        "purpose": "Section headings below the sky: Now, Best times in the next 24 hours, Next 24 hours."
+      },
+      "display-window-best": {
+        "displayName": "Display / Best Window",
+        "purpose": "The best window's time on the planning band (other rows use 2.25rem)."
+      },
+      "display-number": {
+        "displayName": "Display / Number",
+        "purpose": "Wind, gusts and humidity values in the Now strip; nowrap."
+      },
+      "display-hour": {
+        "displayName": "Display / Hour",
+        "purpose": "Feels-like temperature leading each hourly tile, with an uppercase sans \"feels like\" label below."
       },
       "verdict": {
         "displayName": "Verdict",
@@ -523,11 +539,43 @@
       },
       "title": {
         "displayName": "Title",
-        "purpose": "Now, Next 24 hours, supporting-page h2."
+        "purpose": "Supporting-page h2."
+      },
+      "wordmark": {
+        "displayName": "Wordmark",
+        "purpose": "The OUTSIDE? wordmark in the header."
+      },
+      "display-subhead": {
+        "displayName": "Display / Subhead",
+        "purpose": "Preferences disclosure summary and the hour-details heading."
+      },
+      "display-minor": {
+        "displayName": "Display / Minor",
+        "purpose": "Preferences and storage subheadings, and the time in each hourly tile."
+      },
+      "lede": {
+        "displayName": "Lede",
+        "purpose": "One-line promise under the empty-state headline; 34rem max."
       },
       "body": {
         "displayName": "Body",
         "purpose": "All reading text; tabular numerals."
+      },
+      "body-large": {
+        "displayName": "Body / Large",
+        "purpose": "Readout condition line (600, feels-like at 400), empty-windows text, and the 56px hero search input text. Weight varies by use."
+      },
+      "metric-value": {
+        "displayName": "Metric Value",
+        "purpose": "Metric values in the hour-details list (sans 600)."
+      },
+      "body-compact": {
+        "displayName": "Body / Compact",
+        "purpose": "Notice text, table body and window reasons."
+      },
+      "body-small": {
+        "displayName": "Body / Small",
+        "purpose": "Hints, footer, hourly-tile text; also the uppercase header nav links (600, 0.06em) and the readout region line (700, 0.12em). Weight and tracking vary by use."
       },
       "label": {
         "displayName": "Label",
@@ -562,6 +610,26 @@
         "purpose": "Signature: registered @property sky colours move when conditions change. Disabled under prefers-reduced-motion."
       },
       {
+        "name": "sky-drift",
+        "value": "background-position-x 0 to -1400px, 160s linear infinite (75s for storm)",
+        "purpose": "Ambient: cloud banks (cloudy, night-cloudy, storm, unknown) on a 1400px repeat-x tile drift one tile per loop. Only under prefers-reduced-motion: no-preference; hidden in forced colours; carries no meaning."
+      },
+      {
+        "name": "sky-fall",
+        "value": "translateY(140px), 1.4s linear infinite",
+        "purpose": "Ambient: rain and storm streaks (104deg, 22% ink). Same reduced-motion and forced-colours limits."
+      },
+      {
+        "name": "sky-snow",
+        "value": "9 layers, each background-position-y +1 tile (173-397px), 22s linear infinite",
+        "purpose": "Ambient: snowfall on distinct tiles so the pattern never visibly repeats. Same limits."
+      },
+      {
+        "name": "sky-twinkle",
+        "value": "opacity 0.25 to 0.6, 7s ease-in-out infinite alternate",
+        "purpose": "Ambient: star layers (9 layers, 197-449px tiles, masked to the top 55%) on night skies. Same limits."
+      },
+      {
         "name": "control-state",
         "value": "160ms ease-out",
         "purpose": "Background/border/colour changes on buttons and pills."
@@ -578,11 +646,15 @@
         "value": "720px"
       },
       {
+        "name": "now-split",
+        "value": "760px"
+      },
+      {
         "name": "window-subgrid",
         "value": "760px"
       },
       {
-        "name": "overview-grid",
+        "name": "hero-verdict-split",
         "value": "900px"
       },
       {
@@ -598,12 +670,24 @@
         "use": "display only"
       }
     ],
-    "forcedColors": "Sky and planning band fall back to Canvas/CanvasText; veil layer and timeline fade removed; selection shown with a 3px Highlight outline and bold weight.",
+    "forcedColors": "Sky and planning band fall back to Canvas/CanvasText; the sky's veil and ambient layers and the timeline fade are removed; controls on the sky use ButtonFace/ButtonText; selection shown with a 3px Highlight outline and bold weight.",
     "verification": {
-      "contrast": "tests/unit/contrast.test.ts",
-      "axe": "Chromium, Firefox, WebKit",
+      "contrast": "tests/unit/contrast.test.ts: every sky's ink against both stops, bare and fully veiled",
+      "tests": "279 unit tests; 101 E2E tests across Chromium, Firefox and WebKit",
+      "axe": "0 violations in Chromium, Firefox, WebKit",
       "screenshots": "tests/e2e/screenshots.spec.ts (SCREENSHOT_DIR), one capture per sky",
-      "budgets": "initial JS 95.8/100 KB gzip; CSS ~5 KB; LCP 536-552 ms (lab)"
+      "budgets": "initial JS 96.1/100 KB gzip; CSS ~6.9 KB; lab LCP 596 ms; CLS 0"
+    },
+    "skyControls": {
+      "ink": "--ink: the sky's ink; ghost buttons, pill outlines, notice borders, focus outlines and the 45% hero hairline are drawn in it.",
+      "onInk": "--on-ink: label on an ink fill (selected pills, units, primary Search, ghost hover). --sky-bottom on dark-ink skies; --sky-top on white-ink skies (rain, storm, night-clear, night-cloudy).",
+      "matchKnock": "--match-knock: knock-out tick of the good mark; --sky-top on the sky, #fff elsewhere.",
+      "idleSky": "Empty state: 'clear' from 6:00 to 18:59 local time (and before hydration), otherwise 'night-clear'.",
+      "hero": "width: 100vw; margin-inline: calc(50% - 50vw); min-height: calc(100svh - 62px)."
+    },
+    "brand": {
+      "favicon": "Chalk sun rising over a sand horizon and olive ground on a navy-to-slate rounded tile: favicon.svg, favicon.ico, apple-touch-icon.png.",
+      "themeColor": "#233651"
     }
   },
   "components": [
@@ -619,7 +703,7 @@
       "name": "Primary Button",
       "kind": "button",
       "refersTo": "button-primary",
-      "description": "The one primary action in a group (e.g. search submit).",
+      "description": "The one primary action in a group off the sky (e.g. search submit on the ground).",
       "html": "<button class=\"ds-btn-primary\">Search</button>",
       "css": ".ds-btn-primary{min-height:44px;padding:0 16px;font-family:var(--font-sans);font-size:.8125rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;border:1.5px solid var(--color-brand,#233651);border-radius:4px;background:var(--color-brand,#233651);color:#fff;cursor:pointer;transition:background-color 160ms cubic-bezier(.16,1,.3,1)}.ds-btn-primary:hover{background:var(--color-text,#1d2321);border-color:var(--color-text,#1d2321)}.ds-btn-primary:focus-visible{outline:3px solid var(--color-brand,#233651);outline-offset:2px}"
     },
@@ -651,9 +735,17 @@
       "name": "Sky Readout",
       "kind": "custom",
       "refersTo": "sky-readout",
-      "description": "Signature: place and temperature in Bebas capitals over the clear-day sky with its veil layer.",
+      "description": "Signature: place and temperature in Bebas capitals on the full-bleed clear-day sky, with its veil layer, the 45% ink hairline and the verdict below.",
       "html": "<div class=\"ds-sky\"><h2 class=\"ds-sky-place\"><span class=\"ds-sky-city\">London</span><span class=\"ds-sky-region\">England, United Kingdom</span></h2><div class=\"ds-sky-now\"><p class=\"ds-sky-temp\">11°C</p><p class=\"ds-sky-cond\">Mainly clear <span>Feels like 9°C</span></p></div></div>",
-      "css": ".ds-sky{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:12px 32px;padding:48px 24px 24px;color:var(--sky-clear-ink,#0e1e36);background:radial-gradient(120% 85% at 82% 118%,color-mix(in srgb,#fff 75%,transparent),transparent 62%),linear-gradient(180deg,var(--sky-clear-top,#5e95cc),var(--sky-clear-bottom,#d3e6f5))}.ds-sky-place{margin:0;font-weight:400}.ds-sky-city{display:block;font-family:var(--font-display);font-size:clamp(3.25rem,1.8rem + 7vw,6.5rem);line-height:.88;letter-spacing:.005em}.ds-sky-region{display:block;margin-top:8px;font-family:var(--font-sans);font-size:.875rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}.ds-sky-now{text-align:right}.ds-sky-now p{margin:0}.ds-sky-temp{font-family:var(--font-display);font-size:clamp(5rem,2.5rem + 11vw,10rem);line-height:.82;letter-spacing:-.01em}.ds-sky-cond{margin-top:8px!important;font-family:var(--font-sans);font-size:1.0625rem;font-weight:600}.ds-sky-cond span{font-weight:400;margin-left:12px}"
+      "css": ".ds-sky{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:12px 32px;padding:48px 24px 24px;color:var(--sky-clear-ink,#0e1e36);background:radial-gradient(120% 85% at 82% 118%,color-mix(in srgb,#fff 75%,transparent),transparent 62%),linear-gradient(180deg,var(--sky-clear-top,#5e95cc),var(--sky-clear-bottom,#d3e6f5))}.ds-sky-place{margin:0;font-weight:400}.ds-sky-city{display:block;font-family:var(--font-display);font-size:clamp(3.75rem,1.5rem + 9vw,8.5rem);line-height:.86;letter-spacing:.005em}.ds-sky-region{display:block;margin-top:8px;font-family:var(--font-sans);font-size:.875rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}.ds-sky-now{text-align:right}.ds-sky-now p{margin:0}.ds-sky-temp{font-family:var(--font-display);font-size:clamp(6rem,2.5rem + 16vw,14rem);line-height:.8;letter-spacing:-.01em}.ds-sky-cond{margin-top:8px!important;font-family:var(--font-sans);font-size:1.125rem;font-weight:600}.ds-sky-cond span{font-weight:400;margin-left:12px}"
+    },
+    {
+      "name": "Controls on the Sky",
+      "kind": "chip",
+      "refersTo": "pill-on-sky",
+      "description": "Units, activity pills and the primary Search on a white-ink sky (rain): drawn in --ink, chosen and primary filled with --ink and the --on-ink label; the notice is transparent with a 1.5px ink border.",
+      "html": "<div class=\"ds-skyc\"><fieldset class=\"ds-skyc-pills\"><legend>Units</legend><label><input type=\"radio\" name=\"ds-u\" checked><span>°C</span></label><label><input type=\"radio\" name=\"ds-u\"><span>°F</span></label></fieldset><div class=\"ds-skyc-row\"><input type=\"search\" aria-label=\"Search city or place\" placeholder=\"e.g. Utrecht\"><button>Search</button></div><button class=\"ds-skyc-ghost\">Change location</button></div>",
+      "css": ".ds-skyc{--ink:var(--sky-rain-ink,#fff);--on-ink:var(--sky-rain-top,#44546a);display:grid;gap:16px;padding:32px 24px;color:var(--ink);background:linear-gradient(180deg,var(--sky-rain-top,#44546a),var(--sky-rain-bottom,#56677a));font-family:var(--font-sans)}.ds-skyc-pills{border:0;margin:0;padding:0;display:flex;gap:8px}.ds-skyc-pills legend{width:100%;font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;padding:0}.ds-skyc-pills label{position:relative}.ds-skyc-pills input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer}.ds-skyc-pills span{display:inline-flex;align-items:center;justify-content:center;min-height:44px;min-width:44px;padding:0 12px;border:1.5px solid var(--ink);border-radius:999px;background:transparent;color:var(--ink);font-weight:600;transition:background-color 160ms cubic-bezier(.16,1,.3,1)}.ds-skyc-pills input:hover+span{background:color-mix(in srgb,var(--ink) 12%,transparent)}.ds-skyc-pills input:checked+span{background:var(--ink);color:var(--on-ink)}.ds-skyc-pills input:focus-visible+span{outline:3px solid var(--ink);outline-offset:2px}.ds-skyc-row{display:flex;flex-wrap:wrap;gap:8px}.ds-skyc-row input{flex:1 1 14rem;min-height:56px;padding:0 12px;font:inherit;font-size:1.125rem;color:var(--color-text,#1d2321);background:var(--color-surface,#fff);border:1px solid var(--ink);border-radius:4px}.ds-skyc button{min-height:44px;padding:0 16px;font:inherit;font-size:.8125rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;border:1.5px solid var(--ink);border-radius:4px;background:transparent;color:var(--ink);cursor:pointer;transition:background-color 160ms cubic-bezier(.16,1,.3,1),color 160ms cubic-bezier(.16,1,.3,1)}.ds-skyc-row button{min-height:56px;padding:0 24px;background:var(--ink);color:var(--on-ink)}.ds-skyc-ghost{justify-self:start}.ds-skyc-ghost:hover{background:var(--ink);color:var(--on-ink)}.ds-skyc :focus-visible{outline:3px solid var(--ink);outline-offset:2px}"
     },
     {
       "name": "Scoreboard Window Row",
@@ -667,9 +759,9 @@
       "name": "Hourly Tile",
       "kind": "custom",
       "refersTo": "hour-tile",
-      "description": "One stop in the next-24-hours strip; selected tile gets navy border, wash and inset underbar.",
-      "html": "<div class=\"ds-hours\"><button class=\"ds-hour\" aria-checked=\"true\" role=\"radio\"><span class=\"ds-hour-date\">Sun, Nov 15</span><span class=\"ds-hour-time\">8:00 AM</span><span>8°C feels like</span><span>60% precip.</span></button><button class=\"ds-hour\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\"><span class=\"ds-hour-time\">9:00 AM</span><span>9°C feels like</span><span>60% precip.</span></button></div>",
-      "css": ".ds-hours{display:flex;gap:8px}.ds-hour{display:grid;gap:2px;min-width:8.75rem;padding:12px;text-align:left;font-family:var(--font-sans);font-size:.875rem;color:var(--color-text,#1d2321);background:var(--color-surface,#fff);border:1.5px solid var(--color-control-border,#7a8794);border-radius:6px;cursor:pointer}.ds-hour:hover{background:var(--color-selected,#e7edf4);border-color:var(--color-brand,#233651)}.ds-hour[aria-checked=true]{border:2px solid var(--color-brand,#233651);background:var(--color-selected,#e7edf4);box-shadow:inset 0 -4px 0 var(--color-brand,#233651)}.ds-hour:focus-visible{outline:3px solid var(--color-brand,#233651);outline-offset:2px}.ds-hour-date{font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--color-text-secondary,#4a5662)}.ds-hour-time{font-family:var(--font-display);font-size:1.5rem;line-height:1;letter-spacing:.02em}"
+      "description": "One stop in the next-24-hours strip, led by a 2.5rem display feels-like temperature; selected tile gets navy border, wash and inset underbar.",
+      "html": "<div class=\"ds-hours\"><button class=\"ds-hour\" aria-checked=\"true\" role=\"radio\"><span class=\"ds-hour-time\"><span class=\"ds-hour-date\">Sun, Nov 15</span>8:00 AM</span><span class=\"ds-hour-temp\">8°C<span class=\"ds-hour-temp-label\"> feels like</span></span><span>60% precip.</span><span>12 km/h wind</span></button><button class=\"ds-hour\" role=\"radio\" aria-checked=\"false\" tabindex=\"-1\"><span class=\"ds-hour-time\">9:00 AM</span><span class=\"ds-hour-temp\">9°C<span class=\"ds-hour-temp-label\"> feels like</span></span><span>60% precip.</span><span>14 km/h wind</span></button></div>",
+      "css": ".ds-hours{display:flex;gap:8px}.ds-hour{display:grid;gap:2px;min-width:8.75rem;padding:12px;text-align:left;font-family:var(--font-sans);font-size:.875rem;color:var(--color-text,#1d2321);background:var(--color-surface,#fff);border:1.5px solid var(--color-control-border,#7a8794);border-radius:6px;cursor:pointer}.ds-hour:hover{background:var(--color-selected,#e7edf4);border-color:var(--color-brand,#233651)}.ds-hour[aria-checked=true]{border:2px solid var(--color-brand,#233651);background:var(--color-selected,#e7edf4);box-shadow:inset 0 -4px 0 var(--color-brand,#233651)}.ds-hour:focus-visible{outline:3px solid var(--color-brand,#233651);outline-offset:2px}.ds-hour-date{display:block;font-family:var(--font-sans);margin-bottom:2px;font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--color-text-secondary,#4a5662)}.ds-hour-time{font-family:var(--font-display);font-size:1.5rem;line-height:1;letter-spacing:.02em}.ds-hour-temp{margin:4px 0 2px;font-family:var(--font-display);font-size:2.5rem;line-height:.9;letter-spacing:.01em}.ds-hour-temp-label{display:block;margin-top:2px;font-family:var(--font-sans);font-size:.75rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--color-text-secondary,#4a5662)}"
     },
     {
       "name": "Concern Notice",
@@ -682,11 +774,11 @@
   ],
   "narrative": {
     "northStar": "The Scoreboard Against the Sky",
-    "overview": "**Creative North Star: \"The Scoreboard Against the Sky\"**\n\nThe answer is a scoreboard set against the sky. The place and the current temperature stand in huge condensed capitals over a full-bleed band whose colours are today's weather: blue for a clear day, grey for cloud, slate with fine diagonal streaks for rain, near-black for a storm, deep navy at night. Under the sky, the next-hour verdict uses the same display capitals and gives two plain reasons. This rejects the category default, a small icon-and-number weather card. The weather is the hero, and the tool works as a tool from the first viewport down. The look follows the owner-pinned Dutchblue reference (2026-11-12) and replaces the earlier calm green editorial world.\n\nTwo typefaces split the work. Bebas Neue capitals carry every display line: the wordmark, the place, the temperature, the verdict, section titles, and the times in the window rows and hourly tiles. The system sans carries everything people read: reasons, measurements, labels and controls. The ground is cool and pale with white surfaces and charcoal ink. Navy marks selection and action, slate is the secondary ink, and warm sand appears only as hairline detail. One full-bleed charcoal-olive band holds the planning section. Choices are pills that fill with navy when selected. Actions are thin outlined ghost buttons. Status is shown by drawn SVG marks next to words.\n\nThe page is dense but calm. Dividers and two full-bleed bands do the structuring, so there are no nested cards and no elevation shadows. Motion is limited to one event: when the conditions change, the sky moves to its new colours.",
+    "overview": "**Creative North Star: \"The Scoreboard Against the Sky\"**\n\nThe answer is a scoreboard set against the sky. The whole first screen below the slim header is a full-bleed sky whose colours are today's weather: blue for a clear day, grey for cloud, slate with falling streaks for rain, near-black for a storm, deep navy with stars at night. The place and the current temperature stand on it in huge condensed capitals, and the next-hour verdict follows on the same sky in the same display capitals with two plain reasons. Before a place is chosen, the sky is the visitor's own day or night and carries the question \"How's it outside?\" at full scale, with the search set into it. This rejects the category default, a small icon-and-number weather card. The weather is the hero, and the tool works as a tool from the first viewport down. The look follows the owner-pinned Dutchblue reference (2026-11-12) and replaces the earlier calm green editorial world. The bolder pass of 2026-11-12 follows three owner answers: \"Both screens\" should stop feeling blank, \"Sky fills first screen\", and \"Slow ambient motion\".\n\nTwo typefaces split the work. Bebas Neue capitals carry every display line: the wordmark, the empty-state headline, the place, the temperature, the verdict, section titles, the Now numbers, and the times and temperatures in the window rows and hourly tiles. The system sans carries everything people read: the lede, reasons, measurements, labels and controls. Below the sky the ground is cool and pale with white surfaces and charcoal ink. Navy marks selection and action there, slate is the secondary ink, and warm sand appears only as hairline detail. On the sky, every control takes that sky's ink instead. One full-bleed charcoal-olive band holds the planning section. Choices are pills that fill when selected. Actions are thin outlined ghost buttons. Status is shown by drawn SVG marks next to words.\n\nBelow the sky the page is dense but calm. Dividers and two full-bleed bands do the structuring, so there are no nested cards and no elevation shadows. The sky moves in two ways: its colours transition when the conditions change, and a slow ambient layer (cloud drift, rain, snow, star twinkle) runs in CSS for visitors who have not asked for reduced motion. The motion never carries meaning.",
     "keyCharacteristics": [
-      "A weather-aware CSS sky behind the place and temperature: nine skies, each a two-stop gradient plus a veil layer drawn for that weather.",
+      "A weather-aware CSS sky that fills the first screen: nine skies, each a two-stop gradient, a veil layer drawn for that weather, and an optional slow ambient layer.",
       "Bebas Neue for display only, self-hosted and preloaded. All reading text uses the system sans.",
-      "Pills for choices, ghost buttons for actions, and the navy fill means \"chosen\".",
+      "Pills for choices, ghost buttons for actions, and a fill means \"chosen\": navy on the ground, the sky's ink on the sky, chalk on the band.",
       "One charcoal-olive planning band with sand hairlines between scoreboard rows.",
       "Drawn status marks and words together, never colour alone. Every token pair is contrast-tested."
     ],
@@ -697,8 +789,8 @@
         "section": "colors"
       },
       {
-        "name": "The Navy Means Chosen Rule",
-        "body": "Navy fill is reserved for \"this is selected\" and \"this is the primary action\". Do not use it for decoration.",
+        "name": "The Ink Means Chosen Rule",
+        "body": "A filled control means \"this is selected\" or \"this is the primary action\". Off the sky the fill is navy with a white label; on the sky it is the sky's ink with the `--on-ink` label; on the band it is chalk with an olive label. Do not use a fill for decoration.",
         "section": "colors"
       },
       {
@@ -713,28 +805,29 @@
       },
       {
         "name": "The Label Follows Rule",
-        "body": "Uppercase sans labels name a field, a term or a group (legend, `dt`, a rank under a time). They never sit above a heading as an invented tagline.",
+        "body": "Uppercase sans labels name a field, a term or a group (legend, `dt`, a rank under a time, \"feels like\" under a temperature). They never sit above a heading as an invented tagline.",
         "section": "typography"
       },
       {
         "name": "The Bands Not Boxes Rule",
-        "body": "Separate regions with a full-bleed band, a divider or a white field. Do not lift them with shadows or nest them as cards.",
+        "body": "Separate regions with a full-bleed band, a hairline, a divider or a white field. On the sky, group with a hairline in the sky's ink, never a panel. Do not lift regions with shadows or nest them as cards.",
         "section": "elevation"
       }
     ],
     "dos": [
       "**Do** use Bebas Neue at weight 400 for display lines only, and the system sans for all reading text.",
-      "**Do** keep the temperature at `clamp(5rem, 2.5rem + 11vw, 10rem)` and the place at `clamp(3.25rem, 1.8rem + 7vw, 6.5rem)` in the readout.",
-      "**Do** add any new sky as a top stop, bottom stop, veil colour, veil strength and ink in tokens.css, and extend `tests/unit/contrast.test.ts` so the ink is checked against both stops, with no veil and fully veiled.",
-      "**Do** use navy fill only for the selected state and the single primary action.",
+      "**Do** keep the readout at the `display-temperature` and `display-place` sizes and the empty-state headline at `display-hero`.",
+      "**Do** add any new sky as a top stop, bottom stop, veil colour, veil strength and ink in tokens.css, set its `--on-ink` (the lighter stop under a dark ink, the darker stop under a white ink), and extend `tests/unit/contrast.test.ts` so the ink is checked against both stops, with no veil and fully veiled.",
+      "**Do** draw every control on the sky in the sky's ink; at rest, fill only the chosen pill and the primary action, with the `--on-ink` label.",
+      "**Do** use navy fill off the sky only for the selected state and the single primary action.",
       "**Do** pair every status colour with a drawn SVG mark and a word.",
-      "**Do** keep every control at least 44×44px and give it a steel (≥3:1) boundary.",
-      "**Do** turn off transitions under `prefers-reduced-motion` and fall back to Canvas/CanvasText in forced colours."
+      "**Do** keep every control at least 44×44px and give it a ≥3:1 boundary (steel off the sky, ink on it).",
+      "**Do** keep ambient sky motion slow, CSS only, inside `prefers-reduced-motion: no-preference`, hidden in forced colours, and free of meaning."
     ],
     "donts": [
-      "**Don't** use gradients outside the sky (the timeline's edge-fade mask is an overflow cue, not decoration).",
-      "**Don't** animate the sky continuously. It moves only when the conditions change.",
-      "**Don't** add elevation shadows or nested cards. Use bands, dividers and white fields.",
+      "**Don't** use gradients outside the sky (the timeline's edge-fade mask and the star mask are overflow and fade cues, not decoration).",
+      "**Don't** add sky motion beyond the slow ambient set (cloud drift, rain, snow, star twinkle), animate it in JavaScript, or let it signal anything.",
+      "**Don't** add elevation shadows or nested cards. Use bands, hairlines, dividers and white fields.",
       "**Don't** use Unicode glyphs or icon fonts for status, or a thick side stripe for notices.",
       "**Don't** use sand as text on light ground, or the divider as the only edge of a control.",
       "**Don't** request fonts or icons from a CDN.",

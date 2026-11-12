@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### Bolder pass (12 November 2026)
+- The first screen is now the sky: a giant "How's it outside?" over a day or night sky before a place is chosen; city, a huge temperature, the verdict and activities on the place's own sky after.
+- Slow ambient motion: drifting cloud banks, falling rain and snow, twinkling stars; off with reduced motion.
+- Controls, pills and warnings on the sky take the sky's own colours; Now becomes scoreboard numbers; hours lead with large temperatures.
+- After choosing a place the page returns to the top of the new sky.
+
 ### Redesign (12 November 2026)
 - New look after the Dutchblue site reference: place and temperature in self-hosted Bebas Neue capitals over a CSS sky that changes with the weather (clear, cloudy, rain, snow, storm, fog, night).
 - Navy pills for choices, thin outlined buttons for actions, a full-bleed charcoal band for best times shown as scoreboard rows, drawn status marks.

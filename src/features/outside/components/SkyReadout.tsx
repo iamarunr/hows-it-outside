@@ -1,13 +1,11 @@
 import type { Ref } from 'react';
 import { currentIsUsable } from '../../../domain/freshness';
-import type { SkyId } from '../../../domain/sky';
 import type { CurrentConditions } from '../../../domain/types';
 import { conditionText } from '../../../domain/weatherCodes';
 import { formatTemperature, type UnitSystem } from '../../../lib/units';
 
 type Props = {
   label: string;
-  sky: SkyId;
   current: CurrentConditions | null;
   units: UnitSystem;
   now: number;
@@ -15,10 +13,10 @@ type Props = {
 };
 
 /**
- * The scoreboard: place and temperature in display capitals over a sky that
- * reflects the current weather. The sky is decorative; every fact is text.
+ * The scoreboard: place and temperature in display capitals, set into the
+ * sky hero. The sky is decorative; every fact is text.
  */
-export function SkyReadout({ label, sky, current, units, now, headingRef }: Props) {
+export function SkyReadout({ label, current, units, now, headingRef }: Props) {
   const [city, ...rest] = label.split(',').map((s) => s.trim());
   const region = rest.join(', ');
   const usable = current !== null && currentIsUsable(current.time, now) === 'ok';
@@ -26,8 +24,7 @@ export function SkyReadout({ label, sky, current, units, now, headingRef }: Prop
   const feels = usable ? formatTemperature(current.feelsLikeC, units) : null;
 
   return (
-    <div className="sky" data-sky={sky}>
-      <div className="sky-inner">
+    <div className="readout">
         <h2
           id="weather-heading"
           ref={headingRef}
@@ -51,7 +48,6 @@ export function SkyReadout({ label, sky, current, units, now, headingRef }: Prop
             {usable ? conditionText(current.weatherCode) : 'Current conditions unavailable'}
             {feels !== null && <span className="readout-feels">Feels like {feels}</span>}
           </p>
-        </div>
       </div>
     </div>
   );

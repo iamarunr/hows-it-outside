@@ -1,16 +1,5 @@
 /* The weather tool: scoreboard over a live sky, pills for choices, a charcoal planning band. */
 
-/* Once a place is chosen the page question is answered by the readout: keep it for assistive tech only. */
-main:has(.weather) > h1 {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-}
-
 fieldset {
   border: 0;
   margin: 0;
@@ -26,22 +15,21 @@ legend {
   padding: 0;
 }
 
-/* Location row */
-.location-row {
+/* Hero toolbar: place controls and units, set on the sky. */
+.hero-toolbar {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-3);
+  gap: var(--space-3) var(--space-5);
   align-items: flex-end;
   justify-content: space-between;
-  padding-block: var(--space-3);
 }
-.location-row .location {
-  flex: 1 1 14rem;
+.hero-toolbar .location {
+  flex: 1 1 18rem;
 }
-.location-row:has(.location-current) {
+.hero-toolbar:has(.location-current) {
   align-items: center;
 }
-.location-row:has(.location-current) .location {
+.hero-toolbar:has(.location-current) .location {
   flex: 0 1 auto;
 }
 .location {
@@ -172,7 +160,11 @@ legend {
   padding: 0 var(--space-3);
 }
 
-/* The sky. Registered colors let the gradient itself move when conditions change. */
+/*
+ * The sky hero: the first screen is the weather. Registered colours let the gradient move when
+ * conditions change; per-sky veil layers draw clouds, glow, banding and mist; a second layer
+ * carries slow ambient motion (drift, rain, snow, stars) that stops for reduced-motion users.
+ */
 @property --sky-top {
   syntax: '<color>';
   inherits: true;
@@ -184,34 +176,27 @@ legend {
   initial-value: #d6dde3;
 }
 .sky {
+  /* Label colour on an ink fill: the lighter stop on dark-ink skies, the darker stop on white-ink skies. */
+  --on-ink: var(--sky-bottom);
   --sky-top: var(--sky-unknown-top);
   --sky-bottom: var(--sky-unknown-bottom);
+  --ink: var(--sky-unknown-ink);
   --veil: color-mix(in srgb, var(--sky-unknown-veil) var(--sky-unknown-veil-strength), transparent);
-  --sky-layers: radial-gradient(60% 55% at 20% 40%, var(--veil), transparent 70%),
-    radial-gradient(50% 45% at 75% 30%, var(--veil), transparent 70%);
+  --sky-layers: radial-gradient(300px 85px at 330px 32%, var(--veil), transparent 70%),
+    radial-gradient(180px 68px at 420px 28%, var(--veil), transparent 70%),
+    radial-gradient(165px 59px at 234px 35%, var(--veil), transparent 70%),
+    radial-gradient(270px 78px at 990px 22%, var(--veil), transparent 70%),
+    radial-gradient(162px 62px at 1071px 18%, var(--veil), transparent 70%),
+    radial-gradient(148px 55px at 904px 25%, var(--veil), transparent 70%);
   position: relative;
   isolation: isolate;
-  color: var(--sky-unknown-ink);
+  overflow: hidden;
+  color: var(--ink);
   background: linear-gradient(180deg, var(--sky-top), var(--sky-bottom));
-  border-image: linear-gradient(180deg, var(--sky-top), var(--sky-bottom)) fill 0 / / 0 100vw;
-  padding-block: clamp(var(--space-7), 9vw, 7.5rem) clamp(var(--space-5), 4vw, var(--space-7));
   transition:
     --sky-top 1200ms var(--ease-out),
     --sky-bottom 1200ms var(--ease-out),
     color 600ms var(--ease-out);
-}
-/* Weather layers (clouds, glow, banding) painted full-bleed behind the readout. */
-.sky::before {
-  content: '';
-  position: absolute;
-  inset: 0 calc(50% - 50vw);
-  z-index: -1;
-  background: var(--sky-layers);
-  pointer-events: none;
-}
-.sky ::selection {
-  background: currentColor;
-  color: var(--sky-top);
 }
 .sky[data-sky='clear'] {
   --veil: color-mix(in srgb, var(--sky-clear-veil) var(--sky-clear-veil-strength), transparent);
@@ -220,25 +205,33 @@ legend {
     linear-gradient(180deg, transparent 55%, color-mix(in srgb, var(--veil) 50%, transparent) 100%);
   --sky-top: var(--sky-clear-top);
   --sky-bottom: var(--sky-clear-bottom);
-  color: var(--sky-clear-ink);
+  --ink: var(--sky-clear-ink);
 }
 .sky[data-sky='cloudy'] {
   --veil: color-mix(in srgb, var(--sky-cloudy-veil) var(--sky-cloudy-veil-strength), transparent);
-  --sky-layers: radial-gradient(38% 34% at 12% 34%, var(--veil), transparent 70%),
-    radial-gradient(30% 28% at 40% 18%, var(--veil), transparent 70%),
-    radial-gradient(42% 40% at 72% 42%, var(--veil), transparent 70%),
-    radial-gradient(36% 30% at 96% 20%, var(--veil), transparent 70%);
+  --sky-layers: radial-gradient(330px 95px at 320px 28%, var(--veil), transparent 70%),
+    radial-gradient(198px 76px at 419px 24%, var(--veil), transparent 70%),
+    radial-gradient(182px 66px at 214px 31%, var(--veil), transparent 70%),
+    radial-gradient(270px 72px at 860px 15%, var(--veil), transparent 70%),
+    radial-gradient(162px 58px at 941px 11%, var(--veil), transparent 70%),
+    radial-gradient(148px 50px at 774px 18%, var(--veil), transparent 70%),
+    radial-gradient(300px 82px at 1130px 46%, var(--veil), transparent 70%),
+    radial-gradient(180px 66px at 1220px 42%, var(--veil), transparent 70%),
+    radial-gradient(165px 57px at 1034px 49%, var(--veil), transparent 70%),
+    radial-gradient(240px 60px at 600px 60%, color-mix(in srgb, var(--veil) 60%, transparent), transparent 70%),
+    radial-gradient(144px 48px at 672px 56%, color-mix(in srgb, var(--veil) 60%, transparent), transparent 70%),
+    radial-gradient(132px 42px at 523px 63%, color-mix(in srgb, var(--veil) 60%, transparent), transparent 70%);
   --sky-top: var(--sky-cloudy-top);
   --sky-bottom: var(--sky-cloudy-bottom);
-  color: var(--sky-cloudy-ink);
+  --ink: var(--sky-cloudy-ink);
 }
 .sky[data-sky='rain'] {
   --veil: color-mix(in srgb, var(--sky-rain-veil) var(--sky-rain-veil-strength), transparent);
-  --sky-layers: linear-gradient(180deg, transparent 45%, var(--veil) 100%),
-    repeating-linear-gradient(105deg, transparent 0 22px, color-mix(in srgb, var(--veil) 45%, transparent) 22px 23px);
+  --sky-layers: linear-gradient(180deg, transparent 45%, var(--veil) 100%);
   --sky-top: var(--sky-rain-top);
   --sky-bottom: var(--sky-rain-bottom);
-  color: var(--sky-rain-ink);
+  --ink: var(--sky-rain-ink);
+  --on-ink: var(--sky-top);
 }
 .sky[data-sky='snow'] {
   --veil: color-mix(in srgb, var(--sky-snow-veil) var(--sky-snow-veil-strength), transparent);
@@ -246,43 +239,309 @@ legend {
     radial-gradient(35% 30% at 20% 25%, color-mix(in srgb, var(--veil) 60%, transparent), transparent 70%);
   --sky-top: var(--sky-snow-top);
   --sky-bottom: var(--sky-snow-bottom);
-  color: var(--sky-snow-ink);
+  --ink: var(--sky-snow-ink);
 }
 .sky[data-sky='storm'] {
   --veil: color-mix(in srgb, var(--sky-storm-veil) var(--sky-storm-veil-strength), transparent);
-  --sky-layers: radial-gradient(55% 60% at 25% -10%, var(--veil), transparent 70%),
-    radial-gradient(50% 55% at 80% -5%, var(--veil), transparent 70%),
+  --sky-layers: radial-gradient(430px 140px at 320px 6%, var(--veil), transparent 70%),
+    radial-gradient(258px 112px at 449px 2%, var(--veil), transparent 70%),
+    radial-gradient(237px 98px at 182px 9%, var(--veil), transparent 70%),
+    radial-gradient(410px 130px at 980px 2%, var(--veil), transparent 70%),
+    radial-gradient(246px 104px at 1103px -2%, var(--veil), transparent 70%),
+    radial-gradient(226px 91px at 849px 5%, var(--veil), transparent 70%),
     linear-gradient(180deg, transparent 60%, var(--veil) 100%);
   --sky-top: var(--sky-storm-top);
   --sky-bottom: var(--sky-storm-bottom);
-  color: var(--sky-storm-ink);
+  --ink: var(--sky-storm-ink);
+  --on-ink: var(--sky-top);
 }
 .sky[data-sky='fog'] {
   --veil: color-mix(in srgb, var(--sky-fog-veil) var(--sky-fog-veil-strength), transparent);
   --sky-layers: linear-gradient(180deg, transparent 15%, var(--veil) 35%, transparent 55%, var(--veil) 80%, transparent 100%);
   --sky-top: var(--sky-fog-top);
   --sky-bottom: var(--sky-fog-bottom);
-  color: var(--sky-fog-ink);
+  --ink: var(--sky-fog-ink);
 }
 .sky[data-sky='night-clear'] {
   --veil: color-mix(in srgb, var(--sky-night-clear-veil) var(--sky-night-clear-veil-strength), transparent);
   --sky-layers: linear-gradient(180deg, var(--veil) 0%, transparent 65%);
   --sky-top: var(--sky-night-clear-top);
   --sky-bottom: var(--sky-night-clear-bottom);
-  color: var(--sky-night-clear-ink);
+  --ink: var(--sky-night-clear-ink);
+  --on-ink: var(--sky-top);
 }
 .sky[data-sky='night-cloudy'] {
   --veil: color-mix(in srgb, var(--sky-night-cloudy-veil) var(--sky-night-cloudy-veil-strength), transparent);
   --sky-layers: linear-gradient(180deg, var(--veil) 0%, transparent 60%),
-    radial-gradient(45% 35% at 70% 30%, color-mix(in srgb, var(--veil) 60%, transparent), transparent 70%);
+    radial-gradient(320px 85px at 420px 26%, color-mix(in srgb, var(--veil) 60%, transparent), transparent 70%),
+    radial-gradient(192px 68px at 516px 22%, color-mix(in srgb, var(--veil) 60%, transparent), transparent 70%),
+    radial-gradient(176px 59px at 318px 29%, color-mix(in srgb, var(--veil) 60%, transparent), transparent 70%),
+    radial-gradient(260px 70px at 1050px 40%, color-mix(in srgb, var(--veil) 60%, transparent), transparent 70%),
+    radial-gradient(156px 56px at 1128px 36%, color-mix(in srgb, var(--veil) 60%, transparent), transparent 70%),
+    radial-gradient(143px 49px at 967px 43%, color-mix(in srgb, var(--veil) 60%, transparent), transparent 70%);
   --sky-top: var(--sky-night-cloudy-top);
   --sky-bottom: var(--sky-night-cloudy-bottom);
-  color: var(--sky-night-cloudy-ink);
+  --ink: var(--sky-night-cloudy-ink);
+  --on-ink: var(--sky-top);
+}
+/* Static weather layer (doubled in width so drifting skies can loop seamlessly). */
+.sky::before,
+.sky::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+}
+.sky::before {
+  inset: 0;
+  background: var(--sky-layers);
+  background-size: 1400px 100%;
+  background-repeat: repeat-x;
+}
+.sky[data-sky='clear']::before,
+.sky[data-sky='rain']::before,
+.sky[data-sky='snow']::before,
+.sky[data-sky='fog']::before,
+.sky[data-sky='night-clear']::before {
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+/* Particle layer: rain streaks, snowflakes, stars. */
+.sky[data-sky='rain']::after,
+.sky[data-sky='storm']::after {
+  inset: -100% 0 0;
+  background: repeating-linear-gradient(
+    104deg,
+    transparent 0 26px,
+    color-mix(in srgb, var(--ink) 22%, transparent) 26px 27px,
+    transparent 27px 61px
+  );
+  background-size: 100% 140px;
+}
+.sky[data-sky='snow']::after {
+  inset: 0;
+  background:
+    radial-gradient(circle at 37px 61px, #fff 0 2.4px, transparent 2.9px),
+    radial-gradient(circle at 151px 23px, #fff 0 1.6px, transparent 2.1px),
+    radial-gradient(circle at 91px 167px, #fff 0 1.1px, transparent 1.6px),
+    radial-gradient(circle at 203px 77px, #fff 0 1.8px, transparent 2.3px),
+    radial-gradient(circle at 19px 229px, #fff 0 1.3px, transparent 1.8px),
+    radial-gradient(circle at 241px 149px, #fff 0 2.0px, transparent 2.5px),
+    radial-gradient(circle at 127px 293px, #fff 0 1.2px, transparent 1.7px),
+    radial-gradient(circle at 311px 41px, #fff 0 1.7px, transparent 2.2px),
+    radial-gradient(circle at 61px 353px, #fff 0 1.4px, transparent 1.9px);
+  background-size: 173px 173px, 199px 199px, 227px 227px, 251px 251px, 283px 283px, 307px 307px, 337px 337px, 367px 367px, 397px 397px;
+  opacity: 0.85;
+}
+.sky[data-sky='night-clear']::after,
+.sky[data-sky='night-cloudy']::after {
+  inset: 0;
+  background:
+    radial-gradient(circle at 43px 59px, #fff 0 1.1px, transparent 1.6px),
+    radial-gradient(circle at 181px 97px, #fff 0 0.8px, transparent 1.3px),
+    radial-gradient(circle at 109px 17px, #fff 0 1.3px, transparent 1.8px),
+    radial-gradient(circle at 271px 191px, #fff 0 0.9px, transparent 1.4px),
+    radial-gradient(circle at 23px 233px, #fff 0 0.7px, transparent 1.2px),
+    radial-gradient(circle at 317px 41px, #fff 0 1.0px, transparent 1.5px),
+    radial-gradient(circle at 149px 311px, #fff 0 0.8px, transparent 1.3px),
+    radial-gradient(circle at 379px 163px, #fff 0 1.2px, transparent 1.7px),
+    radial-gradient(circle at 67px 401px, #fff 0 0.7px, transparent 1.2px);
+  background-size: 197px 197px, 223px 223px, 263px 263px, 293px 293px, 331px 331px, 359px 359px, 389px 389px, 419px 419px, 449px 449px;
+  opacity: 0.5;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, transparent 55%);
+  mask-image: linear-gradient(180deg, #000 0%, transparent 55%);
+}
+.sky[data-sky='night-cloudy']::after {
+  opacity: 0.25;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .sky[data-sky='cloudy']::before,
+  .sky[data-sky='storm']::before,
+  .sky[data-sky='night-cloudy']::before,
+  .sky[data-sky='unknown']::before,
+  .sky:not([data-sky])::before {
+    animation: sky-drift 160s linear infinite;
+  }
+  .sky[data-sky='storm']::before {
+    animation-duration: 75s;
+  }
+  .sky[data-sky='rain']::after,
+  .sky[data-sky='storm']::after {
+    animation: sky-fall 1.4s linear infinite;
+  }
+  .sky[data-sky='snow']::after {
+    animation: sky-snow 22s linear infinite;
+  }
+  .sky[data-sky='night-clear']::after,
+  .sky[data-sky='night-cloudy']::after {
+    animation: sky-twinkle 7s ease-in-out infinite alternate;
+  }
+}
+@keyframes sky-drift {
+  to {
+    background-position-x: -1400px;
+  }
+}
+@keyframes sky-fall {
+  to {
+    transform: translateY(140px);
+  }
+}
+@keyframes sky-snow {
+  to {
+    background-position:
+      0 173px,
+      0 199px,
+      0 227px,
+      0 251px,
+      0 283px,
+      0 307px,
+      0 337px,
+      0 367px,
+      0 397px;
+  }
+}
+@keyframes sky-twinkle {
+  from {
+    opacity: 0.25;
+  }
+  to {
+    opacity: 0.6;
+  }
+}
+.sky ::selection {
+  background: var(--ink);
+  color: var(--sky-top);
 }
 .sky :focus-visible {
-  outline-color: currentColor;
+  outline-color: var(--ink);
 }
-.sky-inner {
+
+/* Full-bleed first screen. */
+.sky-hero {
+  width: 100vw;
+  margin-inline: calc(50% - 50vw);
+  min-height: calc(100svh - 62px);
+  display: flex;
+}
+.hero-inner {
+  width: 100%;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: var(--space-5) clamp(var(--space-4), 4vw, var(--space-6)) clamp(var(--space-6), 5vw, var(--space-7));
+  display: flex;
+  flex-direction: column;
+  gap: clamp(var(--space-5), 4vw, var(--space-7));
+}
+.hero-results {
+  justify-content: space-between;
+}
+.sky-hero-idle .hero-inner {
+  justify-content: center;
+  gap: var(--space-5);
+}
+.hero-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(4.75rem, 1.5rem + 15vw, 14rem);
+  line-height: 0.84;
+  letter-spacing: 0.005em;
+}
+.hero-title span {
+  display: block;
+}
+.hero-lede {
+  margin: 0;
+  max-width: 34rem;
+  font-size: clamp(1.0625rem, 1rem + 0.4vw, 1.3125rem);
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+/* Controls on the sky adopt its ink, so every sky keeps tested contrast. */
+.sky button {
+  color: var(--ink);
+}
+@media (hover: hover) {
+  .sky button:hover:not(:disabled) {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--on-ink);
+  }
+}
+.sky .search-row button[type='submit'] {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--on-ink);
+}
+.sky input[type='search'] {
+  border-color: var(--ink);
+}
+.sky .search-results button {
+  color: var(--color-text);
+  background: var(--color-surface);
+  border-color: transparent;
+}
+.sky .hint,
+.sky .location-kind,
+.sky .summary-when {
+  color: inherit;
+}
+.sky .segmented-option > span {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--ink);
+}
+@media (hover: hover) {
+  .sky .segmented-option input:hover + span {
+    background: color-mix(in srgb, var(--ink) 12%, transparent);
+  }
+}
+.sky .segmented-option input:checked + span {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--on-ink);
+}
+.sky .segmented-option input:focus-visible + span {
+  outline-color: var(--ink);
+}
+.sky .summary .summary-icon {
+  color: currentColor;
+  --match-knock: var(--sky-top);
+}
+.sky .notice,
+.sky .notice-concern,
+.sky .notice-mixed {
+  color: var(--ink);
+  background: transparent;
+  border: 1.5px solid var(--ink);
+}
+.sky .notice button {
+  color: var(--ink);
+}
+.sky-hero .location-panel {
+  max-width: 38rem;
+}
+.sky-hero-idle .hero-toolbar {
+  flex-direction: column;
+  align-items: flex-start;
+}
+.sky-hero-idle .hero-toolbar .location {
+  flex: none;
+  width: 100%;
+}
+.sky-hero-idle .search-row input {
+  min-height: 56px;
+  font-size: 1.125rem;
+}
+.sky-hero-idle .search-row button {
+  min-height: 56px;
+  padding-inline: var(--space-5);
+}
+
+/* Readout: place and temperature. */
+.readout {
   display: grid;
   gap: var(--space-3) var(--space-6);
   align-items: end;
@@ -295,8 +554,8 @@ legend {
 .readout-city {
   display: block;
   font-family: var(--font-display);
-  font-size: clamp(3.25rem, 1.8rem + 7vw, 6.5rem);
-  line-height: 0.88;
+  font-size: clamp(3.75rem, 1.5rem + 9vw, 8.5rem);
+  line-height: 0.86;
   letter-spacing: 0.005em;
 }
 .readout-region {
@@ -313,8 +572,8 @@ legend {
 }
 .readout-temp {
   font-family: var(--font-display);
-  font-size: clamp(5rem, 2.5rem + 11vw, 10rem);
-  line-height: 0.82;
+  font-size: clamp(6rem, 2.5rem + 16vw, 14rem);
+  line-height: 0.8;
   letter-spacing: -0.01em;
 }
 .readout-condition {
@@ -322,14 +581,14 @@ legend {
   flex-wrap: wrap;
   gap: 0 var(--space-3);
   margin-top: var(--space-2) !important;
-  font-size: 1.0625rem;
+  font-size: 1.125rem;
   font-weight: 600;
 }
 .readout-feels {
   font-weight: 400;
 }
 @media (min-width: 720px) {
-  .sky-inner {
+  .readout {
     grid-template-columns: minmax(0, 1fr) auto;
   }
   .readout-now {
@@ -337,6 +596,26 @@ legend {
   }
   .readout-condition {
     justify-content: flex-end;
+  }
+}
+
+/* Verdict and activity, on the sky. */
+.hero-verdict {
+  display: grid;
+  gap: var(--space-4) var(--space-7);
+  padding-top: var(--space-5);
+  border-top: 1px solid color-mix(in srgb, var(--ink) 45%, transparent);
+}
+.hero-verdict .summary {
+  padding: 0;
+}
+.hero-verdict .segmented {
+  margin: 0;
+}
+@media (min-width: 900px) {
+  .hero-verdict {
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    align-items: end;
   }
 }
 
@@ -402,27 +681,39 @@ legend {
   margin: 0 0 var(--space-2);
 }
 
-/* Now */
+/* Now: scoreboard numbers under the sky. */
 .now {
-  padding-block: var(--space-4);
+  padding-block: var(--space-6) var(--space-5);
+  display: grid;
+  gap: var(--space-3) var(--space-7);
+  border-bottom: 1px solid var(--color-divider);
+}
+@media (min-width: 760px) {
+  .now {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+  }
+}
+.now .metrics {
+  grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr));
 }
 .now h3,
 .next-24 h3 {
   font-family: var(--font-display);
   font-weight: 400;
-  font-size: 2rem;
-  line-height: 1;
-  letter-spacing: 0.02em;
-  margin: 0 0 var(--space-3);
+  font-size: clamp(2.5rem, 1.6rem + 3.5vw, 4.25rem);
+  line-height: 0.92;
+  letter-spacing: 0.01em;
+  margin: 0;
 }
-.now-condition {
-  font-weight: 700;
-  margin: 0 0 var(--space-2);
+.now .hint {
+  grid-column: 1 / -1;
+  margin: 0;
 }
 .metrics {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
-  gap: var(--space-3) var(--space-4);
+  gap: var(--space-3) var(--space-5);
   margin: 0;
 }
 .metrics dt {
@@ -437,44 +728,20 @@ legend {
   font-size: 1.25rem;
   font-weight: 600;
 }
-
-/* Overview: verdict and activity left, Now right on wide screens; reading order unchanged. */
-.overview {
-  border-bottom: 1px solid var(--color-divider);
-  padding-bottom: var(--space-4);
-}
-@media (min-width: 900px) {
-  .overview {
-    display: grid;
-    grid-template-columns: minmax(0, 3fr) minmax(17rem, 2fr);
-    grid-template-areas:
-      'summary now'
-      'activity now';
-    column-gap: var(--space-7);
-    align-items: start;
-  }
-  .overview > .summary {
-    grid-area: summary;
-  }
-  .overview > .segmented {
-    grid-area: activity;
-  }
-  .overview > .now {
-    grid-area: now;
-    margin-top: var(--space-5);
-    padding: var(--space-4) 0 0 var(--space-5);
-    border-left: 1px solid var(--color-divider);
-  }
-  .overview .metrics {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+.now .metrics dd {
+  white-space: nowrap;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.25rem, 1.7rem + 2vw, 3.25rem);
+  line-height: 1;
+  letter-spacing: 0.01em;
 }
 
 /* Planning band: full-bleed charcoal-olive, light ink, sand accents. */
 .best-windows {
-  --band-pad: clamp(var(--space-6), 5vw, var(--space-7));
+  --band-pad: clamp(var(--space-7), 7vw, 6rem);
   position: relative;
-  margin-top: var(--space-6);
+  margin-top: 0;
   padding-block: var(--band-pad);
   color: var(--color-band-text);
   background: var(--color-band);
@@ -718,6 +985,23 @@ legend {
   font-size: 0.8125rem;
   margin: 2px 0;
 }
+.hour-temp {
+  margin: var(--space-1) 0 2px;
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  line-height: 0.9;
+  letter-spacing: 0.01em;
+}
+.hour-temp-label {
+  display: block;
+  margin-top: 2px;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
 .hour-details {
   margin-top: var(--space-3);
   padding: var(--space-5);
@@ -853,8 +1137,21 @@ legend {
     background: Canvas;
     color: CanvasText;
   }
-  .sky::before {
+  .sky::before,
+  .sky::after {
     display: none;
+  }
+  .sky .segmented-option > span,
+  .sky .segmented-option input:checked + span,
+  .sky button,
+  .sky .search-row button[type='submit'] {
+    background: ButtonFace;
+    color: ButtonText;
+    border-color: ButtonText;
+  }
+  .sky .segmented-option > span *,
+  .sky button * {
+    color: ButtonText;
   }
   .best-windows *,
   .sky *,
@@ -865,4 +1162,12 @@ legend {
   .timeline-scroll {
     mask-image: none;
   }
+}
+
+/* Knock-out stroke of drawn marks (the tick in the 'good' disc). */
+.match-icon .knock {
+  stroke: var(--match-knock, #fff);
+}
+.best-windows .match-icon {
+  --match-knock: var(--color-band);
 }

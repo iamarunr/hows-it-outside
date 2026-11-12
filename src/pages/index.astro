@@ -7,10 +7,12 @@ import OutsideApp from '../features/outside/OutsideApp';
   title="Outside? — Weather for getting outdoors"
   description="Check outdoor conditions for walking, running, cycling or spending time outside, and find a better window in the next 24 hours."
 >
-  <h1>How's it outside?</h1>
-  <p class="js-required notice notice-mixed">
-    Outside? needs JavaScript to load weather for your location. You can still read
-    <a href="/methodology/">how it works</a>, <a href="/privacy/">privacy</a> and <a href="/about/">about</a>.
-  </p>
+  <div class="js-required">
+    <h1>How's it outside?</h1>
+    <p class="notice notice-mixed">
+      Outside? needs JavaScript to load weather for your location. You can still read
+      <a href="/methodology/">how it works</a>, <a href="/privacy/">privacy</a> and <a href="/about/">about</a>.
+    </p>
+  </div>
   <OutsideApp client:load />
 </BaseLayout>

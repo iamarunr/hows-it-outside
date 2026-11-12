@@ -109,6 +109,7 @@ Capture answers in the decision register. Do not invent them or stop ordinary im
 | 2026-11-12 | Owner supplies the public repository URL; the local `gh` account is not used to create it | `PUBLIC_SOURCE_URL` and README links follow that URL |
 | 2026-11-12 | Security reports go through GitHub private vulnerability reporting on the public repository | No email address is published |
 | 2026-11-12 | Deploy to Cloudflare Pages on the owner's account: verify a preview, then attach outside.knnaresh.com and verify production | Existing knnaresh.com DNS records are left untouched |
+| 2026-11-12 | Bolder pass: "Both screens", "Sky fills first screen", "Slow ambient motion" | Replaces the no-looping-animation rule with slow CSS-only sky motion, off under reduced motion |
 | 2026-11-12 | Custom domain outside.knnaresh.com deferred; production canonical uses https://hows-it-outside.pages.dev until it is attached | Owner decision after the first attempt left no domain on the project |
 | 2026-11-12 | Published commits use the owner's GitHub noreply address (3859170+iamarunr@users.noreply.github.com) | History rewritten before the first push; content unchanged |
 | 2026-11-12 | Redesign after the Dutchblue site reference: its look, tool-first; self-hosted Bebas Neue for display; weather-aware CSS sky instead of photos | Supersedes the original calm green editorial direction in DESIGN.md; PRODUCT.md's "no gradients / compact" lines are superseded for visuals |
@@ -119,3 +120,6 @@ Capture answers in the decision register. Do not invent them or stop ordinary im
 | 2026-11-12 | IMP-043 | Now panel keeps wind, gusts, humidity and timestamp; temperature, feels-like and condition appear once, in the readout | Design review: no duplicated facts |
 | 2026-11-12 | IMP-044 | Unicode status glyphs replaced by drawn SVG marks; notices use tinted field, hairline border and a masked SVG mark | Design review (craft floor): no glyph icons, no thick side stripes |
 | 2026-11-12 | IMP-045 | Hover fills only under `@media (hover: hover)` | Tapped buttons stayed filled on phones |
+| 2026-11-12 | IMP-046 | Sky hero is a real full-bleed element (`width: 100vw`) that clips its own layers; drift and snowfall animate background-position by exactly one tile | Seamless motion at every viewport; `body { overflow-x: clip }` prevents horizontal scroll |
+| 2026-11-12 | IMP-047 | Controls on the sky use per-sky `--ink` / `--on-ink`; notices on the sky are ink-outlined | Every sky keeps tested contrast; design review |
+| 2026-11-12 | IMP-048 | After a visitor picks a place the page scrolls to the top and focus moves with preventScroll | A low search result on a 320 px phone left the new sky partly scrolled away |

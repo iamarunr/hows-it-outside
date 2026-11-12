@@ -53,10 +53,10 @@ Configuration: Chromium, 390×844, CPU 4× slowdown, network about 1.6 Mbps down
 
 | Metric | Budget | Measured (3 runs) |
 |---|---|---|
-| Initial first-party JS (gzip -9) | ≤ 100 KB | 95.9 KB |
-| CSS (gzip -9) | ≤ 30 KB | 6.0 KB |
+| Initial first-party JS (gzip -9) | ≤ 100 KB | 96.1 KB |
+| CSS (gzip -9) | ≤ 30 KB | 6.9 KB |
 | Display font (self-hosted woff2) | not budgeted | 13.8 KB |
-| LCP, static first render | ≤ 2.5 s | 560–568 ms (after the 2026-11-12 redesign; 416–436 ms before the display font) |
+| LCP, static first render | ≤ 2.5 s | 596 ms (bolder pass, 2026-11-12; 560–568 ms after the first redesign; 416–436 ms before the display font) |
 | CLS | ≤ 0.1 | 0 |
 | Activity switch to next paint | < 100 ms | 23–40 ms |
 

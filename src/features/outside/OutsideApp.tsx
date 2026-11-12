@@ -3,7 +3,7 @@ import { ACTIVITY_PRESETS } from '../../domain/activities';
 import { summaryHeadline } from '../../domain/explanations';
 import { defaultUnitSystem } from '../../lib/units';
 import { resetActivity } from '../../services/settings';
-import { skyFor } from '../../domain/sky';
+import { skyFor, type SkyId } from '../../domain/sky';
 import { ConditionsSummary } from './components/ConditionsSummary';
 import { SkyReadout } from './components/SkyReadout';
 import { ActivityPicker, UnitsPicker, WindowControls } from './components/Controls';
@@ -65,7 +65,10 @@ export default function OutsideApp({ depsFactory = browserDeps }: OutsideAppProp
   useEffect(() => {
     if (location === null || saved || view.kind !== 'data' || focusedFor.current === location.key) return;
     focusedFor.current = location.key;
-    headingRef.current?.focus();
+    // Show the new place's sky from the top (choosing a low search result may have scrolled the page),
+    // then move focus to its heading without scrolling again.
+    window.scrollTo({ top: 0 });
+    headingRef.current?.focus({ preventScroll: true });
   }, [location, saved, view.kind]);
 
   const timezone = view.kind === 'data' ? view.forecast.timezone : 'UTC';
@@ -74,6 +77,26 @@ export default function OutsideApp({ depsFactory = browserDeps }: OutsideAppProp
     view.kind === 'data'
       ? skyFor(view.forecast.current?.weatherCode ?? firstHour?.weatherCodes[0] ?? null, firstHour?.daylight ?? null)
       : 'unknown';
+  // Before a place is chosen the sky follows the visitor's own clock: day or night.
+  const localHour = new Date(c.now * 1000).getHours();
+  const idleSky: SkyId = !c.hydrated || (localHour >= 6 && localHour < 19) ? 'clear' : 'night-clear';
+
+  const toolbar = (
+    <div className="hero-toolbar">
+      <LocationPicker
+        location={location}
+        saved={c.locationSaved}
+        locating={c.locating}
+        geoNotice={c.geoNotice}
+        geocodingCache={c.geocodingCache}
+        onSelectPlace={c.selectPlace}
+        onLocateMe={c.locateMe}
+        announce={announce}
+        ready={c.hydrated}
+      />
+      <UnitsPicker value={units} onChange={(u) => updateSettings((s) => ({ ...s, units: u }))} />
+    </div>
+  );
 
   return (
     <div className="outside-app">
@@ -84,40 +107,45 @@ export default function OutsideApp({ depsFactory = browserDeps }: OutsideAppProp
         <p className="notice notice-mixed">Your saved settings couldn&apos;t be read, so the default settings are in use.</p>
       )}
 
-      <div className="location-row">
-        <LocationPicker
-          location={location}
-          saved={c.locationSaved}
-          locating={c.locating}
-          geoNotice={c.geoNotice}
-          geocodingCache={c.geocodingCache}
-          onSelectPlace={c.selectPlace}
-          onLocateMe={c.locateMe}
-          announce={announce}
-          ready={c.hydrated}
-        />
-        <UnitsPicker value={units} onChange={(u) => updateSettings((s) => ({ ...s, units: u }))} />
-      </div>
-
-      {location !== null && (
+      {location === null ? (
+        <section className="sky sky-hero sky-hero-idle" data-sky={idleSky} aria-labelledby="page-title">
+          <div className="hero-inner">
+            <h1 id="page-title" className="hero-title">
+              <span>How&apos;s it</span> <span>outside?</span>
+            </h1>
+            <p className="hero-lede">
+              Pick a place. See whether now is good for a walk, a run, a ride or just being outside, and when it gets
+              better.
+            </p>
+            {toolbar}
+          </div>
+        </section>
+      ) : (
         <section className="weather" aria-labelledby="weather-heading">
-          <SkyReadout
-            label={location.label}
-            sky={sky}
-            current={view.kind === 'data' ? view.forecast.current : null}
-            units={units}
-            now={c.now}
-            headingRef={headingRef}
-          />
-          <DataStatus view={view} now={c.now} cooldownUntil={c.cooldownUntil} onRetry={c.retry} />
+          <h1 className="visually-hidden">How&apos;s it outside?</h1>
+          <div className="sky sky-hero" data-sky={sky}>
+            <div className="hero-inner hero-results">
+              {toolbar}
+              <SkyReadout
+                label={location.label}
+                current={view.kind === 'data' ? view.forecast.current : null}
+                units={units}
+                now={c.now}
+                headingRef={headingRef}
+              />
+              <DataStatus view={view} now={c.now} cooldownUntil={c.cooldownUntil} onRetry={c.retry} />
+              {view.kind === 'data' && results !== null && (
+                <div className="hero-verdict">
+                  <NextHourSummary results={results} units={units} timezone={timezone} />
+                  <ActivityPicker value={settings.activity} onChange={(id) => updateSettings((s) => ({ ...s, activity: id }))} />
+                </div>
+              )}
+            </div>
+          </div>
 
           {view.kind === 'data' && results !== null && (
             <>
-              <div className="overview">
-                <NextHourSummary results={results} units={units} timezone={timezone} />
-                <ActivityPicker value={settings.activity} onChange={(id) => updateSettings((s) => ({ ...s, activity: id }))} />
-                <ConditionsSummary current={view.forecast.current} timezone={timezone} units={units} now={c.now} />
-              </div>
+              <ConditionsSummary current={view.forecast.current} timezone={timezone} units={units} now={c.now} />
 
               <section className="best-windows" aria-labelledby="windows-heading">
                 <h3 id="windows-heading">Best times in the next 24 hours</h3>

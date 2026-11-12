@@ -2,7 +2,7 @@
 
 **Should you head outside now, or is there a better time in the next 24 hours?** Outside? turns the forecast into a clear, explained match for walking, running, cycling, hanging out or just being outdoors.
 
-![Outside? on desktop: London and 11°C in large condensed capitals over a clear-sky gradient, with the next-hour verdict and activity choices below](docs/images/screenshot-desktop.png)
+![Outside? on desktop: the whole first screen is a clear sky with LONDON and 11°C in giant condensed capitals, and the next-hour verdict and activity choices set on the sky](docs/images/screenshot-desktop.png)
 
 <sub>Screenshots use synthetic sample weather from the test fixtures, not a real forecast.</sub>
 
@@ -81,8 +81,8 @@ Astro static pages ──► one React island (src/features/outside/OutsideApp.t
 - **Browser → Open-Meteo directly.** The provider sees the visitor's IP and the rounded coordinates.
 - **Pure, tested domain.** Internal units are SI and UTC epoch seconds. Precipitation, its probability and gusts are aligned to the hour they describe, which differs from instantaneous fields. Missing values stay `null`.
 - **Strict CSP** generated at build time from the actual inline scripts, delivered by `dist/_headers`.
-- **Budgets:** initial JS 95.9 KB of 100 KB gzip; CSS 6.0 KB of 30 KB; one self-hosted display font (Bebas Neue, 13.8 KB).
-- **Look:** place and temperature in Bebas Neue capitals over a CSS sky that changes with the weather; see [DESIGN.md](DESIGN.md).
+- **Budgets:** initial JS 96.1 KB of 100 KB gzip; CSS 6.9 KB of 30 KB; one self-hosted display font (Bebas Neue, 13.8 KB).
+- **Look:** the first screen is a CSS sky that changes with the weather (drifting clouds, rain, snow, stars; still for reduced motion), with place and temperature in giant Bebas Neue capitals; see [DESIGN.md](DESIGN.md).
 
 Full design: [docs/02-ARCHITECTURE.md](docs/02-ARCHITECTURE.md), [docs/03-DATA-AND-API.md](docs/03-DATA-AND-API.md), [docs/04-SCORING.md](docs/04-SCORING.md). Implementation decisions: [docs/10-DECISIONS-SOURCES.md](docs/10-DECISIONS-SOURCES.md).
 

@@ -19,7 +19,7 @@ export function MatchIcon({ label, className }: { label: MatchLabel; className?:
       return (
         <svg {...common}>
           <circle cx="9" cy="9" r="8" fill="currentColor" />
-          <path d="M5.2 9.3l2.4 2.4 5.2-5.4" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <path className="knock" d="M5.2 9.3l2.4 2.4 5.2-5.4" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       );
     case 'mixed':

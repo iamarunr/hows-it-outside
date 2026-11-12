@@ -109,7 +109,10 @@ export function HourlyTimeline({ results, units, timezone, now, announce }: Prop
                   <MatchIcon label={a.label} />
                   {m.text}
                 </span>
-                <span>{formatTemperature(a.interval.feelsLikeC, units) ?? NA} feels like</span>
+                <span className="hour-temp">
+                  {formatTemperature(a.interval.feelsLikeC, units) ?? NA}
+                  <span className="hour-temp-label"> feels like</span>
+                </span>
                 <span>{formatPercent(a.interval.precipProbabilityPct) ?? NA} precip.</span>
                 <span>{formatWind(a.interval.windKmh, units) ?? NA} wind</span>
               </button>
