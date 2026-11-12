@@ -130,3 +130,27 @@ for (const width of [320, 390, 768, 1440]) {
     }
   });
 }
+
+test('part-way through an hour (25 tiles) nothing runs past the edge of a phone screen', async ({ page }) => {
+  // Found on the live site in WebKit: with a partial first hour there are 25 bars, and a label on the last one stuck out.
+  await page.setViewportSize({ width: 390, height: 844 });
+  await setUp(page, {
+    referenceNow: NOW + 20 * 60,
+    handlers: [
+      {
+        match: (u) => u.pathname === '/v1/forecast',
+        body: syntheticForecast({ start: NOW - 8 * H, timezone: 'Europe/London', current: { time: NOW + 15 * 60 }, hourly: () => ({}) }),
+      },
+    ],
+  });
+  await london(page);
+  await expect(page.locator('.daystrip-hour')).toHaveCount(25);
+  const past = await page.evaluate(() => {
+    const width = document.documentElement.clientWidth;
+    return [...document.querySelectorAll('.best-windows *, .now *')]
+      .filter((el) => el.getBoundingClientRect().right > width + 1)
+      .map((el) => `${el.className} ${el.textContent?.trim().slice(0, 20) ?? ''}`);
+  });
+  expect(past).toEqual([]);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(0);
+});

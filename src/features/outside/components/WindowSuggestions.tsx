@@ -35,7 +35,8 @@ function DayStrip({ results, timezone }: { results: Results; timezone: string })
           return (
             <span key={a.interval.start} className={`daystrip-hour daystrip-${a.label}${inBest ? ' daystrip-best' : ''}`}>
               <span className="daystrip-bar" />
-              {i % 6 === 0 && <span className="daystrip-label">{labels[i]?.time}</span>}
+              {/* Not on the last few bars: a label there would run past the edge of the strip. */}
+            {i % 6 === 0 && i < results.timeline.length - 3 && <span className="daystrip-label">{labels[i]?.time}</span>}
             </span>
           );
         })}
