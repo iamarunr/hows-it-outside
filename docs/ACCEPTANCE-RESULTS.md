@@ -66,10 +66,10 @@ These are local lab numbers, not field data. Real-device and hosted measurements
 
 | Check | Result |
 |---|---|
-| Live smoke in 5+ cities through the deployed UI | **Pending (release)**; provider field availability checked for 8 cities in M0 |
+| Live smoke in 5+ cities through the deployed UI | Pass 2026-11-12 on https://hows-it-outside.pages.dev (commit `ec9ed96`): St. Louis, London, Chennai, Sydney, Tromsø, Kathmandu each loaded live weather with the correct IANA zone, a matching sky, 25 hourly items and no console errors. Found and fixed one bug first: input before hydration was lost and natively submitted |
 | Provider eligibility (non-commercial use from a portfolio subdomain) | Owner confirmed non-commercial use of the free API (2026-11-12) |
 | Real repository URL, contact and security route | Repository: https://github.com/iamarunr/hows-it-outside; security reports via GitHub private vulnerability reporting |
-| Cloudflare Pages project, custom domain, HTTPS | **Pending (authorization)** |
-| Production response headers and CSP verified on the host | **Pending (release)**; verified locally with `scripts/serve-dist.ts` |
-| Preview deployments not indexable | Implemented (`PUBLIC_NOINDEX`); **Pending** host verification |
+| Cloudflare Pages project, custom domain, HTTPS | Project `hows-it-outside` (classic Pages, direct upload) live with HTTPS at hows-it-outside.pages.dev; custom domain outside.knnaresh.com **pending** (added in the dashboard) |
+| Production response headers and CSP verified on the host | Pass on the preview and production pages.dev hosts: CSP (no unsafe-inline, exact Open-Meteo origins, frame-ancestors none), nosniff, no-referrer, Permissions-Policy, X-Frame-Options, immutable caching for /_astro/*, real 404 |
+| Preview deployments not indexable | Pass: preview.hows-it-outside.pages.dev sends `X-Robots-Tag: noindex, nofollow` and the robots meta; production sends neither |
 | Dependency audit | Production dependencies: 0 vulnerabilities. Dev tooling: 12 moderate (one `minimatch` advisory via ESLint packages, not shipped); no forced upgrade |

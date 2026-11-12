@@ -100,3 +100,10 @@ Expect the CSP to start with `default-src 'self'`, contain `connect-src 'self' h
 ### Rollback
 
 Cloudflare Pages keeps every deployment. To roll back, choose the last known-good deployment in the Pages dashboard and use **Rollback to this deployment**, then record the commit. Do not rewrite git history to roll back.
+
+### Release record (12 November 2026)
+
+- Pages project `hows-it-outside` on the owner's account, created with `wrangler pages project create hows-it-outside --production-branch main --force`. Current Wrangler delegates new Pages projects to Workers; `--force` keeps the classic Pages product the runbook specifies. It is not needed again.
+- Deployed by direct upload from a local build (not Git-connected): `wrangler pages deploy dist --project-name hows-it-outside --branch <main|preview> --commit-hash <sha>`. Preview builds set `PUBLIC_NOINDEX=true`; both set `PUBLIC_SITE_URL`, `PUBLIC_SOURCE_URL` and `PUBLIC_AUTHOR_URL` as listed above.
+- Released commit: `ec9ed96` (production at https://hows-it-outside.pages.dev, preview at https://preview.hows-it-outside.pages.dev). Rollback target: the previous production deployment in the Pages dashboard (`00c4bf1`).
+- Custom domain: add `outside.knnaresh.com` under the project's **Custom domains** in the Cloudflare dashboard; knnaresh.com is on the same account, so Cloudflare creates the DNS record. Existing records stay untouched.
