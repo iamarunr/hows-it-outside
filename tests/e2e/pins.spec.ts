@@ -93,10 +93,10 @@ test('three pins at most: a fourth place explains why it cannot be pinned, and u
   await choose(page, 'London');
   await expect(pinButton(page)).toBeEnabled();
   await pinButton(page).click();
+  await expect(pinButton(page)).toHaveAttribute('aria-pressed', 'true');
 
   await page.reload();
-  const names = await page.getByRole('list', { name: 'Your pinned places' }).locator('.postcard-city').allTextContents();
-  expect(names).toEqual(['St. Louis', 'Trondheim', 'London']);
+  await expect(page.getByRole('list', { name: 'Your pinned places' }).locator('.postcard-city')).toHaveText(['St. Louis', 'Trondheim', 'London']);
 });
 
 test('clearing all local data removes the pins', async ({ page }) => {

@@ -24,6 +24,19 @@ describe('parsePlaceName', () => {
   it('falls back to the locality when there is no city', () => {
     expect(parsePlaceName({ lookupSource: 'coordinates', city: '', locality: 'Polynesian Triangle', principalSubdivision: '', countryName: '' })).toBe('Polynesian Triangle');
   });
+  // Shapes below are from real provider responses for public town centres (12 November 2026).
+  it.each([
+    ['a township "city" with a community locality', 'Township of Gravois', 'Affton', 'Affton, Missouri, USA'],
+    ['a real city with a township locality', 'Naperville', 'Township of Naperville', 'Naperville, Missouri, USA'],
+    ['a "City of" prefix', 'City of Ann Arbor', 'City of Ann Arbor', 'Ann Arbor, Missouri, USA'],
+    ['a "Village of" locality behind a charter township', 'Charter Township of West Bloomfield', 'Village of Orchard Lake', 'Orchard Lake, Missouri, USA'],
+    ['only a township to go on', 'Township of Lyon', 'Township of Lyon', 'Township of Lyon, Missouri, USA'],
+    ['a township and no locality', 'Township of Lyon', '', 'Township of Lyon, Missouri, USA'],
+    ['an ordinary city', 'Chennai', 'Chennai', 'Chennai, Missouri, USA'],
+    ['a name that merely contains the words', 'Kansas City of Fountains', 'x', 'Kansas City of Fountains, Missouri, USA'],
+  ])('prefers the everyday name: %s', (_case, city, locality, expected) => {
+    expect(parsePlaceName({ lookupSource: 'coordinates', city, locality, principalSubdivision: 'Missouri', countryName: 'USA' })).toBe(expected);
+  });
   it('does not repeat a part (city-states)', () => {
     expect(parsePlaceName({ lookupSource: 'coordinates', city: 'Singapore', principalSubdivision: 'Singapore', countryName: 'Singapore' })).toBe('Singapore');
   });

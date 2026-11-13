@@ -44,6 +44,21 @@ function clean(value: string | undefined): string | undefined {
   return v === '' || Array.from(v).length > PART_MAX_LENGTH ? undefined : v;
 }
 
+const TOWNSHIP = /^(charter )?township of /i;
+const CIVIC_PREFIX = /^(city|town|village) of /i;
+
+/**
+ * HEURISTIC (English-language names, mostly United States): the provider's "city" is sometimes a
+ * civil township ("Township of Gravois") while its "locality" is the community people actually
+ * name ("Affton"). Prefer whichever of the two is not a township, and drop a bare "City of" /
+ * "Town of" / "Village of" prefix. When both are townships the township is all there is, so keep it.
+ */
+function everydayName(city: string | undefined, locality: string | undefined): string | undefined {
+  const candidates = [city, locality].filter((n): n is string => n !== undefined);
+  const name = candidates.find((n) => !TOWNSHIP.test(n)) ?? candidates[0];
+  return name?.replace(CIVIC_PREFIX, '');
+}
+
 /**
  * "City, Region, Country" from the provider payload, or null.
  * A name the provider guessed from the IP address is rejected: only a name for
@@ -52,7 +67,7 @@ function clean(value: string | undefined): string | undefined {
 export function parsePlaceName(payload: unknown): string | null {
   const parsed = rawPlace.safeParse(payload);
   if (!parsed.success || parsed.data.lookupSource !== 'coordinates') return null;
-  const place = clean(parsed.data.city) ?? clean(parsed.data.locality);
+  const place = everydayName(clean(parsed.data.city), clean(parsed.data.locality));
   if (place === undefined) return null;
   const parts = [place];
   for (const part of [clean(parsed.data.principalSubdivision), clean(parsed.data.countryName)]) {
