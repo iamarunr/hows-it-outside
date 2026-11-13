@@ -378,3 +378,54 @@ html:not(.js) .outside-app {
     transition: none !important;
   }
 }
+
+/*
+ * Interaction feel (after Apple's interface guidance, where it applies to a page like this one).
+ * - Materials: once the page scrolls, the menu is a frosted layer that content passes beneath,
+ *   not an opaque strip. Solid again without backdrop-filter, with reduced transparency, or in forced colours.
+ * - Response on press: controls give way the moment they are pressed, not on release.
+ * - No tap delay: touch-action: manipulation removes the double-tap wait on every control.
+ */
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .scrolled .site-header {
+    background: color-mix(in srgb, var(--color-brand) var(--header-frost), transparent);
+    -webkit-backdrop-filter: saturate(160%) blur(18px);
+    backdrop-filter: saturate(160%) blur(18px);
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .scrolled .site-header {
+    background: var(--color-brand);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+a,
+button,
+input,
+select,
+summary,
+label {
+  touch-action: manipulation;
+}
+@media (prefers-reduced-motion: no-preference) {
+  button,
+  .segmented-option > span {
+    transition:
+      background-color 160ms var(--ease-out),
+      color 160ms var(--ease-out),
+      border-color 160ms var(--ease-out),
+      scale 120ms var(--ease-out);
+  }
+  button:active:not(:disabled),
+  .segmented-option input:active + span {
+    scale: 0.96;
+  }
+}
+/* The pill's real control is the radio input laid over it: keep it on top so a press that scales the pill still lands on the input. */
+.segmented-option input {
+  z-index: 1;
+}
+.segmented-option > span {
+  pointer-events: none;
+}

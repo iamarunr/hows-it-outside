@@ -2078,3 +2078,29 @@ body:has(.sky-hero[data-sky='unknown']) {
     outline-offset: 2px;
   }
 }
+
+/* The hour ribbon scrolls with native momentum and comes to rest on a tile edge. */
+.timeline-scroll {
+  scroll-snap-type: x proximity;
+  overscroll-behavior-x: contain;
+}
+.timeline > .hour {
+  scroll-snap-align: start;
+  scroll-margin-left: 3px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  /* Cards and hour tiles press in under the finger; the transition retargets if the press is released early. */
+  .sky .postcard:active:not(:disabled) {
+    scale: 0.97;
+  }
+  .timeline .hour.sky:active:not(:disabled) {
+    scale: 1;
+    filter: brightness(0.94);
+  }
+}
+@media (forced-colors: active) {
+  .scrolled .site-header {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}

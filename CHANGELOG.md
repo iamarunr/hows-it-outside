@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+### Interaction feel (12 November 2026)
+- Scrolled, the menu is a frosted layer (brand navy at 80% with a backdrop blur) that content passes beneath. It is solid without backdrop-filter support, with reduced transparency, and in forced colours.
+- Buttons, pills and cards give way the moment they are pressed; the double-tap delay is removed on every control.
+- The hour ribbon comes to rest on a tile edge after a swipe.
+- The radio input of each pill now always sits above its label, so a press that scales the pill cannot miss the control.
+
+### Friendlier area names (12 November 2026)
+- "Use my location" prefers the community name over a civil township ("Affton" instead of "Township of Gravois") and drops a leading "City of", "Town of" or "Village of".
+
 ### Pinned places (12 November 2026)
 - "Pin this place" on the results screen pins up to three places. Pinned places replace the London, Chennai and Sydney cards on the first screen and open in one tap, with no search.
 - Pins are stored only in this browser, only when you pin, and are removed by unpinning or "Clear all local data". Settings saved before this change load unchanged.

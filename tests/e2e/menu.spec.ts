@@ -6,6 +6,8 @@ import { syntheticForecast } from './support/forecast';
 const NOW = Date.parse('2026-11-15T12:00:00Z') / 1000;
 const TRANSPARENT = 'rgba(0, 0, 0, 0)';
 const NAVY = 'rgb(35, 54, 81)';
+/** Scrolled: frosted brand navy (80% strength with a backdrop blur) where the browser supports it, else solid. */
+const FROSTED = /^(rgb\(35, 54, 81\)|rgba\(35, 54, 81, 0\.8\)|color\(srgb 0\.137\d* 0\.211\d* 0\.317\d* \/ 0\.8\))$/;
 const WHITE = 'rgb(255, 255, 255)';
 
 test.use({ locale: 'en-GB', timezoneId: 'UTC' });
@@ -61,7 +63,7 @@ test('once the page scrolls the menu turns solid navy and stays reachable; back 
   await page.locator('.summary').waitFor();
 
   await page.mouse.wheel(0, 600);
-  await expect.poll(async () => (await headerStyle(page)).background).toBe(NAVY);
+  await expect.poll(async () => (await headerStyle(page)).background).toMatch(FROSTED);
   expect(await headerStyle(page)).toMatchObject({ color: WHITE, position: 'sticky' });
   expect((await header(page).boundingBox())?.y).toBe(0);
   await expect(page.getByRole('link', { name: 'How it works' }).first()).toBeInViewport();
@@ -128,10 +130,49 @@ test('the menu state follows the page position however it got there (no stuck na
   await page.goto('/');
   const card = page.getByRole('list', { name: 'Places to try' }).getByRole('button').last();
   await card.scrollIntoViewIfNeeded();
-  await expect.poll(async () => (await headerStyle(page)).background).toBe(NAVY);
+  await expect.poll(async () => (await headerStyle(page)).background).toMatch(FROSTED);
   await card.click();
   await page.locator('.summary').waitFor();
   expect(await page.evaluate(() => window.scrollY)).toBe(0);
   await expect.poll(async () => (await headerStyle(page)).background).toBe(TRANSPARENT);
   await expect(page.locator('html')).not.toHaveClass(/scrolled/);
+});
+
+test('scrolled, the menu is a frosted layer; with reduced transparency it is solid', async ({ page, browserName }) => {
+  await open(page, 2);
+  await page.goto('/about/');
+  await page.setViewportSize({ width: 800, height: 400 });
+  await page.mouse.wheel(0, 300);
+  await expect(page.locator('html')).toHaveClass(/scrolled/);
+  const frost = () =>
+    header(page).evaluate((el) => {
+      const s = getComputedStyle(el);
+      return { background: s.backgroundColor, blur: s.backdropFilter ?? (s as unknown as Record<string, string>)['webkitBackdropFilter'] ?? 'none' };
+    });
+  const frosted = await frost();
+  expect(frosted.background).toMatch(FROSTED);
+  expect(frosted.background).not.toBe(NAVY);
+  expect(frosted.blur).toContain('blur(18px)');
+  // Chromium is the only engine here that can emulate the reduced-transparency preference.
+  test.skip(browserName !== 'chromium', 'prefers-reduced-transparency emulation needs Chromium');
+  const session = await page.context().newCDPSession(page);
+  await session.send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-transparency', value: 'reduce' }] });
+  await expect.poll(async () => (await frost()).background).toBe(NAVY);
+  expect((await frost()).blur).toBe('none');
+});
+
+test('controls respond on press and carry no tap delay', async ({ page }) => {
+  await open(page, 2);
+  await page.goto('/');
+  const button = page.getByRole('button', { name: 'Use my location' });
+  expect(await button.evaluate((el) => getComputedStyle(el).touchAction)).toBe('manipulation');
+  const box = await button.boundingBox();
+  await page.mouse.move((box?.x ?? 0) + 10, (box?.y ?? 0) + 10);
+  await page.mouse.down();
+  await expect.poll(() => button.evaluate((el) => getComputedStyle(el).scale)).toBe('0.96');
+  // Released off the button: nothing is triggered and it springs back.
+  await page.mouse.move(5, 5);
+  await page.mouse.up();
+  await expect.poll(() => button.evaluate((el) => getComputedStyle(el).scale)).toBe('none');
+  await expect(page.getByRole('button', { name: 'Use my location' })).toBeEnabled();
 });

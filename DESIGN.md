@@ -432,7 +432,7 @@ Thin and exact, like a ticket stub.
 ### Navigation
 A full-width bar, 62px tall, with the Bebas Neue wordmark and two uppercase links on one row at every width (links drop to 12px below 360px). It has two states:
 - **On the sky:** at the top of the home page the bar is transparent and the sky runs behind it. Its ink is the current sky's ink, set from the sky id with `:has()`, so it is the same contrast-tested pair as the hero text.
-- **Solid:** brand navy with white ink (a tested pair). Used once the page has scrolled (the layout script toggles `.scrolled` on `html` when an 8px marker at the top of the page leaves the screen), on pages without a sky, when a notice sits above the sky, and always without JavaScript.
+- **Solid:** brand navy with white ink (a tested pair). When it is solid because the page has scrolled, it is frosted: navy at 80% strength over a saturated 18px backdrop blur, so content passes beneath it (white ink is tested against the frost over white). It falls back to opaque navy without backdrop-filter, with `prefers-reduced-transparency`, and in forced colours. Used once the page has scrolled (the layout script toggles `.scrolled` on `html` when an 8px marker at the top of the page leaves the screen), on pages without a sky, when a notice sits above the sky, and always without JavaScript.
 
 The bar is sticky only with JavaScript. `scroll-padding-top` keeps focused and linked-to content clear of it. Hover is an underline; the focus ring uses the bar's current ink.
 

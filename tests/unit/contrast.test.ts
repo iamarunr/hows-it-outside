@@ -72,6 +72,16 @@ describe('sky readouts (ink ≥ 4.5:1 on both stops, bare and under the stronges
   }
 });
 
+describe('frosted menu', () => {
+  it('white ink holds 4.5:1 on the frost over the lightest thing that can scroll beneath it (white)', () => {
+    const strength = Number(/--header-frost:\s*(\d+)%/.exec(css)?.[1]) / 100;
+    expect(strength).toBeGreaterThan(0);
+    for (const beneath of ['#ffffff', token('color-bg'), token('color-band'), token('sky-night-clear-top')]) {
+      expect(contrast('#ffffff', blend(beneath, token('color-brand'), strength)), beneath).toBeGreaterThanOrEqual(4.5);
+    }
+  });
+});
+
 describe('control boundaries and focus (≥ 3:1)', () => {
   for (const fg of ['color-control-border', 'color-text-secondary', 'color-brand']) {
     for (const bg of ['color-bg', 'color-surface']) {

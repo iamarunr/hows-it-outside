@@ -114,5 +114,7 @@
   --content-max: 1180px;
   --target-min: 44px;
   --header-h: 62px;
+  /* Frosted menu: brand navy at this strength over whatever scrolls beneath. White ink holds 4.5:1 even over a white page (tested). */
+  --header-frost: 80%;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
